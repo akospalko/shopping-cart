@@ -72,7 +72,8 @@ export const ProductsProvider = ({children}: ChildrenType) => {
       return data
     }
 
-    fetchProducts()
+    // fetch data, update state
+    fetchProducts().then(products => setProducts(products))
   }, [])
 
  return(
