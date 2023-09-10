@@ -7,8 +7,6 @@ The context fetches mokup data from fake server using json-server
     -- -p portNum - specify port for resource link      
   -- create fetch function, specify resource link (localhost at port xy)
 */
-
-
 import {createContext, ReactElement, useState, useEffect} from 'react';
 
 // Create product type
@@ -82,3 +80,5 @@ export const ProductsProvider = ({children}: ChildrenType) => {
     </ProductsContext.Provider>
   )
 }
+
+export default ProductsContext
