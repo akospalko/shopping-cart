@@ -1,7 +1,6 @@
 import {ReactElement} from 'react'
 import useCart from '../hooks/useCart'
 import useProducts from '../hooks/useProducts'
-import {UseProductContextType} from '../context/ProductsProvider' 
 import Product from './Product'
 
 const ProductList = () => {
@@ -12,7 +11,8 @@ const ProductList = () => {
 
   if(products?.length) {
     pageContent = products.map(product => {
-      const inCart: boolean = cart.some(item => item.sku === product.sku )
+      
+      const inCart: boolean = cart.some(item => item.sku === product.sku)
 
       return (
         <Product

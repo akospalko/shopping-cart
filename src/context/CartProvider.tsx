@@ -2,7 +2,7 @@ import {useReducer, useMemo, createContext, ReactElement} from 'react'
 
 // SET UP REDUCER
 // Cart item type
-type CartItemType = {
+export type CartItemType = {
   sku: string,
   name: string,
   price: number,
@@ -19,7 +19,7 @@ const initCartState: CartStateType = {cart: []}
 const REDUCER_ACTION_TYPE = {
   ADD: "ADD",
   REMOVE: "REMOVE",
-  QUANTITY: "REMOVE",
+  QUANTITY: "QUANTITY",
   SUBMIT: "SUBMIT"
 }
 
@@ -53,24 +53,27 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
       if(!action.payload) {
         throw new Error('action.payload missing in REMOVE action')
       }
+      const {sku} = action.payload
+      const filteredCart: CartItemType[] | undefined = state.cart.filter(item => item.sku !== sku) // filter cart item where sku props are matching 
+      return {...state, cart: [...filteredCart]} 
+    }
+    
+    // QUANTITY
+    case REDUCER_ACTION_TYPE.QUANTITY: {
+      if(!action.payload) {
+        throw new Error('action.payload missing in QUANTITY action')
+      }
       const {sku, qty} = action.payload
       const itemExists: CartItemType | undefined = state.cart.find(item => item.sku === sku); // check if item is in cart
       if(!itemExists) {
         throw new Error('Item must exist in order to update quantity')
       }
-
       const updatedItem: CartItemType = {...itemExists, qty} // update item with qty values
-
       const filteredCart: CartItemType[] = state.cart.filter(item => item.sku !== sku)  // filter all items but the updated one
 
       return {...state, cart: [...filteredCart, updatedItem]}
     }
-
-    // case REDUCER_ACTION_TYPE.QUANTITY: {
-    //   if(!action.payload) {
-    //       throw new Error('action.payload missing in QUANTITY action')
-    //   }
-    // }
+    
     // SUBMIT ORDER
     case REDUCER_ACTION_TYPE.SUBMIT: {
       return {...state, cart: []} // empty out cart on submit
