@@ -10,11 +10,11 @@ function App() {
   const pageContent  = viewCart ? <Cart/> : <ProductList/>
 
   const content = (
-    <>
+    <div className="page">
       <Header viewCart={viewCart} setViewCart={setViewCart}/>
       {pageContent}
       <Footer viewCart={viewCart} />
-    </>
+    </div>
 
   )
 

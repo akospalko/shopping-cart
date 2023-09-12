@@ -7,12 +7,12 @@ type PropsType = {
 
 const Nav = ({viewCart, setViewCart}: PropsType) => {
   const button = viewCart ? 
-  <button onClick={() => setViewCart(false)}> Products </button>
+  <button className='button--toggle-cart' onClick={() => setViewCart(false)}> Products </button>
   :
-  <button onClick={() => setViewCart(true)}> Cart </button>
+  <button className='button--toggle-cart' onClick={() => setViewCart(true)}> Cart </button>
 
   const content = (
-    <nav>
+    <nav className="nav">
       {button}
     </nav>
   )
