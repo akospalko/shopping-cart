@@ -1,26 +1,14 @@
-import React from 'react'
-import useCart from '../hooks/useCart'
+import logo from '../assets/logo.svg'
 
-type PropsType = {
-  viewCart: boolean
-}
-const Footer = ({viewCart}: PropsType) => {
+const Footer = () => {
   
-  const {totalItems, totalPrice} = useCart();
-
   const year: number = new Date().getFullYear()
-  const pageContent = viewCart ? 
-    <p> Shopping Cart &copy; {year} </p>
-    : (
-    <>
-      <p> Total Items: {totalItems}</p>
-      <p> Total Price: {totalPrice}</p>
-      <p> Shopping Cart &copy; {year} </p>
-    </>
-    )
+
   const content = (
     <footer className="footer">
-      {pageContent}
+      <img className='logo' src={logo}/>
+      <p>Palkó Ákos, {year}</p>
+      <p> Shopping Cart ❤️</p>
     </footer>
   )
   return content
