@@ -1,4 +1,4 @@
-import logo from '../assets/logo.svg'
+import { LogoIcon } from './SVGComponents'
 
 const Footer = () => {
   
@@ -6,9 +6,13 @@ const Footer = () => {
 
   const content = (
     <footer className="footer">
-      <img className='logo' src={logo}/>
-      <p>Palkó Ákos, {year}</p>
-      <p> Shopping Cart ❤️</p>
+      <div className="footer__branding">
+        <LogoIcon height='40px' width='40px' wrapperCustomStyle={{'height': '100%'}}/>
+        <p>Palkó Ákos, {year}</p>
+      </div>
+      <div className="footer_page-info">
+        <p> Acme co., Shopping Cart ❤️</p>
+      </div>
     </footer>
   )
   return content
