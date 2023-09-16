@@ -48,7 +48,8 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
 
       return {...state, cart: [...filteredCart, {sku, name, price, qty}]}
     }
-    // REMOVE ITEM
+
+    // REMOVE ALL ITEMS
     case REDUCER_ACTION_TYPE.REMOVE: {
       if(!action.payload) {
         throw new Error('action.payload missing in REMOVE action')
@@ -57,7 +58,7 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
       const filteredCart: CartItemType[] | undefined = state.cart.filter(item => item.sku !== sku) // filter cart item where sku props are matching 
       return {...state, cart: [...filteredCart]} 
     }
-    
+
     // QUANTITY
     case REDUCER_ACTION_TYPE.QUANTITY: {
       if(!action.payload) {
@@ -78,6 +79,7 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
     case REDUCER_ACTION_TYPE.SUBMIT: {
       return {...state, cart: []} // empty out cart on submit
     }
+    
     default:
       throw new Error('Unindentified reducer action type')
   }

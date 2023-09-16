@@ -13,7 +13,8 @@ function App() {
     <div className="page">
       <Header viewCart={viewCart} setViewCart={setViewCart}/>
       {pageContent}
-      <Footer viewCart={viewCart} />
+      <Footer/>
+      
     </div>
 
   )
