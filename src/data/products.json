@@ -2,18 +2,18 @@
   "products": [
       {
           "sku": "item0001",
-          "name": "Widget",
-          "price": 9.99
+          "name": "AMD Ryzen 9 5900X 12-Core 3.7GHz",
+          "price": 29.99
       },
       {
           "sku": "item0002",
-          "name": "Premium Widget",
+          "name": "AMD Ryzen 7 7800X3D 4.4GHz 8-Cores",
           "price": 19.99
       },
       {
           "sku": "item0003",
-          "name": "Deluxe Widget",
-          "price": 29.99
+          "name": "AMD Ryzen 5 7600X 4.7GHz 6-Core",
+          "price": 9.99
       }
   ]
 }
