@@ -1,20 +1,24 @@
 import {ReactElement} from 'react'
+import './ProductList.css'
 import useCart from '../hooks/useCart'
 import useProducts from '../hooks/useProducts'
 import Product from './Product'
+import { CartItemType } from '../types/cartProviderTypes'
+import { ProductItemType } from '../types/productsProviderTypes'
 
 const ProductList = () => {
-  const {dispatch, REDUCER_ACTIONS, cart} = useCart()
-  const {products} = useProducts()
+  const {dispatch, REDUCER_ACTIONS_CART, cart} = useCart()
+  const {products, filteredProducts} = useProducts()
   let pageContent:ReactElement | ReactElement[] = <p> Loading... </p>
-
-  if(products?.length) {
-    pageContent = products.map(product => {
-      
-      const inCart: boolean = cart.some(item => item.sku === product.sku)
+  console.log(filteredProducts)
+  const displayedProducts: ProductItemType[] = filteredProducts?.length > 0 ? filteredProducts : products
+  
+  if(displayedProducts?.length) {
+    pageContent = displayedProducts.map((product: ProductItemType) => {
+      const inCart: boolean = cart.some((item: CartItemType) => item.sku === product.sku)
 
       const inCartQty: number | undefined = (() => {
-        const foundItem = cart.find(item => item.sku === product.sku);
+        const foundItem = cart.find((item: CartItemType) => item.sku === product.sku);
         if (foundItem) {
           return foundItem.qty as number;
         } else {
@@ -28,7 +32,7 @@ const ProductList = () => {
           product={product}
           inCartQty={inCartQty} 
           dispatch={dispatch} 
-          REDUCER_ACTIONS={REDUCER_ACTIONS}
+          REDUCER_ACTIONS_CART={REDUCER_ACTIONS_CART}
           inCart={inCart}
         />
       )

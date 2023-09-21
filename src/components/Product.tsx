@@ -1,59 +1,71 @@
 import React, { ReactElement, memo } from 'react'
-import { ProductType } from '../context/ProductsProvider'
-import { ReducerActionType, ReducerAction } from '../context/CartProvider'
+import { ProductItemType } from '../types/productsProviderTypes'
+import { ReducerActionType, ReducerAction } from '../types/cartProviderTypes'
 import { MinusIcon, PlusIcon, CheckmarkIcon } from './SVGComponents'
+import './Product.css'
 
 type PropsType = {
-  product: ProductType,    
+  product: ProductItemType,    
   inCartQty: number | undefined,
   dispatch: React.Dispatch<ReducerAction>  
-  REDUCER_ACTIONS: ReducerActionType
+  REDUCER_ACTIONS_CART: ReducerActionType
   inCart: boolean
 }
 
-const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS, inCart }:PropsType): ReactElement => {
+const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS_CART, inCart }:PropsType): ReactElement => {
   const img:string =  new URL(`../images/${product.sku}.jpg`, import.meta.url).href
-  
-  const itemInCart = inCart ? 
-  <div className='product__info'> 
-    <span> {inCartQty} {'in cart'}  </span>
-    <CheckmarkIcon width='25px' height='25px' wrapperCustomStyle={{"width": "auto"}}/>
-  </div> 
-  : null
 
-  const onAddToCart = () => dispatch({type: REDUCER_ACTIONS.ADD, payload: {...product, qty: 1}})
+  const onAddToCart = () => dispatch({type: REDUCER_ACTIONS_CART.ADD, payload: {...product, qty: 1}})
 
   const onRemoveSingleFromCart = () => {
     if (inCartQty > 1) {
-      dispatch({type: REDUCER_ACTIONS.QUANTITY, payload: {...product, qty: inCartQty - 1 }});
+      dispatch({type: REDUCER_ACTIONS_CART.UPDATE_QUANTITY, payload: {...product, qty: inCartQty - 1 }});
     } else if (inCartQty === 1) {
-      dispatch({type: REDUCER_ACTIONS.REMOVE, payload: {...product, qty: 0}})
+      dispatch({type: REDUCER_ACTIONS_CART.REMOVE, payload: {...product, qty: 0}})
     }
   }
 
-  const content = 
-  <article className="product">
-    <h3 className="product__header"> {product.name} </h3>
-    <img src={img} alt={product.name} className="product__img"/>
+  // Elements
+  const itemInCart = inCart ? 
+    <div className='product__info-in-cart'> 
+      <span> {inCartQty} {'in cart'}  </span>
+      <CheckmarkIcon width='20px' height='20px' wrapperCustomStyle={{"width": "auto"}}/>
+    </div> 
+    : null
 
-    <div className='product__price'> 
-      <span>
+  const productInfo = (
+    <div className='product__info'> 
+      <span className='product__info-price'>
         {new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(product.price)} 
       </span>
-      <span> {itemInCart} </span>
+      {itemInCart}
     </div>
-    <button 
-      className='button--add-remove-single-product'
-      onClick={onAddToCart}
-    > {<PlusIcon width='25px' height='25px' strokeWidth='0' fill='var(--color--light)'/>}
-    </button>
-    <button 
-      className='button--add-remove-single-product'
-      disabled={inCartQty < 1}
-      onClick={onRemoveSingleFromCart}
-    > <MinusIcon width='25px' height='25px' fill='var(--color--light)' strokeWidth='0'/>
-    </button>
-  </article>
+  )
+
+  const addOrRemoveProductButtons = (
+    <>
+      <button 
+        className='button--add-remove-single-product'
+        onClick={onAddToCart}
+      > {<PlusIcon width='20px' height='20px' strokeWidth='0' fill='var(--color--light)'/>}
+      </button>
+      <button 
+        className='button--add-remove-single-product'
+        disabled={inCartQty < 1}
+        onClick={onRemoveSingleFromCart}
+        > <MinusIcon width='20px' height='20px' fill='var(--color--light)' strokeWidth='0'/>
+      </button>
+    </>
+  )
+
+  const content = (
+    <article className="product">
+    <img src={img} alt={product.name} className="product__img"/>
+    <h3 className="product__header"> {product.name} </h3>
+    {productInfo}
+    {addOrRemoveProductButtons}
+    </article>
+  )
  
  return content
 }
@@ -62,7 +74,7 @@ function areProductsEqual({product: prevProduct, inCart: prevInCart, inCartQty: 
  
   return (
     Object.keys(prevProduct).every(key => {
-      return prevProduct[key as keyof ProductType] === nextProduct[key as keyof ProductType]
+      return prevProduct[key as keyof ProductItemType] === nextProduct[key as keyof ProductItemType]
     }) 
     && prevInCart === nextInCart
     && prevInCartQty === nextInCartQty
