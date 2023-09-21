@@ -139,6 +139,29 @@ export function CartIcon({width, height, fill, wrapperCustomStyle}: IconComponen
   );
 }
 
+// Search 
+export function SearchIcon({width, height, stroke, strokeWidth, wrapperCustomStyle}: IconComponentType): ReactElement | ReactElement[] {
+  return (
+    <IconWrapper wrapperCustomStyle={wrapperCustomStyle}>
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        fill="none" 
+        viewBox="0 0 24 24"
+        width={width ||  "100%"}
+        height={height || "100%"}
+      >
+        <path
+          stroke={stroke || "#000" }
+          strokeWidth={strokeWidth || "2"}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M15.796 15.811L21 21m-3-10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"
+        ></path>
+      </svg>
+    </IconWrapper>
+  );
+}
+
 // Logo
 export function LogoIcon({width, height, wrapperCustomStyle}: IconComponentType): ReactElement | ReactElement[] {
   return (
