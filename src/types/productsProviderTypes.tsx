@@ -17,8 +17,7 @@ export type ReducerAction = {
 export type ProductStateType = {
   products?: ProductItemType[],
   filteredProducts?: ProductItemType[],
-  searchedProduct?: string,
-  isSearching?: boolean // // tracks state btwn search btn pressed / remove srch results btn 
+  searcheTerm?: string
 }
 
 // ----------CREATE CONTEXT----------

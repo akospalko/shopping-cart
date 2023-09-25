@@ -1,20 +1,31 @@
-import {ReactElement} from 'react'
+import {useEffect, ReactElement} from 'react'
 import './ProductList.css'
 import useCart from '../hooks/useCart'
-import useProducts from '../hooks/useProducts'
 import Product from './Product'
 import { CartItemType } from '../types/cartProviderTypes'
 import { ProductItemType } from '../types/productsProviderTypes'
 
-const ProductList = () => {
+// TYPE
+type PropsType = {
+  productsData: ProductItemType[] | undefined
+}
+
+// COMPONENT
+const ProductList = ({productsData}: PropsType) => {
+
+  // CONTEXTS
   const {dispatch, REDUCER_ACTIONS_CART, cart} = useCart()
-  const {products, filteredProducts} = useProducts()
-  let pageContent:ReactElement | ReactElement[] = <p> Loading... </p>
-  console.log(filteredProducts)
-  const displayedProducts: ProductItemType[] = filteredProducts?.length > 0 ? filteredProducts : products
+
+  // EFFECTS
+  useEffect(() => {
+    sessionStorage.setItem('lastVisitedPage', 'products');
+  }, [])
+
+  // ELEMENTS
+  let displayedProducts:ReactElement | ReactElement[] = <p> Loading... </p>
   
-  if(displayedProducts?.length) {
-    pageContent = displayedProducts.map((product: ProductItemType) => {
+  if(productsData?.length) {
+    displayedProducts = productsData.map((product: ProductItemType) => {
       const inCart: boolean = cart.some((item: CartItemType) => item.sku === product.sku)
 
       const inCartQty: number | undefined = (() => {
@@ -39,15 +50,20 @@ const ProductList = () => {
     })
   }
 
-  const content = 
-    <main className="main main--products">
+  const productsContent = (
+    <>
       <h1 className="main--products__title"> Browse goodies </h1>
       <div className="product-list">
-        {pageContent}
+        {displayedProducts}
       </div>
-    </main>
+    </>
+  )
 
-  return content
+  return ( 
+    <main className="main main--products">
+      {productsContent}
+    </main>
+  )
 }
 
 export default ProductList

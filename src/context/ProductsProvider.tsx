@@ -1,5 +1,5 @@
 /* NOTE:
-The context fetches mokup data from fake server using json-server
+The context fetches mockup data from fake server using json-server
 - json-server set up:
   -- create folder with json data 
   -- run json-server: npx json-server -w data/products.json -p 3500
@@ -7,18 +7,88 @@ The context fetches mokup data from fake server using json-server
     -- -p portNum - specify port for resource link      
   -- create fetch function, specify resource link (localhost at port xy)
 */
-import {createContext, ReactElement, useState, useEffect} from 'react';
 
-// Create product type
-export type ProductType = {
-  sku: string,
-  name: string,
-  price: number
+import { createContext, useEffect, useReducer, useMemo } from 'react';
+import { ProductItemType, ProductStateType, ReducerAction, UseProductContextType, ChildrenType } from '../types/productsProviderTypes';
+import { REDUCER_ACTION_TYPE_PRODUCT } from '../data/reducerActionTypeConstant';
+
+// REDUCER
+const reducer = (state: ProductStateType, action: ReducerAction): ProductStateType => {
+  switch(action.type) {
+    // UPDATE SEARCH VALUE
+    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_SEARCH_VALUE:
+      if(!action.payload) {
+        throw new Error('action.payload missing in UPDATE_SEARCH_VALUE action')
+      }
+      return {...state, searcheTerm: action.payload.searcheTerm}
+    // UPDATE PRODUCTS
+    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS: 
+      if(!action.payload) {
+        throw new Error('action.payload missing in UPDATE_SEARCH_VALUE action')
+      }
+      return {...state, products: action.payload.products}
+    // UPDATE FILTERED PRODUCTS
+    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_FILTERED_PRODUCTS: 
+      if(!action.payload) {
+        throw new Error('action.payload missing in UPDATE_FILTERED_PRODUCTS action')
+      }
+      return {...state, filteredProducts: action.payload.filteredProducts}
+    // DEFAULT
+    default: {
+      throw new Error('Unindentified reducer action type')
+    }
+  }
 }
 
+// ----------PRODUCT CONTEXT LOGIC----------
+// Init state
+const initProductState: ProductStateType = {
+  products: [],
+  filteredProducts: [],
+  searcheTerm: ''
+}
 
-// Init state - dynamicly populated items
-const initState: ProductType[] = []
+export const useProductContext = (initProductState: ProductStateType) => {
+  const [state, dispatch] = useReducer(reducer, initProductState)
+
+  const REDUCER_ACTIONS_PRODUCT = useMemo(()=> {
+    return REDUCER_ACTION_TYPE_PRODUCT
+  }, []) 
+
+  useEffect(() => {
+    const fetchProducts = async (): Promise<ProductItemType[]> => {
+      const data = await fetch('http://localhost:3500/products') // create a json-server (mockup data): npx json-server -w data/products.json -p 3500 
+      .then(res => {
+        return res.json()
+      })
+      .catch(err => {
+        if(err instanceof Error) {
+          console.log(err)
+        }
+      })
+
+      return data
+    }
+    
+    // fetch data, update state
+    fetchProducts().then(products => {
+      console.log('products provider ue:', products)
+      dispatch({
+        type: REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS, 
+        payload: {products: products}
+      })
+    })
+  }, [])
+
+  return {
+    dispatch, 
+    REDUCER_ACTIONS_PRODUCT,  
+    products: state.products, 
+    filteredProducts: state.filteredProducts,
+    searcheTerm: state.searcheTerm,
+  }
+}
+
 // Init state - static items
 // const initState: ProductType[] = [
 //   {
@@ -38,44 +108,23 @@ const initState: ProductType[] = []
 //   }
 // ]; 
 
-// Create type for init context state by mocking produts.json's content: {products: [{},{},...]}    
-export type UseProductContextType = {products: ProductType[]}
-// Init context state
-const initContextState: UseProductContextType = { products: []}
+// ----------CREATE CONTEXT----------
+// State init
+const initContextState: UseProductContextType = { 
+  dispatch: () => {},
+  REDUCER_ACTIONS_PRODUCT: REDUCER_ACTION_TYPE_PRODUCT,  
+  products: [],
+  filteredProducts: [],
+  searcheTerm: '',
+}
 
 // Create context
-const ProductsContext = createContext<UseProductContextType>(initContextState)
-
-// SET UP CONTEXT PROVIDER
-// type for provider children 
-type ChildrenType = {children?: ReactElement | ReactElement[]}
-
-// provider
+const ProductsContext = createContext<UseProductContextType>(initContextState);
+// ----------CREATE PROVIDER----------
 export const ProductsProvider = ({children}: ChildrenType) => {
 
-  const [products, setProducts] = useState<ProductType[]>(initState);
-
-  useEffect(() => {
-    const fetchProducts = async (): Promise<ProductType[]> => {
-      const data = await fetch('http://localhost:3500/products') // create a json-server (mokup data): npx json-server -w data/products.json -p 3500 
-      .then(res => {
-        return res.json()
-      })
-      .catch(err => {
-        if(err instanceof Error) {
-          console.log(err)
-        }
-      })
-
-      return data
-    }
-
-    // fetch data, update state
-    fetchProducts().then(products => setProducts(products))
-  }, [])
-
  return(
-    <ProductsContext.Provider value={{products}}>
+    <ProductsContext.Provider value={useProductContext(initProductState)}>
       {children}
     </ProductsContext.Provider>
   )

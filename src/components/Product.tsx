@@ -1,9 +1,12 @@
+ // TODO: stock counter -> available / out of stock | unavailable
+ 
 import React, { ReactElement, memo } from 'react'
 import { ProductItemType } from '../types/productsProviderTypes'
 import { ReducerActionType, ReducerAction } from '../types/cartProviderTypes'
 import { MinusIcon, PlusIcon, CheckmarkIcon } from './SVGComponents'
 import './Product.css'
 
+// TYPE
 type PropsType = {
   product: ProductItemType,    
   inCartQty: number | undefined,
@@ -12,11 +15,10 @@ type PropsType = {
   inCart: boolean
 }
 
+// COMPONET
 const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS_CART, inCart }:PropsType): ReactElement => {
-  const img:string =  new URL(`../images/${product.sku}.jpg`, import.meta.url).href
-
+  // HANDLERS
   const onAddToCart = () => dispatch({type: REDUCER_ACTIONS_CART.ADD, payload: {...product, qty: 1}})
-
   const onRemoveSingleFromCart = () => {
     if (inCartQty > 1) {
       dispatch({type: REDUCER_ACTIONS_CART.UPDATE_QUANTITY, payload: {...product, qty: inCartQty - 1 }});
@@ -25,7 +27,7 @@ const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS_CART, inCar
     }
   }
 
-  // Elements
+  // ELEMENTS
   const itemInCart = inCart ? 
     <div className='product__info-in-cart'> 
       <span> {inCartQty} {'in cart'}  </span>
@@ -58,18 +60,21 @@ const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS_CART, inCar
     </>
   )
 
+  const img:string =  new URL(`../images/${product.sku}.jpg`, import.meta.url).href
+
   const content = (
     <article className="product">
-    <img src={img} alt={product.name} className="product__img"/>
-    <h3 className="product__header"> {product.name} </h3>
-    {productInfo}
-    {addOrRemoveProductButtons}
+      <img src={img} alt={product.name} className="product__img"/>
+      <h3 className="product__header"> {product.name} </h3>
+      {productInfo}
+      {addOrRemoveProductButtons}
     </article>
   )
  
- return content
+  return content
 }
 
+// MEMO
 function areProductsEqual({product: prevProduct, inCart: prevInCart, inCartQty: prevInCartQty}: PropsType, {product: nextProduct, inCart: nextInCart, inCartQty: nextInCartQty}: PropsType) {
  
   return (
