@@ -1,0 +1,14 @@
+{
+  "error": {
+    "h1": "Oops! Page Error.",
+    "h2": "Try again later!"
+  },
+  "noSearchResult": {
+    "h1": "Oops! Couldn't find the searched product.",
+    "h2": "Try a different keyword or browse from our list of products"
+  },
+  "emptySearchResult": {
+    "h1": "Oops! Search term is too short.",
+    "h2": "Enter a longer search term! (min. 3 characters)"
+  }
+}
