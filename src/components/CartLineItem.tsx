@@ -1,13 +1,13 @@
 import React, {ReactElement, ChangeEvent, memo} from 'react'
-import {CartItemType} from '../context/CartProvider'
-import { ReducerAction, ReducerActionType } from '../context/CartProvider'
+import { ReducerAction, ReducerActionType, CartItemType } from '../types/cartProviderTypes'
+import { RemoveIcon } from './SVGComponents'
 
 type PropsType = {
   item: CartItemType,
   dispatch: React.Dispatch<ReducerAction>
-  REDUCER_ACTIONS: ReducerActionType
+  REDUCER_ACTIONS_CART: ReducerActionType
 }
-const CartLineItem = ({item, dispatch, REDUCER_ACTIONS}: PropsType) => {
+const CartLineItem = ({item, dispatch, REDUCER_ACTIONS_CART}: PropsType) => {
   
   const img:string =  new URL(`../images/${item.sku}.jpg`, import.meta.url).href
   const lineTotal: number = (item.qty * item.price)
@@ -26,52 +26,55 @@ const CartLineItem = ({item, dispatch, REDUCER_ACTIONS}: PropsType) => {
   const onChangeQty = (e: ChangeEvent<HTMLSelectElement>) => {
     console.log(item, e.target.value)
     dispatch({
-      type: REDUCER_ACTIONS.QUANTITY,
+      type: REDUCER_ACTIONS_CART.UPDATE_QUANTITY,
       payload: {...item, qty: Number(e.target.value)}
     })
   }
 
   const onRemoveFromCart = () => dispatch({
-    type: REDUCER_ACTIONS.REMOVE,
+    type: REDUCER_ACTIONS_CART.REMOVE,
     payload: item
   })
 
   const content = (
     <li className="cart__item">
-      <img src={img} alt={item.name} className="cart__img" />
-      <div aria-label="Item Name">{item.name}</div>
-      <div aria-label="Price Per Item">{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(item.price)}</div>
-      <label htmlFor="itemQty" className="offscreen">
-        Item Quantity
-      </label>
-      <select 
-        name="itemQty" 
-        id="itemQty"
-        className='cart__select'
-        value={item.qty}
-        aria-label='Item Quantity'
-        onChange={onChangeQty}
-      > {options} </select>
-      <div 
-        className="cart_item-subtotal"
-        aria-label="line Item Subtotal"
-      >
-        {new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(lineTotal)}
+      <div className="cart__item--image-and-name" aria-label="Item Name"> 
+        <img src={img} alt={item.name} className="cart__img"/>
+        <span > {item.name} </span>
+      </div>
+      <div className="cart__item--price" aria-label="Price Per Item">
+        <span> 
+          {new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(item.price)}
+        </span>
+        </div>
+      <div className='cart__item--select-quantity'>
+        <select 
+          name="itemQty" 
+          id="itemQty"
+          className='button--select-quantity'
+          value={item.qty}
+          aria-label='Item Quantity'
+          onChange={onChangeQty}
+        > {options} </select>
+      </div>
+      <div className="cart__item-subtotal" aria-label="line Item Subtotal">
+        <span> {new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(lineTotal)} </span>
+      </div>
+      <div className="cart__item-remove" aria-label="line Item Subtotal">
         <button 
-          className="cart__button"
+          className="button--remove-from-cart"
           aria-label="Remove Item From Cart"
           title="Remove Item From Cart"
           onClick={onRemoveFromCart}
-        >
-          X
-        </button>
+          > 
+            <RemoveIcon height='30px' width='30px'/>
+          </button>
       </div>
     </li>
   )
 
   return content
 }
-
 
 // comparing props to make sure they are the same: prevItem === nextItem ? no rerender : rerender
 function areItemsEqual({item: prevItem}: PropsType, {item: nextItem}:PropsType )  {

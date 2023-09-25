@@ -1,43 +1,14 @@
-import {useReducer, useMemo, createContext, ReactElement} from 'react'
+import { useReducer, useMemo, createContext, ReactElement } from 'react'
+import { CartItemType, CartStateType, ReducerAction, UserCartContextType, ChildrenType } from '../types/cartProviderTypes';
+import { REDUCER_ACTION_TYPE_CART } from '../data/reducerActionTypeConstant';
 
-// SET UP REDUCER
-// Cart item type
-export type CartItemType = {
-  sku: string,
-  name: string,
-  price: number,
-  qty: number
-}
-
-// Cart state type
-type CartStateType = {cart: CartItemType[]};
-
-// Cart init state
-const initCartState: CartStateType = {cart: []}
-
-// reducer action strings
-const REDUCER_ACTION_TYPE = {
-  ADD: "ADD",
-  REMOVE: "REMOVE",
-  QUANTITY: "QUANTITY",
-  SUBMIT: "SUBMIT"
-}
-
-// reducer action types type
-export type ReducerActionType = typeof REDUCER_ACTION_TYPE
-
-// reducer action type
-export type ReducerAction = {
-  type: string,
-  payload?: CartItemType,
-}
-
-// reducer function
+// ----------REDUCER----------
+// reducer
 const reducer = (state: CartStateType, action: ReducerAction): CartStateType => {
-  // decide active action
+  // action logic
   switch(action.type) {
     // ADD ITEM
-    case REDUCER_ACTION_TYPE.ADD: {
+    case REDUCER_ACTION_TYPE_CART.ADD: {
       if(!action.payload) {
         throw new Error('action.payload missing in ADD action')
       }
@@ -50,7 +21,7 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
     }
 
     // REMOVE ALL ITEMS
-    case REDUCER_ACTION_TYPE.REMOVE: {
+    case REDUCER_ACTION_TYPE_CART.REMOVE: {
       if(!action.payload) {
         throw new Error('action.payload missing in REMOVE action')
       }
@@ -59,10 +30,10 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
       return {...state, cart: [...filteredCart]} 
     }
 
-    // QUANTITY
-    case REDUCER_ACTION_TYPE.QUANTITY: {
+    // UPDATE QUANTITY
+    case REDUCER_ACTION_TYPE_CART.UPDATE_QUANTITY: {
       if(!action.payload) {
-        throw new Error('action.payload missing in QUANTITY action')
+        throw new Error('action.payload missing in UPDATE_QUANTITY action')
       }
       const {sku, qty} = action.payload
       const itemExists: CartItemType | undefined = state.cart.find(item => item.sku === sku); // check if item is in cart
@@ -76,7 +47,7 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
     }
     
     // SUBMIT ORDER
-    case REDUCER_ACTION_TYPE.SUBMIT: {
+    case REDUCER_ACTION_TYPE_CART.SUBMIT_ORDER: {
       return {...state, cart: []} // empty out cart on submit
     }
     
@@ -85,13 +56,16 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
   }
 }
 
-// CART CONTEXT: with exports (reducer, calculated values)
-const useCartContext = (initCartState: CartStateType) => {
+// ----------CART CONTEXT LOGIC----------
+// Cart init state
+const initCartState: CartStateType = {cart: []}
+
+export const useCartContext = (initCartState: CartStateType) => {
   const [state, dispatch] = useReducer(reducer, initCartState)
 
   // memoize reducer actions -> so they won't cause unnecessary rerender
-  const REDUCER_ACTIONS = useMemo(() => {
-    return REDUCER_ACTION_TYPE
+  const REDUCER_ACTIONS_CART = useMemo(() => {
+    return REDUCER_ACTION_TYPE_CART
   }, [])
 
   // Calc values:
@@ -112,17 +86,14 @@ const useCartContext = (initCartState: CartStateType) => {
     return itemA - itemB
   })
 
-  return {dispatch, REDUCER_ACTIONS, totalItems, totalPrice, cart}
+  return {dispatch, REDUCER_ACTIONS_CART, totalItems, totalPrice, cart}
 }
 
-// CREATE CONTEXT
-// define type for use context return value & state init type  
-export type UserCartContextType = ReturnType<typeof useCartContext>
-
+// ----------CREATE CONTEXT----------
 // state initializer
 const initCartContextState: UserCartContextType = {
   dispatch: () => {},
-  REDUCER_ACTIONS: REDUCER_ACTION_TYPE,
+  REDUCER_ACTIONS_CART: REDUCER_ACTION_TYPE_CART,
   totalItems: 0,
   totalPrice: '',
   cart: []
@@ -131,16 +102,11 @@ const initCartContextState: UserCartContextType = {
 // create context
 const CartContext = createContext<UserCartContextType>(initCartContextState)
 
-// CREATE PROVIDER
-// provider type
-type ChildrenType = {children?: ReactElement | ReactElement[]}
-
+// ----------CREATE PROVIDER----------
 // provider component
 export const CartProvider = ({children}: ChildrenType): ReactElement => {
   return (
-    <CartContext.Provider
-      value={useCartContext(initCartState)}
-    >
+    <CartContext.Provider value={useCartContext(initCartState)}>
       {children}
     </CartContext.Provider>
   )
