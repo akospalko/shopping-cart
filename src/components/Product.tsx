@@ -1,5 +1,3 @@
- // TODO: stock counter -> available / out of stock | unavailable
- 
 import React, { ReactElement, memo } from 'react'
 import { ProductItemType } from '../types/productsProviderTypes'
 import { ReducerActionType, ReducerAction } from '../types/cartProviderTypes'
