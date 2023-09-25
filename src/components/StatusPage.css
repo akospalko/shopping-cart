@@ -1,0 +1,39 @@
+
+.main--status-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--color-2);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+}
+
+.main--status-page-wrapper h1 {
+  text-align: center;
+  color: var(--color-4);
+  margin: 1rem 0;
+  font-size: 2rem;
+  line-height: calc(2rem * 1.1);
+}
+
+.main--status-page-wrapper h2 {
+  text-align: center;
+  color: var(--color-4);
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  line-height: calc(1.5rem * 1.1);
+}
+
+.status-page__button {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 767px) {
+  .main--status-page-wrapper {
+    width: 750px;
+  }
+}
