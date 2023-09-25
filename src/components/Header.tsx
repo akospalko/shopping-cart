@@ -5,15 +5,18 @@ import { CartIcon } from './SVGComponents'
 import './Header.css'
 import SearchBar from './SearchBar'
 
+// TYPE
 type PropsType = {
   viewCart: boolean,
   setViewCart: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
+// COMPONENT
 const Header = ({viewCart, setViewCart}: PropsType) => {
+  // CONTEXT
   const {totalItems} = useCart();
 
-  // Elements
+  // ELEMENTS
   const title = (
     <div className="header__title">
       <h1> Acme co. </h1>
@@ -39,7 +42,7 @@ const Header = ({viewCart, setViewCart}: PropsType) => {
     </div>
   )
 
-  // Layouts
+  // LAYOUTS
   const smallScreenLayout = (
     <header className='header header__small-screen'>
       {navigation}
