@@ -1,5 +1,4 @@
-// TODO: rename filteredProducts state value: matchedProducts/found, etc
-
+// Products search bar and related logic
 import { ChangeEvent, CSSProperties } from 'react'
 import './SearchBar.css'
 import useProducts from '../hooks/useProducts';
