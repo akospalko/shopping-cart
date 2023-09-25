@@ -100,9 +100,9 @@ export function CheckmarkIcon({width, height, fill, stroke, strokeWidth, wrapper
 }
 
 // Remove / delete all items
-export function RemoveIcon({width, height, fill, stroke, strokeWidth}: IconComponentType): ReactElement | ReactElement[]  {
+export function RemoveIcon({width, height, fill, stroke, strokeWidth, wrapperCustomStyle}: IconComponentType): ReactElement | ReactElement[]  {
   return (
-    <IconWrapper>
+    <IconWrapper wrapperCustomStyle={wrapperCustomStyle}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width={width ||  "100%" }

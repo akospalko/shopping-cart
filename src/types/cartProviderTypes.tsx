@@ -28,5 +28,4 @@ export type ReducerAction = {
 export type UserCartContextType = ReturnType<typeof useCartContext>
 
 // ----------CREATE PROVIDER----------
-// provider type
 export type ChildrenType = {children?: ReactElement | ReactElement[]}
