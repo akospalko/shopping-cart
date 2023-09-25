@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 type PropsType = {
   viewCart: boolean,
@@ -12,9 +13,9 @@ const Nav = ({viewCart, setViewCart}: PropsType) => {
   <button className='button--toggle-cart' onClick={() => setViewCart(true)}> Cart </button>
 
   const content = (
-    <nav className="nav">
+    <NavLink to={`/${ viewCart ? 'products' : 'cart'}`} className="nav">
       {button}
-    </nav>
+    </NavLink>
   )
 
   return content
