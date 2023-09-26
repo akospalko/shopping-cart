@@ -4,6 +4,7 @@ import useCart from '../hooks/useCart'
 import Product from './Product'
 import { CartItemType } from '../types/cartProviderTypes'
 import { ProductItemType } from '../types/productsProviderTypes'
+import Pagination from './Pagination'
 
 // TYPE
 type PropsType = {
@@ -62,6 +63,7 @@ const ProductList = ({productsData}: PropsType) => {
   return ( 
     <main className="main main--products">
       {productsContent}
+      <Pagination/>
     </main>
   )
 }
