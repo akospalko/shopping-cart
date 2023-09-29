@@ -162,6 +162,28 @@ export function SearchIcon({width, height, stroke, strokeWidth, wrapperCustomSty
   );
 }
 
+// Arrow
+export function ArrowIcon({width, height, fill, wrapperCustomStyle}: IconComponentType): ReactElement | ReactElement[] {
+  return (
+    <IconWrapper wrapperCustomStyle={wrapperCustomStyle}>
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        viewBox="0 0 1920 1920"
+        width={width ||  "100%"}
+        height={height || "100%"}
+      >
+        <path
+          fillRule="evenodd"
+          fill={fill || "#000" }
+          d="M1352.005.012l176.13 176.13-783.864 783.989 783.864 783.74L1352.005 1920 391.887 960.13z"
+        ></path>
+      </svg>
+    </IconWrapper>
+  );
+}
+    
+
+
 // Logo
 export function LogoIcon({width, height, wrapperCustomStyle}: IconComponentType): ReactElement | ReactElement[] {
   return (
