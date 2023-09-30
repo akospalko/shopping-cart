@@ -17,7 +17,7 @@ export type ReducerAction = {
 export type ProductStateType = {
   products?: ProductItemType[],
   filteredProducts?: ProductItemType[],
-  searcheTerm?: string
+  searchTerm?: string,
 }
 
 // ----------CREATE CONTEXT----------

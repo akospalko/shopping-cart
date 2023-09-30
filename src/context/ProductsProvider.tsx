@@ -20,7 +20,7 @@ const reducer = (state: ProductStateType, action: ReducerAction): ProductStateTy
       if(!action.payload) {
         throw new Error('action.payload missing in UPDATE_SEARCH_VALUE action')
       }
-      return {...state, searcheTerm: action.payload.searcheTerm}
+      return {...state, searchTerm: action.payload.searchTerm}
     // UPDATE PRODUCTS
     case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS: 
       if(!action.payload) {
@@ -45,7 +45,7 @@ const reducer = (state: ProductStateType, action: ReducerAction): ProductStateTy
 const initProductState: ProductStateType = {
   products: [],
   filteredProducts: [],
-  searcheTerm: ''
+  searchTerm: '',
 }
 
 export const useProductContext = (initProductState: ProductStateType) => {
@@ -66,13 +66,11 @@ export const useProductContext = (initProductState: ProductStateType) => {
           console.log(err)
         }
       })
-
       return data
     }
     
     // fetch data, update state
     fetchProducts().then(products => {
-      console.log('products provider ue:', products)
       dispatch({
         type: REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS, 
         payload: {products: products}
@@ -85,7 +83,7 @@ export const useProductContext = (initProductState: ProductStateType) => {
     REDUCER_ACTIONS_PRODUCT,  
     products: state.products, 
     filteredProducts: state.filteredProducts,
-    searcheTerm: state.searcheTerm,
+    searchTerm: state.searchTerm,
   }
 }
 
@@ -115,7 +113,7 @@ const initContextState: UseProductContextType = {
   REDUCER_ACTIONS_PRODUCT: REDUCER_ACTION_TYPE_PRODUCT,  
   products: [],
   filteredProducts: [],
-  searcheTerm: '',
+  searchTerm: '',
 }
 
 // Create context
