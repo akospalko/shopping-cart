@@ -54,10 +54,10 @@
   padding: 3px;
   height: 20px;
   border-radius: var(--border-radius);
-  background-color: var(--color-1);
-  border: 2px solid var(--color-4);
-  color: var(--color-4);
+  background-color: var(--color-4);
+  color: var(--color-1);
   font-size: 0.7rem;
+  font-weight: bold;
   text-align: center;
 }
 
