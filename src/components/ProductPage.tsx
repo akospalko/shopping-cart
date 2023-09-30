@@ -1,8 +1,10 @@
+// Component to hold the product items and related pagination
 import {useEffect, useState, ReactElement} from 'react'
 import './ProductList.css'
 import {ProductItemType} from '../types/productsProviderTypes'
 import Pagination from './Pagination'
 import ProductList from './ProductList'
+import {useNavigate, useParams, useLocation} from 'react-router-dom'
 
 // TYPE
 type PropsType = {
@@ -11,17 +13,27 @@ type PropsType = {
 
 // COMPONENT
 const ProductPage = ({productsData}: PropsType) => {
+  // ROUTE
+  const navigate = useNavigate();
+  const {page} = useParams();
+  const location = useLocation();
+  
+  // STATE
+  const [activePage, setActivePage] = useState<number>(parseInt(page || '1'));
 
-  // EFFECT
+  // EFFECTS
   useEffect(() => {
     sessionStorage.setItem('lastVisitedPage', 'products');
   }, [])
 
-    // STATE
-    const [activePage, setActivePage] = useState<number>(1);
+  useEffect(() => {
+    const testLocation = location.pathname.split('').filter(segment => segment !== '').slice(0, -1).join('')
+    navigate(`${testLocation}${activePage}`, { replace: true });
+    console.log(`${testLocation}${activePage}`)
+  }, [activePage, location.pathname, navigate])
 
     // CONSTANT VALUES
-    const itemsPerPage = 1;
+    const itemsPerPage = 10;
 
     // CALCULATED VALUES
     const displayedProductData: ProductItemType[] = productsData || []
@@ -44,7 +56,7 @@ const ProductPage = ({productsData}: PropsType) => {
     <main className="main main--products">
       <h1 className="main--products__title"> Browse goodies </h1>
       { productsData?.length ? 
-        <ProductList productsData={paginatedProducts} />
+        <ProductList productsData={paginatedProducts}/>
         : 
         loader 
       }

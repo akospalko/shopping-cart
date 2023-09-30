@@ -13,7 +13,7 @@ const Nav = ({viewCart, setViewCart}: PropsType) => {
   <button className='button--toggle-cart' onClick={() => setViewCart(true)}> Cart </button>
 
   const content = (
-    <NavLink to={`/${ viewCart ? 'products' : 'cart'}`} className="nav">
+    <NavLink to={`/${ viewCart ? 'products/1' : 'cart'}`} className="nav">
       {button}
     </NavLink>
   )
