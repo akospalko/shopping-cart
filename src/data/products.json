@@ -1,19 +1,54 @@
 {
   "products": [
-      {
-          "sku": "item0001",
-          "name": "AMD Ryzen 9 5900X 12-Core 3.7GHz",
-          "price": 29.99
-      },
-      {
-          "sku": "item0002",
-          "name": "AMD Ryzen 7 7800X3D 4.4GHz 8-Cores",
-          "price": 19.99
-      },
-      {
-          "sku": "item0003",
-          "name": "AMD Ryzen 5 7600X 4.7GHz 6-Core",
-          "price": 9.99
-      }
+    {
+        "sku": "item0001",
+        "name": "AMD Ryzen 9 5900X 12-Core 3.7GHz",
+        "price": 29.99
+    },
+    {
+        "sku": "item0002",
+        "name": "AMD Ryzen 7 7800X3D 4.4GHz 8-Cores",
+        "price": 19.99
+    },
+    {
+        "sku": "item0003",
+        "name": "AMD Ryzen 5 7600X 4.7GHz 6-Core",
+        "price": 9.99
+    },
+    {
+        "sku": "item0004",
+        "name": "Intel Core i9-13900K 3.0GHz 24-Core",
+        "price": 34.99
+    },
+    {
+        "sku": "item0005",
+        "name": "Intel Core i7-13700K 3.4GHz 16-Core",
+        "price": 24.49
+    },
+    {
+        "sku": "item0006",
+        "name": "item007",
+        "price": 15
+    },
+    {
+        "sku": "item0007",
+        "name": "item0007",
+        "price": 74.99
+    },
+    {
+        "sku": "item0008",
+        "name": "item0008",
+        "price": 32
+    },
+    {
+        "sku": "item0009",
+        "name": "item0009",
+        "price": 10
+    },
+    {
+        "sku": "item0010",
+        "name": "item0010",
+        "price": 100
+    }
   ]
 }

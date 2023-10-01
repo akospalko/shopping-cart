@@ -42,7 +42,7 @@ select {
     flex-direction: column;
     width: 100%;
     min-height: 100vh;
-    background-color: var(--color-4);
+    background-color: var(--color-5);
 }
 
 .main,
@@ -60,6 +60,7 @@ select {
 .main--status-page {
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -121,6 +122,7 @@ button {
     border: 0;
     background-color: rgb(253, 253, 253, 1);
     cursor: pointer;
+    user-select: none;
 }
 
 .button--toggle-cart {
@@ -128,7 +130,7 @@ button {
     width: 75px;
     height: 40px;
     padding: 0.25rem;
-    background-color: var(--color-4);
+    background-color: var(--color-5);
     color: var(--color-1);
     transition: transform 0.2s ease;
 }
@@ -191,8 +193,8 @@ button {
     width: 75px;
     height: 100%;
     background-color: var(--color-1);
-    border: 2px solid var(--color-4);
-    color: var(--color-4);
+    border: 2px solid var(--color-5);
+    color: var(--color-5);
     padding: 0.5rem;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
@@ -209,7 +211,7 @@ button {
 
 .button--navigate-back {
     height: 50px;
-    background-color: var(--color-4);
+    background-color: var(--color-5);
     border-radius: var(--border-radius);
     color: var(--color-1);
     font-size: 1.2rem;

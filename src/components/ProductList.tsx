@@ -1,3 +1,4 @@
+// Displayed products container
 import './ProductList.css'
 import useCart from '../hooks/useCart'
 import Product from './Product'
