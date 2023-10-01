@@ -6,20 +6,20 @@ import { ProductItemType } from '../types/productsProviderTypes';
 import { RemoveIcon, SearchIcon } from './SVGComponents';
 import { useNavigate } from 'react-router-dom';
 
+// COMPONENT
 const SearchBar = () => {
   // ROUTE
   const navigate = useNavigate()
 
   // CONTEXTS
-  const {dispatch, REDUCER_ACTIONS_PRODUCT, products, filteredProducts, searcheTerm } = useProducts();
-
+  const {dispatch, REDUCER_ACTIONS_PRODUCT, products, filteredProducts, searchTerm} = useProducts();
   // HANDLERS
   const searchBarHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     dispatch({
       type: REDUCER_ACTIONS_PRODUCT.UPDATE_SEARCH_VALUE, 
       payload: {
-        searcheTerm: value
+        searchTerm: value
       }
     })
   }
@@ -27,8 +27,8 @@ const SearchBar = () => {
   // HANDLER
   const SearchProductHandler = () => {
     // check if search term was provided
-    const searchTerm = searcheTerm?.trim() || '';
-    if (!searchTerm?.length) {
+    const searchTermFormatted: string = searchTerm?.trim() || '';
+    if (!searchTermFormatted?.length) {
       navigate('/products/search/empty');
       return;
     }  
@@ -36,7 +36,7 @@ const SearchBar = () => {
     // find products where product name is matching the search term  
     let foundProducts: ProductItemType[] = [];
     foundProducts = products?.filter((product: ProductItemType) => {
-      return product.name.toLowerCase().includes(searchTerm?.toLowerCase())}) ?? []
+      return product.name.toLowerCase().includes(searchTermFormatted?.toLowerCase())}) ?? []
 
     // checks: found / not found products
     if(foundProducts.length) {
@@ -45,9 +45,8 @@ const SearchBar = () => {
         type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
         payload: {filteredProducts: foundProducts}
       })
-      navigate('/products/search/result');
+      navigate(`/products/search/1`);
     } else if(!foundProducts.length) {
-      console.log('NO SUCH PRODUCT')
       dispatch({
         type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
         payload: {filteredProducts: []}
@@ -59,11 +58,11 @@ const SearchBar = () => {
   // Remove search results empty search bar input field
   const RemoveSearchResultsHandler = () => {
     // empty input field
-    dispatch({type: 'UPDATE_SEARCH_VALUE', payload: {searcheTerm: ''} })
+    dispatch({type: 'UPDATE_SEARCH_VALUE', payload: {searchTerm: ''} })
     if(filteredProducts?.length) {
       dispatch({type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS, payload: {filteredProducts: []}})
     }
-    navigate('/products'); // navigate back to either products or cart (which one was the previous)
+    navigate('/products/1'); // navigate back to products
   }
 
   // STYLE
@@ -79,6 +78,7 @@ const SearchBar = () => {
     <button 
       className='button--search-bar-remove-term'
       onClick={RemoveSearchResultsHandler}
+      disabled={!searchTerm?.length}
     >
        <RemoveIcon 
         width='20px' 
@@ -102,7 +102,7 @@ const SearchBar = () => {
         className="search-bar__input-field" 
         name='search-bar' 
         onChange={searchBarHandler}
-        value={searcheTerm}
+        value={searchTerm}
       />
       <button 
         className='button--search-bar__submit'

@@ -9,7 +9,7 @@
   flex-grow: 1;
   border: none;
   padding: 0.5rem 2.5rem 0.5rem 2.5rem;
-  background-color: var(--color-4);
+  background-color: var(--color-5);
   font-size: 1rem;
   color: var(--color-1);
   border-radius: var(--border-radius) 0 0 var(--border-radius);
