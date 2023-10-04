@@ -4,7 +4,8 @@ import { useProductContext } from "../context/ProductsProvider"
 export type ProductItemType = {
   sku: string,
   name: string,
-  price: number
+  price: number,
+  category: string
 }
 
 // ----------REDUCER----------
