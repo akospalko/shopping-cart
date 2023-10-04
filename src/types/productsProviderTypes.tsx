@@ -19,6 +19,7 @@ export type ProductStateType = {
   products?: ProductItemType[],
   filteredProducts?: ProductItemType[],
   searchTerm?: string,
+  activePage?: number,
 }
 
 // ----------CREATE CONTEXT----------

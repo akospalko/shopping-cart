@@ -1,10 +1,8 @@
 import {ReactElement} from 'react'
 
 // ProductSidemenu & ProductCategory 
-export type ProductsSidemenuPropsType = {
-  onResetActivePage: React.Dispatch<React.SetStateAction<number>>
-  activeCategory: string
-}
+export type ProductsSidemenuPropsType = {activeCategory: string}
+
 // ProductCategory
 // category item type
 export type ProductCategoryItemType = {
@@ -12,5 +10,6 @@ export type ProductCategoryItemType = {
   icon: string,
   category: string,
 }
+
 // category icon type
 export type CategoryIconType = {[key: string]: ReactElement}
