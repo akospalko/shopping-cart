@@ -6,21 +6,29 @@ import { ProductItemType } from '../types/productsProviderTypes';
 import { RemoveIcon, SearchIcon } from './SVGComponents';
 import { useNavigate } from 'react-router-dom';
 
+const CONSTANTS = {
+  SEARCH: 'Search'
+}
+
 // COMPONENT
 const SearchBar = () => {
   // ROUTE
   const navigate = useNavigate()
-
+  
   // CONTEXTS
-  const {dispatch, REDUCER_ACTIONS_PRODUCT, products, filteredProducts, searchTerm} = useProducts();
+  const {dispatch, 
+    REDUCER_ACTIONS_PRODUCT, 
+    products, 
+    filteredProducts, 
+    searchTerm,
+  } = useProducts();
+
   // HANDLERS
   const searchBarHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     dispatch({
       type: REDUCER_ACTIONS_PRODUCT.UPDATE_SEARCH_VALUE, 
-      payload: {
-        searchTerm: value
-      }
+      payload: {searchTerm: value}
     })
   }
 
@@ -29,7 +37,7 @@ const SearchBar = () => {
     // check if search term was provided
     const searchTermFormatted: string = searchTerm?.trim() || '';
     if (!searchTermFormatted?.length) {
-      navigate('/products/search/empty');
+      navigate('/search/empty');
       return;
     }  
     
@@ -37,21 +45,24 @@ const SearchBar = () => {
     let foundProducts: ProductItemType[] = [];
     foundProducts = products?.filter((product: ProductItemType) => {
       return product.name.toLowerCase().includes(searchTermFormatted?.toLowerCase())}) ?? []
-
+      
     // checks: found / not found products
     if(foundProducts.length) {
-      console.log('ITEM FOUND', foundProducts)
+      navigate(`/search/1`, {replace: true});
       dispatch({
         type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
         payload: {filteredProducts: foundProducts}
       })
-      navigate(`/products/search/1`);
+      dispatch({
+        type: REDUCER_ACTIONS_PRODUCT.UPDATE_ACTIVE_PAGE,
+        payload: {activePage: 1}
+      })
     } else if(!foundProducts.length) {
       dispatch({
         type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
         payload: {filteredProducts: []}
       })
-      navigate('/products/search/no-result');
+      navigate('/search/no-result');
     }
   }
 
@@ -62,7 +73,7 @@ const SearchBar = () => {
     if(filteredProducts?.length) {
       dispatch({type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS, payload: {filteredProducts: []}})
     }
-    navigate('/products/1'); // navigate back to products
+    navigate('/all/1'); // navigate back to products
   }
 
   // STYLE
@@ -107,7 +118,7 @@ const SearchBar = () => {
       <button 
         className='button--search-bar__submit'
         onClick={SearchProductHandler}
-      > Search
+      > {CONSTANTS.SEARCH}
       </button>
     </div>
   )
