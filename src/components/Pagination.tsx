@@ -2,27 +2,24 @@
 import { ReactElement } from 'react';
 import './Pagination.css';
 import { ArrowIcon } from './SVGComponents';
+import { 
+  PaginationPropsType, 
+  NavigationButtonPropsType, 
+  GoToPageButtonParameterType, 
+  GoToPageButtonType } from '../types/paginationTypes';
+import useProducts from '../hooks/useProducts';
+import { useUpdateActivePage } from '../hooks/useUpdateActivePage';
 
-// TYPES
-type PaginationPropsType = {
-  activePage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-};
 
-type NavigationButtonPropsType = {
-  key?: string | number;
-  style?: string;
-  clicked: () => void;
-  disabled?: boolean;
-  label?: string | number | ReactElement | ReactElement[];
-};
+// PAGINATION COMPONENT
+const Pagination = ({totalPages}: PaginationPropsType) => {
+  // CONTEXT
+  const {activePage} = useProducts()
+  const pageNumber = activePage || 1
 
-type GoToPageButtonParameterType = number;
-type GoToPageButtonType = (page: GoToPageButtonParameterType ) => ReactElement
+  // HOOK 
+  const updateActivePageHandler = useUpdateActivePage()
 
-// COMPONENTS
-const Pagination = ({ activePage, totalPages, onPageChange }: PaginationPropsType) => {
   // STYLES
   // custom style for prev (<) & next (>) buttons
   const navigationPrevNextButtonStyle = 'button-pagination-navigation-next-prev' 
@@ -33,9 +30,9 @@ const Pagination = ({ activePage, totalPages, onPageChange }: PaginationPropsTyp
   const goToPageButton: GoToPageButtonType = (page: GoToPageButtonParameterType): ReactElement => {
     return <NavigationButton 
       key={page}
-      style={activePage === page ? navigationActiveButtonStyle : '' } 
-      clicked={() => onPageChange(page)}
-      disabled={activePage === page} 
+      style={pageNumber === page ? navigationActiveButtonStyle : '' } 
+      clicked={() => updateActivePageHandler(page)}
+      disabled={pageNumber === page} 
       label={page}
     />
   }
@@ -50,7 +47,7 @@ const Pagination = ({ activePage, totalPages, onPageChange }: PaginationPropsTyp
       return Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
         goToPageButton(page)
       ));
-    } else if (activePage <= 4) {
+    } else if (pageNumber <= 4) {
       // Show pages 1-5, an ellipsis, and the last page
       return (
         <>
@@ -61,7 +58,7 @@ const Pagination = ({ activePage, totalPages, onPageChange }: PaginationPropsTyp
           {goToPageButton(totalPages)}
         </>
       );
-    } else if (activePage >= totalPages - 3) {
+    } else if (pageNumber >= totalPages - 3) {
       // Show the first page, an ellipsis, and pages totalPages-4 to totalPages
       return (
         <>
@@ -78,7 +75,7 @@ const Pagination = ({ activePage, totalPages, onPageChange }: PaginationPropsTyp
         <>
           {goToPageButton(1)}
           {goToPageButton_ellipsis}
-          {Array.from({ length: 3 }, (_, i) => activePage - 1 + i).map((page) => (
+          {Array.from({ length: 3 }, (_, i) => pageNumber - 1 + i).map((page) => (
             goToPageButton(page)
           ))}
           {goToPageButton_ellipsis}
@@ -93,15 +90,15 @@ const Pagination = ({ activePage, totalPages, onPageChange }: PaginationPropsTyp
       <div className="pagination__navigation">
         <NavigationButton
           style={navigationPrevNextButtonStyle}
-          clicked={() => onPageChange(activePage - 1)}
-          disabled={activePage === 1}
+          clicked={() => updateActivePageHandler(pageNumber - 1)}
+          disabled={pageNumber === 1}
           label={<ArrowIcon  width='12px' height='12px' fill='var(--color-1)'/>}
         />
         {renderPageButtons()}
         <NavigationButton
           style={navigationPrevNextButtonStyle}
-          clicked={() => onPageChange(activePage + 1)}
-          disabled={activePage === totalPages}
+          clicked={() => updateActivePageHandler(pageNumber + 1)}
+          disabled={pageNumber === totalPages}
           label={<ArrowIcon  width='12px' height='12px' fill='var(--color-1)' wrapperCustomStyle={{'transform': 'rotate(180deg)'}}/>}
         />
       </div>
@@ -111,7 +108,7 @@ const Pagination = ({ activePage, totalPages, onPageChange }: PaginationPropsTyp
 
 export default Pagination;
 
-// Reusable navigation btn used for page pagination 
+// REUSABLE BTN FOR PAGINATION 
 const NavigationButton = ({ style, clicked, disabled, label }: NavigationButtonPropsType) => {
   return (
     <button
