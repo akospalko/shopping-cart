@@ -57,7 +57,7 @@ export const ProductCategories = ({activeCategory}: ProductsSidemenuPropsType) =
 
   return (     
   <div className="product-sidemenu-category">
-    <h2 className="product-sidemenu-category__header">{CONSTANTS.CATEGORIES}</h2>
+    <h2 className="product-sidemenu-category__header--2">{CONSTANTS.CATEGORIES}</h2>
     <div className="product-sidemenu-category__content">
       {menuCategories}
     </div>
