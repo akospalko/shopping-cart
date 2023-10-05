@@ -33,6 +33,12 @@ const reducer = (state: ProductStateType, action: ReducerAction): ProductStateTy
         throw new Error('action.payload missing in UPDATE_FILTERED_PRODUCTS action')
       }
       return {...state, filteredProducts: action.payload.filteredProducts}
+    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_ACTIVE_PAGE:
+      if(!action.payload) {
+        throw new Error('action.payload missing in UPDATE_ACTIVE_PAGE action')
+      }
+      return {...state, activePage: action.payload.activePage}
+
     // DEFAULT
     default: {
       throw new Error('Unindentified reducer action type')
@@ -46,6 +52,7 @@ const initProductState: ProductStateType = {
   products: [],
   filteredProducts: [],
   searchTerm: '',
+  activePage: 1
 }
 
 export const useProductContext = (initProductState: ProductStateType) => {
@@ -84,6 +91,7 @@ export const useProductContext = (initProductState: ProductStateType) => {
     products: state.products, 
     filteredProducts: state.filteredProducts,
     searchTerm: state.searchTerm,
+    activePage: state.activePage
   }
 }
 
@@ -114,6 +122,7 @@ const initContextState: UseProductContextType = {
   products: [],
   filteredProducts: [],
   searchTerm: '',
+  activePage: 1
 }
 
 // Create context
