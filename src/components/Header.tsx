@@ -5,6 +5,11 @@ import { CartIcon } from './SVGComponents'
 import './Header.css'
 import SearchBar from './SearchBar'
 
+// CONSTANT
+const CONSTANTS = {
+  LOGO_TITLE: 'Acme co.' 
+}
+
 // TYPE
 type PropsType = {
   viewCart: boolean,
@@ -19,7 +24,7 @@ const Header = ({viewCart, setViewCart}: PropsType) => {
   // ELEMENTS
   const title = (
     <div className="header__title">
-      <h1> Acme co. </h1>
+      <h1>{CONSTANTS.LOGO_TITLE}</h1>
     </div>
   )
 
