@@ -11,9 +11,10 @@
   border-radius: var(--border-radius);
   padding: 1rem;
   background-color: var(--color--light);
+  height: 200px;
 }
 
-.product__header {
+.product__header--3 {
   color: var(--color-1);
   margin-top: 0.5rem;
   font-size: 0.9rem;
@@ -72,11 +73,6 @@
 }
 
 /* MEDIA QUERIES */
-@media screen and (min-width: 360px) {
-  .product__img {
-    height: 200px;
-  }
-}
 @media screen and (min-width: 450px) {
   .product__img {
     height: 250px;

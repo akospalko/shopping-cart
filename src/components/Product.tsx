@@ -15,6 +15,10 @@ type PropsType = {
 
 // COMPONET
 const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS_CART, inCart }:PropsType): ReactElement => {
+  
+  // VALUES
+  const img:string =  new URL(`../images/${product.sku}.jpg`, import.meta.url).href
+  
   // HANDLERS
   const onAddToCart = () => dispatch({type: REDUCER_ACTIONS_CART.ADD, payload: {...product, qty: 1}})
   const onRemoveSingleFromCart = () => {
@@ -29,7 +33,7 @@ const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS_CART, inCar
   const itemInCart = inCart ? 
     <div className='product__info-in-cart'> 
       <span> {inCartQty} {'in cart'}  </span>
-      <CheckmarkIcon width='20px' height='20px' wrapperCustomStyle={{"width": "auto"}}/>
+      <CheckmarkIcon width='20px' height='20px' wrapperCustomStyle={{'width': 'auto'}}/>
     </div> 
     : null
 
@@ -58,18 +62,14 @@ const Product = ({ product, inCartQty = 0, dispatch, REDUCER_ACTIONS_CART, inCar
     </>
   )
 
-  const img:string =  new URL(`../images/${product.sku}.jpg`, import.meta.url).href
-
-  const content = (
-    <article className="product">
-      <img src={img} alt={product.name} className="product__img"/>
-      <h3 className="product__header"> {product.name} </h3>
+  return (
+    <article className='product'>
+      <img src={img} alt={product.name} className='product__img'/>
+      <h3 className='product__header--3'> {product.name} </h3>
       {productInfo}
       {addOrRemoveProductButtons}
     </article>
   )
- 
-  return content
 }
 
 // MEMO
