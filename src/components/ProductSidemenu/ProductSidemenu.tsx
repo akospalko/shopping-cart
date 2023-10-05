@@ -1,17 +1,14 @@
 // Product page menu that holds product categories and additional menu elements
 import './ProductSidemenu.css'
-import { ProductCategories } from './ProductCategories'
-import { ProductsSidemenuPropsType } from '../../types/productSidemenuTypes'
+import {ProductCategories} from './ProductCategories'
+import {ProductsSidemenuPropsType} from '../../types/productSidemenuTypes'
 
 // COMPONENT
-const ProductSidemenu = ({onResetActivePage, activeCategory}: ProductsSidemenuPropsType) => {
+const ProductSidemenu = ({activeCategory}: ProductsSidemenuPropsType) => {
   
   return (
     <div className='product-sidemenu'>
-      <ProductCategories 
-        onResetActivePage={onResetActivePage} 
-        activeCategory={activeCategory} 
-      />
+      <ProductCategories activeCategory={activeCategory}/>
     </div>
   )
 }

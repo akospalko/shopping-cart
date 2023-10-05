@@ -5,13 +5,16 @@ import productCategories from '../../data/productCategories.json'
 import {NavLink} from 'react-router-dom'
 import {ProductsSidemenuPropsType, ProductCategoryItemType, CategoryIconType} from '../../types/productSidemenuTypes'
 import { CheckmarkIcon, RemoveIcon } from '../SVGComponents'
+import { useUpdateActivePage } from '../../hooks/useUpdateActivePage'
+
+// CONSTANT
+const CONSTANTS = {CATEGORIES: 'Categories'}
 
 // COMPONENT
-export const ProductCategories = ({onResetActivePage, activeCategory}: ProductsSidemenuPropsType) => {
-  // CONSTANT
-  const CONSTANTS = {
-    CATEGORIES: 'Categories'
-  }
+export const ProductCategories = ({activeCategory}: ProductsSidemenuPropsType) => {
+
+  // HOOK 
+  const updateActivePageHandler = useUpdateActivePage()
 
   // ELEMENTS
   // Icon
@@ -45,7 +48,7 @@ export const ProductCategories = ({onResetActivePage, activeCategory}: ProductsS
     <NavLink 
       key={i}
       to={`/${item.category}/1`}
-      onClick={() => onResetActivePage(1)} // activate new category -> reset pagination to 1
+      onClick={() => updateActivePageHandler(1)} // activate new category -> reset pagination to 1
       className='product-sidemenu-category__item product-sidemenu-category__item--inactive'
     >
       {categoryItemContent(item)}
