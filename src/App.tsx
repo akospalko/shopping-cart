@@ -20,12 +20,12 @@ function App() {
       <Header viewCart={viewCart} setViewCart={setViewCart}/>
       <Routes>
         <Route path="/cart" element={<Cart />}/>
-        <Route path="/products/search/:page" element={<ProductPage productsData={filteredProducts}/>}/>  
-        <Route path="/products/:page" element={<ProductPage productsData={products}/>}/>
-        <Route path="/products/search/no-result" element={<StatusPage statusType='noSearchResult'/>}/>
-        <Route path="/products/search/empty" element={<StatusPage statusType='emptySearchResult'/>}/>
+        <Route path="/search/:page" element={<ProductPage productData={filteredProducts}/>}/>  
+        <Route path="/search/no-result" element={<StatusPage statusType='noSearchResult'/>}/>
+        <Route path="/search/empty" element={<StatusPage statusType='emptySearchResult'/>}/>
+        <Route path="/:category/:page" element={<ProductPage productData={products}/>}/>
         <Route path="/error" element={<StatusPage statusType='error'/>}/>
-        <Route path="/" element={<Navigate to='/products/1'/>} />
+        <Route path="/" element={<Navigate to='/all/1'/>} />
       </Routes>
       <Footer/>
     </div>
