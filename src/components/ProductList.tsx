@@ -15,7 +15,7 @@ const ProductList = ({productsData}: PropsType) => {
 
   // CONTEXTS
   const {dispatch, REDUCER_ACTIONS_CART, cart} = useCart()
-
+  
   // GETTERS
   // check value if an item is added to cart
   const isItemInCart = (cartItems: CartItemType[], product: ProductItemType): boolean => {
