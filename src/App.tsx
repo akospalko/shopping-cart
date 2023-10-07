@@ -6,6 +6,7 @@ import Cart from "./components/Cart"
 import useProducts from "./hooks/useProducts"
 import StatusPage from "./components/StatusPage"
 import ProductPage from "./components/ProductPage"
+import ProductView from "./components/ProductView"
 
 function App() {
 
@@ -20,10 +21,12 @@ function App() {
       <Header viewCart={viewCart} setViewCart={setViewCart}/>
       <Routes>
         <Route path="/cart" element={<Cart />}/>
+        <Route path="/:category/:page" element={<ProductPage productData={products}/>}/>
         <Route path="/search/:page" element={<ProductPage productData={filteredProducts}/>}/>  
+        <Route path="/test" element={<ProductView/>}/>  
+        {/* <Route path="/:category/:product" element={<ProductView/>}/>   */}
         <Route path="/search/no-result" element={<StatusPage statusType='noSearchResult'/>}/>
         <Route path="/search/empty" element={<StatusPage statusType='emptySearchResult'/>}/>
-        <Route path="/:category/:page" element={<ProductPage productData={products}/>}/>
         <Route path="/error" element={<StatusPage statusType='error'/>}/>
         <Route path="/" element={<Navigate to='/all/1'/>} />
       </Routes>
