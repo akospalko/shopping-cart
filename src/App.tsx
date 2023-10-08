@@ -22,9 +22,8 @@ function App() {
       <Routes>
         <Route path="/cart" element={<Cart />}/>
         <Route path="/:category/:page" element={<ProductPage productData={products}/>}/>
+        <Route path="/:category/product/:product" element={<ProductView/>}/>  
         <Route path="/search/:page" element={<ProductPage productData={filteredProducts}/>}/>  
-        <Route path="/test" element={<ProductView/>}/>  
-        {/* <Route path="/:category/:product" element={<ProductView/>}/>   */}
         <Route path="/search/no-result" element={<StatusPage statusType='noSearchResult'/>}/>
         <Route path="/search/empty" element={<StatusPage statusType='emptySearchResult'/>}/>
         <Route path="/error" element={<StatusPage statusType='error'/>}/>
