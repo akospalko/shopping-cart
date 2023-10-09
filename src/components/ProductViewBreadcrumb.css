@@ -1,0 +1,26 @@
+.product-view-breadcrumb {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.product-view-breadcrumb__home-link {
+  margin-right: 0.5rem;
+}
+
+.product-view-breadcrumb_item {
+  text-decoration: none;
+}
+
+.product-view-breadcrumb_item a {
+  text-decoration: none;
+  color: var(--color-2);
+  font-size: 1.1rem;
+
+}
+
+.product-view-breadcrumb_item span {
+  margin: 0 0.5rem;
+  font-size: 1.2rem;
+  color: var(--color-2)
+}
