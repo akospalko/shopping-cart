@@ -12,6 +12,7 @@
   padding: 1rem;
   background-color: var(--color--light);
   height: 200px;
+  cursor: pointer;
 }
 
 .product__header--3 {
@@ -20,6 +21,12 @@
   font-size: 0.9rem;
   line-height: calc(0.9rem * 1.1);
   height: 40px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.product__header--3:hover {
+  color: var(--color-3);
 }
 
 .button--add-remove-single-product {

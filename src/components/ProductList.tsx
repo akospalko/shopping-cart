@@ -1,7 +1,7 @@
 // Displayed products container
 import './ProductList.css'
 import useCart from '../hooks/useCart'
-import Product from './Product'
+import ProductCard from './ProductCard'
 import { CartItemType } from '../types/cartProviderTypes'
 import { ProductItemType } from '../types/productsProviderTypes'
 
@@ -34,7 +34,7 @@ const ProductList = ({productsData}: PropsType) => {
 
   // ELEMENTS
   const displayedProductList = productsData?.map((product: ProductItemType) => (
-    <Product
+    <ProductCard
       key={product.sku} 
       product={product}
       inCart={isItemInCart(cart, product)}
