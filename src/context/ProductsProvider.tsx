@@ -38,7 +38,6 @@ const reducer = (state: ProductStateType, action: ReducerAction): ProductStateTy
         throw new Error('action.payload missing in UPDATE_ACTIVE_PAGE action')
       }
       return {...state, activePage: action.payload.activePage}
-
     // DEFAULT
     default: {
       throw new Error('Unindentified reducer action type')
@@ -56,8 +55,10 @@ const initProductState: ProductStateType = {
 }
 
 export const useProductContext = (initProductState: ProductStateType) => {
+  // REDUCER
   const [state, dispatch] = useReducer(reducer, initProductState)
 
+  // MEMO
   const REDUCER_ACTIONS_PRODUCT = useMemo(()=> {
     return REDUCER_ACTION_TYPE_PRODUCT
   }, []) 
