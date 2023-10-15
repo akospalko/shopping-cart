@@ -61,7 +61,6 @@ select {
     flex-direction: column;
     gap: 0;
     background-color: var(--color--light__50);
-    padding: 0;
 }
 
 .main--status-page {
@@ -324,6 +323,15 @@ button {
     display: none;
 }
 
+.cart-item__product-name {
+    color: var(--color-1);  
+    text-decoration: underline;  
+    cursor: pointer;
+}
+
+.cart-item__product-name:hover {
+    color: var(--color-3);
+}
 
 .cart__item--price {
     display: flex;
@@ -447,6 +455,7 @@ button {
         display: initial;
         border-radius: var(--border-radius);
         width: 100px;
+        cursor: pointer;
     }
 
     .cart__item--image-and-name span {
