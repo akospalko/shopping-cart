@@ -1,94 +1,85 @@
-import React, { ReactElement, memo } from 'react'
-import { ProductItemType } from '../types/productsProviderTypes'
-import { ReducerActionType, ReducerAction } from '../types/cartProviderTypes'
-import { MinusIcon, PlusIcon, CheckmarkIcon } from './SVGComponents'
-import useProducts from '../hooks/useProducts'
-import { useNavigate } from 'react-router-dom'
+// Displayed product card
+import {ReactElement, memo} from 'react'
+import {ProductItemType} from '../types/productsProviderTypes'
+import {CheckmarkIcon} from './SVGComponents'
+import {useNavigate} from 'react-router-dom'
+import useCart from '../hooks/useCart'
+import {useIsItemInCart} from '../hooks/useIsItemInCart'
+import {useConvertStringToURLFormat} from '../hooks/useConvertStringToURLFormat'
+import useCartProductHandler from '../hooks/useCartProductHandler'
 import './ProductCard.css'
+import useProductPriceElement from '../hooks/useProductPriceElement'
+import useProductStockElement from '../hooks/useProductStockElement'
 
 // TYPE
 type ProductCardPropsType = {
   product: ProductItemType,    
-  inCartQty: number | undefined,
-  dispatch: React.Dispatch<ReducerAction>  
-  REDUCER_ACTIONS_CART: ReducerActionType
-  inCart: boolean
+}
+
+// CONSTANT
+const CONSTANT = {
+  ADD_TO_CART: 'add to cart',
+  REMOVE_FROM_CART: 'remove from cart',
+  IN_CART: 'in cart',
 }
 
 // COMPONET
-const ProductCard = ({ product, inCartQty = 0, dispatch:cartDispatch, REDUCER_ACTIONS_CART, inCart }:ProductCardPropsType): ReactElement => {
+const ProductCard = ({product}:ProductCardPropsType): ReactElement => {
   // ROUTE
   const navigate = useNavigate()
   
   // CONTEXT
-  const {dispatch: productsDispatch, REDUCER_ACTIONS_PRODUCT} = useProducts();
-
-  // VALUES
-  const img:string =  new URL(`../images/${product.sku}.jpg`, import.meta.url).href
+  const {cart} = useCart();
   
-  // HANDLERS
-  const onAddToCart = () => cartDispatch({type: REDUCER_ACTIONS_CART.ADD, payload: {...product, qty: 1}})
-  const onRemoveSingleFromCart = () => {
-    if (inCartQty > 1) {
-      cartDispatch({type: REDUCER_ACTIONS_CART.UPDATE_QUANTITY, payload: {...product, qty: inCartQty - 1 }});
-    } else if (inCartQty === 1) {
-      cartDispatch({type: REDUCER_ACTIONS_CART.REMOVE, payload: {...product, qty: 0}})
-    }
-  }
+  // CUSTOM HOOKS
+  const isInCart = useIsItemInCart(cart, product);
+  const productURL = useConvertStringToURLFormat(product.name + '-' + product.sku);
+  const {addToCartHandler, removeFromCartHandler} = useCartProductHandler(); // toggle cart prouct handlers
+  const productPriceElement = useProductPriceElement();
+  const productStockeElement = useProductStockElement();
 
-  // convert product name string to url format
-  const convertStringToURLFormat = (inputString: string): string =>{
-    // replace spaces and special characters with hyphens
-    let urlFriendlyString = inputString.replace(/[^a-zA-Z0-9]+/g, '-');
-        
-    // remove leading and trailing hyphens
-    urlFriendlyString = urlFriendlyString.replace(/^-+|-+$/g, '');
+  // MISC
+  // Image
+  const img:string = new URL(`../images/${product.sku}.jpg`, import.meta.url).href
 
-    // replace consecutive hyphens with a single hyphen
-    urlFriendlyString = urlFriendlyString.replace(/-{2,}/g, '-');
-
-    return urlFriendlyString.toLowerCase();
-  }
-
-  // Handle
-    const viewProductHandler = () => {
-    // set context state with active page id
-    productsDispatch({type: REDUCER_ACTIONS_PRODUCT.UPDATE_ACTIVE_PRODUCT_ID, payload: {activeProductID: product.sku}})
-    // navigate to product view route
-    navigate(`/${product.category}/product/${convertStringToURLFormat(product.name + '-' +product.sku)}/about`, {replace: true}) 
+  // HANDLER
+  // navigate to product view route
+  const viewProductHandler = () => {
+    navigate(`/${product.category}/product/${productURL}/about`, {replace: true}) 
   }
 
   // ELEMENTS
-  const itemInCart = inCart ? 
-    <div className='product__info-in-cart'> 
-      <span> {inCartQty} {'in cart'}  </span>
-      <CheckmarkIcon width='20px' height='20px' wrapperCustomStyle={{'width': 'auto'}}/>
+  // Label - item in cart
+  const itemInCart =
+    <div className='product-card__in-cart'> 
+     {isInCart && <>
+        <span>{CONSTANT.IN_CART}</span>
+        <CheckmarkIcon 
+          fill='var(--color-5)' 
+          stroke='transparent' 
+          width='15px' height='20px' 
+          wrapperCustomStyle={{'width': 'auto'}}
+        /> 
+      </>}
     </div> 
-    : null
 
-  const productInfo = (
-    <div className='product__info'> 
-      <span className='product__info-price'>
-        {new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(product.price)} 
-      </span>
-      {itemInCart}
+  // Info group about product 
+  const productInfoGroup = (
+    <div className='product-card__info-group'> 
+      {productPriceElement(product, {priceMainStyle: 'product-card__price-main', priceSecondaryStyle: 'product-card__price-secondary'})}
+      {productStockeElement(product?.stock, 'about-product__stock')}
     </div>
   )
 
-  const addOrRemoveProductButtons = (
-    <>
+  // Add/remove product button container  
+  const toggleProductInCart = (
+    <div className='product-card__button'>
       <button 
-        className='button--add-remove-single-product'
-        onClick={onAddToCart}
-      > {<PlusIcon width='20px' height='20px' strokeWidth='0' fill='var(--color--light)'/>}
-      </button>
-      <button 
-        className='button--add-remove-single-product'
-        disabled={inCartQty < 1}
-        onClick={onRemoveSingleFromCart}
-        > <MinusIcon width='20px' height='20px' fill='var(--color--light)' strokeWidth='0'/>
-      </button>
-    </>
+        className='button--product-card-add-to-cart'
+        onClick={isInCart ? () => removeFromCartHandler(product): () => addToCartHandler(product)}
+        disabled={!product?.stock}
+      > { isInCart ? CONSTANT.REMOVE_FROM_CART : CONSTANT.ADD_TO_CART}</button>
+    </div>
   )
 
   return (
@@ -97,28 +88,30 @@ const ProductCard = ({ product, inCartQty = 0, dispatch:cartDispatch, REDUCER_AC
         src={img} 
         title={product.name} 
         alt={product.name} 
-        className='product__img'
+        className='product__image'
         onClick={viewProductHandler}
       />
       <h3 
-        className='product__header--3'
+        title={product.name} 
+        className='product-card__header--3'
         onClick={viewProductHandler}
       > {product.name} </h3>
-      {productInfo}
-      {addOrRemoveProductButtons}
+      {productInfoGroup}
+      {toggleProductInCart}
+      {isInCart && itemInCart}
     </article>
   )
 }
 
 // MEMO
-function areProductsEqual({product: prevProduct, inCart: prevInCart, inCartQty: prevInCartQty}: ProductCardPropsType, {product: nextProduct, inCart: nextInCart, inCartQty: nextInCartQty}: ProductCardPropsType) {
- 
+function areProductsEqual(
+  {product: prevProduct}: ProductCardPropsType, 
+  {product: nextProduct}: ProductCardPropsType
+) {
   return (
     Object.keys(prevProduct).every(key => {
       return prevProduct[key as keyof ProductItemType] === nextProduct[key as keyof ProductItemType]
     }) 
-    && prevInCart === nextInCart
-    && prevInCartQty === nextInCartQty
   )
 }
 
