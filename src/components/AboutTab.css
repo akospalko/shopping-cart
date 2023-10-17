@@ -1,0 +1,16 @@
+.about-tab {
+  display: grid;
+  grid-template-rows: 450px 500px;
+  grid-area: 2 / 1 / 3 / 2;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 650px) {
+  .about-tab {
+    grid-template-rows: 500px;
+    grid-template-columns: 4.5fr 5.5fr;
+    grid-area: 2 / 1 / 3 / 2;
+  }
+}
