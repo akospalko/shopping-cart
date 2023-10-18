@@ -1,0 +1,30 @@
+.about-tab-product-image {
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr;
+  width: 100%;
+  background-color: var(--color--light);
+  grid-area: 1 / 1 / 2 / 2;
+  align-items: center;
+  justify-items: center;
+  overflow: hidden;
+}
+
+.about-tab-product-image__image {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+}
+
+.about-tab-product-image__slide {
+  display: flex;
+  height: 50px;
+  width: 100%;
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 1024px) {
+  .about-tab-product-image {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+}
