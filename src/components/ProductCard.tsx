@@ -1,7 +1,7 @@
 // Displayed product card
-import {ReactElement, memo} from 'react'
+import {ReactElement, memo, useRef} from 'react'
+import { CSSTransition } from 'react-transition-group'
 import {ProductItemType} from '../types/productsProviderTypes'
-import {CheckmarkIcon} from './SVGComponents'
 import {useNavigate} from 'react-router-dom'
 import useCart from '../hooks/useCart'
 import {useIsItemInCart} from '../hooks/useIsItemInCart'
@@ -10,6 +10,7 @@ import useCartProductHandler from '../hooks/useCartProductHandler'
 import './ProductCard.css'
 import useProductPriceElement from '../hooks/useProductPriceElement'
 import useProductStockElement from '../hooks/useProductStockElement'
+import ProductInCartLabel from './ProductInCartLabel'
 
 // TYPE
 type ProductCardPropsType = {
@@ -26,8 +27,11 @@ const CONSTANT = {
 // COMPONET
 const ProductCard = ({product}:ProductCardPropsType): ReactElement => {
   // ROUTE
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
+  // REF
+  const inCartLabelRef = useRef<HTMLDivElement | null>(null);
+
   // CONTEXT
   const {cart} = useCart();
   
@@ -49,20 +53,6 @@ const ProductCard = ({product}:ProductCardPropsType): ReactElement => {
   }
 
   // ELEMENTS
-  // Label - item in cart
-  const itemInCart =
-    <div className='product-card__in-cart'> 
-     {isInCart && <>
-        <span>{CONSTANT.IN_CART}</span>
-        <CheckmarkIcon 
-          fill='var(--color-5)' 
-          stroke='transparent' 
-          width='15px' height='20px' 
-          wrapperCustomStyle={{'width': 'auto'}}
-        /> 
-      </>}
-    </div> 
-
   // Info group about product 
   const productInfoGroup = (
     <div className='product-card__info-group'> 
@@ -82,6 +72,19 @@ const ProductCard = ({product}:ProductCardPropsType): ReactElement => {
     </div>
   )
 
+  // Product in cart label - animated  
+  const InCartLabel = (
+    <CSSTransition
+    in={isInCart}
+    nodeRef={inCartLabelRef}
+    timeout={300}
+    classNames="slide-right-to-left"
+    unmountOnExit
+  > 
+    <ProductInCartLabel ref={inCartLabelRef} style='product-in-cart-label--right'/>
+  </CSSTransition>
+  )
+
   return (
     <article className='product'>
       <img 
@@ -98,7 +101,7 @@ const ProductCard = ({product}:ProductCardPropsType): ReactElement => {
       > {product.name} </h3>
       {productInfoGroup}
       {toggleProductInCart}
-      {isInCart && itemInCart}
+      {InCartLabel}
     </article>
   )
 }
