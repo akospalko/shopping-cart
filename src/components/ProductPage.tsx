@@ -15,12 +15,12 @@ const CONSTANT = {
 }
 
 // TYPE
-type PropsType = {
+type ProductPagePropsType = {
   productData: ProductItemType[] | undefined
 }
 
 // COMPONENT
-const ProductPage = ({productData}: PropsType) => {
+const ProductPage = ({productData}: ProductPagePropsType) => {
   // ROUTE
   const navigate = useNavigate();
   // const {category, page} = useParams();
@@ -39,7 +39,7 @@ const ProductPage = ({productData}: PropsType) => {
   useEffect(() => {
     const activeRoute = activeCategory === 'search' ? '/search/1' : `/${activeCategory}/${pageNumber}`
     navigate(activeRoute, { replace: true });
-  }, [activeCategory, pageNumber, navigate]);
+  }, [activeCategory, navigate, pageNumber]);
 
   // Filter out productsData based on active category
   const categoryProductData = productData?.filter(product => {
@@ -55,7 +55,7 @@ const ProductPage = ({productData}: PropsType) => {
   const displayedProductData: ProductItemType[] = filteredProductData || []
   const totalPages = Math.ceil(displayedProductData?.length / itemsPerPage);
   const startIndex: number = (pageNumber - 1) * itemsPerPage;
-  const endIndex: number =  startIndex + itemsPerPage;
+  const endIndex: number = startIndex + itemsPerPage;
 
   const paginatedProducts: ProductItemType[] = filteredProductData?.slice(startIndex, endIndex) || [];
 
