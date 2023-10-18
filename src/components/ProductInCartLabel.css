@@ -1,0 +1,74 @@
+.product-in-cart-label {
+  display: flex;
+  position: absolute;
+  align-items: center;    
+  height: 35px;
+  width: 150px;
+  background-color: var(--color-1);
+  top: 1rem;
+  padding: 0.5rem;
+}
+
+.product-in-cart-label--left {
+  left: 0;
+  justify-content: end;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.product-in-cart-label--right {
+  right: 0;
+  justify-content: start;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.product-in-cart-label span {
+  font-size: 1.1rem;
+  margin-right: 5px;
+  color: var(--color-5);
+}
+
+/* Slide from left to right*/
+.slide-left-to-right-enter {
+  transform: translateX(-1000px); 
+  opacity: 0;
+}
+
+.slide-left-to-right-enter-active {
+  transform: translateX(0); 
+  opacity: 1;
+  transition: transform 300ms, opacity 300ms;
+}
+
+.slide-left-to-right-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-left-to-right-exit-active {
+  transform: translateX(-1000px);
+  opacity: 0;
+  transition: transform 300ms, opacity 300ms;
+}
+
+/* Slide from right to left*/
+.slide-right-to-left-enter {
+  transform: translateX(1000px); 
+  opacity: 0;
+}
+
+.slide-right-to-left-enter-active {
+  transform: translateX(0); 
+  opacity: 1;
+  transition: transform 300ms, opacity 300ms;
+}
+
+.slide-right-to-left-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-right-to-left-exit-active {
+  transform: translateX(1000px);
+  opacity: 0;
+  transition: transform 300ms, opacity 300ms;
+}
