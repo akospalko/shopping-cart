@@ -1,0 +1,51 @@
+.characteristics-tab {
+  display: flex;
+  flex-direction: column;
+  grid-area: 2 / 1 / 3 / 2;
+  min-height: 500px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--color--light);
+  padding: 1rem;
+}
+
+.characteristics-tab__product-name {
+  display: flex;
+  width: 100%;
+  align-items: center;  
+  margin-bottom: 2rem;
+}
+
+.characteristics-tab__items {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.characteristics-tab__item {
+  display: flex;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-bottom: 1px dotted var(--color-5);
+}
+.characteristics-tab__item:last-of-type {
+  margin: 0;
+  border: 0;
+}
+
+.characteristics-tab__label {
+  width: 40%;
+}
+
+.characteristics-tab__value {
+  width: 60%;
+}
+
+.characteristics-tab__nested-properties {
+  width: 100%;
+  height: 100%;
+}
+
+.characteristics-tab__nested-values {
+  list-style-type: none;
+}
