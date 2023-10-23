@@ -1,19 +1,14 @@
 .product-view {
   display: grid;
-  grid-template-rows: 100px auto;
+  grid-template-rows: 100px min-content;
   width: 100%;
   gap: 1rem;
-}
-
-/* TODO: CARACTERISTICS */
-.product-view-characteristics {
-
 }
 
 @media screen and (min-width: 1024px) {
   .product-view {
     display: grid;
-    grid-template-rows: 75px 500px;
+    grid-template-rows: 75px min-content;
     width: 1000px;
     gap: 2rem;
   }

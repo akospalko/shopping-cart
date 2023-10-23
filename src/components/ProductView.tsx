@@ -5,6 +5,7 @@ import useProducts from '../hooks/useProducts'
 import ProductViewHeader from './ProductViewNavigation'
 import {ProductItemType} from '../types/productsProviderTypes'
 import AboutTab from './AboutTab'
+import CharacteristicsTab from './CharacteristicsTab'
 import './ProductView.css'
 
 // TYPES
@@ -16,8 +17,13 @@ const activeProductInitializer: ProductItemType = {
   sku: '',
   name: '',
   price: 0,
+  priceDiscount: 0,
   stock: 0,
-  category: ''
+  category: '',
+  description: '',
+  warranty: '',
+  retailer: '',
+  properties: undefined
 }
 
 // CONSTANT
@@ -53,19 +59,17 @@ const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
   }, [product, products]);
 
   // ELEMENTS
-  // characteristics
-  const characteristicsContent = (
-    <div className='product-view-characteristics'>{/* TODO... */}</div>
-  )
   // about
   const aboutContent = <AboutTab activeProduct={activeProduct}/>
+  // characteristics
+  const characteristicsTab = <CharacteristicsTab activeProduct={activeProduct}/>
 
   // DISPLAYED TAB
   // conditionally display tabs
   let displayedTab = aboutContent;
   switch(activeTab) {
     case CONSTANT.CHARACTERISTICS:
-      displayedTab = characteristicsContent;
+      displayedTab = characteristicsTab;
       break;
     case CONSTANT.ABOUT:
       displayedTab = aboutContent;
