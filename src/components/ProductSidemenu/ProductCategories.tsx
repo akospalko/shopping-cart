@@ -1,11 +1,11 @@
 // Sidebar menu product categories 
 import {ReactElement} from 'react'
-import './ProductSidemenu.css'
 import productCategories from '../../data/productCategories.json'
 import {NavLink} from 'react-router-dom'
 import {ProductsSidemenuPropsType, ProductCategoryItemType, CategoryIconType} from '../../types/productSidemenuTypes'
-import { CheckmarkIcon, RemoveIcon } from '../SVGComponents'
-import { useUpdateActivePage } from '../../hooks/useUpdateActivePage'
+import {CheckmarkIcon, RemoveIcon} from '../SVGComponents'
+import {useUpdateActivePage} from '../../hooks/useUpdateActivePage'
+import './ProductSidemenu.css'
 
 // CONSTANT
 const CONSTANTS = {CATEGORIES: 'Categories'}
