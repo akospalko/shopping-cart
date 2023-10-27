@@ -8,6 +8,7 @@
   align-items: center;
   justify-items: center;
   overflow: hidden;
+  user-select: none;
 }
 
 .about-tab-product-image__image {
