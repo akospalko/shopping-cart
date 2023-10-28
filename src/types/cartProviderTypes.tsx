@@ -8,7 +8,9 @@ export type CartItemType = {
   sku: string,
   name: string,
   price: number,
-  qty: number
+  qty: number,
+  stock: number,
+  category: string
 }
 
 // Cart state type
