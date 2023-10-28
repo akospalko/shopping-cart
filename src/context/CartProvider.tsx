@@ -12,12 +12,12 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
       if(!action.payload) {
         throw new Error('action.payload missing in ADD action')
       }
-      const {sku, name, price, category} = action.payload // get payload data values
+      const {sku, name, price, stock, category} = action.payload // get payload data values
       const filteredCart: CartItemType[] = state.cart.filter(item => item.sku !== sku) // fitler & store arr of cart items not updated
       const itemExists: CartItemType | undefined = state.cart.find(item => item.sku === sku); // check if action payload's sku val is to be found in current state
       const qty: number = itemExists ? itemExists.qty + 1 : 1 //  active item exists ? qty += 1 : qty = 1
 
-      return {...state, cart: [...filteredCart, {sku, name, price, qty, category}]}
+      return {...state, cart: [...filteredCart, {sku, name, price, qty, stock, category}]}
     }
 
     // REMOVE ALL ITEMS
