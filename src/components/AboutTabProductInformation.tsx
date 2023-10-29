@@ -15,7 +15,7 @@ const CONSTANT = {
   ORDER: 'order',
   RETAILER: 'retailer',
   DELIVERY: 'delivery',
-  DELIVERY_TIME: '1-2 days',
+  DELIVERY_TIME: '2-3 days',
   WARRANTY: 'warranty',
 }
 
@@ -68,7 +68,7 @@ const AboutTabProductInformation = ({activeProduct}: AboutTabPropsType) => {
   // information data
   const retailerInformationData: RetailerInfoType = {
     [CONSTANT.RETAILER]: activeProduct?.retailer,
-    [CONSTANT.DELIVERY]: CONSTANT.DELIVERY,
+    [CONSTANT.DELIVERY]: CONSTANT.DELIVERY_TIME,
     [CONSTANT.WARRANTY]: activeProduct?.warranty
   }
 

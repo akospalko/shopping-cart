@@ -2,11 +2,17 @@ import {useState} from "react"
 import {Route, Routes, Navigate} from "react-router-dom"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
-import Cart from "./components/Cart"
+import CartPage from "./components/CartPage"
 import useProducts from "./hooks/useProducts"
 import StatusPage from "./components/StatusPage"
 import ProductPage from "./components/ProductPage"
 import ProductView from "./components/ProductView"
+
+// CONSTANT
+const CONSTANT = {
+  CHARACTERISTICS: 'CHARACTERISTICS',
+  ABOUT: 'ABOUT'
+}
 
 function App() {
 
@@ -20,9 +26,10 @@ function App() {
     <div className="page">
       <Header viewCart={viewCart} setViewCart={setViewCart}/>
       <Routes>
-        <Route path="/cart" element={<Cart />}/>
+        <Route path="/cart" element={<CartPage/>}/>
         <Route path="/:category/:page" element={<ProductPage productData={products}/>}/>
-        <Route path="/:category/product/:product" element={<ProductView/>}/>  
+        <Route path="/:category/product/:product/about" element={<ProductView activeTab={CONSTANT.ABOUT}/>} />  
+        <Route path="/:category/product/:product/characteristics" element={<ProductView activeTab={CONSTANT.CHARACTERISTICS}/>}/>  
         <Route path="/search/:page" element={<ProductPage productData={filteredProducts}/>}/>  
         <Route path="/search/no-result" element={<StatusPage statusType='noSearchResult'/>}/>
         <Route path="/search/empty" element={<StatusPage statusType='emptySearchResult'/>}/>
