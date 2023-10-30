@@ -3,52 +3,226 @@
     {
         "sku": "item0001",
         "name": "AMD Ryzen 9 5900X 12-Core 3.7GHz",
-        "price": 29.99
+        "price": 29.99,
+        "priceDiscount": 15.99,
+        "stock": 0,
+        "category": "processor",
+        "description": "Short description about the processor.",
+        "warranty": "2 years",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "AMD",
+            "model": "Ryzen 7",
+            "architecture": "0",
+            "cores": "test",
+            "threads": "test",
+            "clock speed": "test",
+            "cache": "test",
+            "socket": "test",
+            "integrated graphics": "test",
+            "hyper-threading": "test",
+            "dimensions": "test",
+            "compatibility": "test",
+            "tdp (thermal design power)": "test"
+        }
     },
     {
         "sku": "item0002",
         "name": "AMD Ryzen 7 7800X3D 4.4GHz 8-Cores",
-        "price": 19.99
+        "price": 369.90,
+        "priceDiscount": 449.50,
+        "stock": 2,
+        "category": "processor",
+        "description": "Short description about the processor.",
+        "warranty": "2 years",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "AMD",
+            "model": "Ryzen 7",
+            "architecture": "Zen 4",
+            "cores": "8",
+            "threads": "16",
+            "clock speed": "4.2 GHz to 5.0 GHz",
+            "cache": ["L2: 8MB", "L3: 96MB"],
+            "socket": "AM5",
+            "integrated graphics": "RDNA 2",
+            "hyper-threading": "yes",
+            "dimensions": "13 x 9.09 x 12.9 cm; 79.38 Grams",
+            "tdp (thermal design power)": "120W"
+        }
     },
     {
         "sku": "item0003",
         "name": "AMD Ryzen 5 7600X 4.7GHz 6-Core",
-        "price": 9.99
+        "price": 9.99,
+        "stock": 15,
+        "category": "processor",
+        "description": "Short description about the processor.",
+        "warranty": "2 years",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "AMD",
+            "model": "Ryzen 7",
+            "architecture": "0",
+            "cores": "test",
+            "threads": "test",
+            "clock speed": "test",
+            "cache": "test",
+            "socket": "test",
+            "integrated graphics": "test",
+            "hyper-threading": "test",
+            "dimensions": "test",
+            "compatibility": "test",
+            "tdp (thermal design power)": "test"
+        }
     },
     {
         "sku": "item0004",
         "name": "Intel Core i9-13900K 3.0GHz 24-Core",
-        "price": 34.99
+        "price": 34.99,
+        "priceDiscount": 25.99,
+        "stock": 10,
+        "category": "processor",
+        "description": "Short description about the processor.",
+        "warranty": "2 years",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "Intel",
+            "model": "Core i9-13900K",
+            "architecture": "0",
+            "cores": "test",
+            "threads": "test",
+            "clock speed": "test",
+            "cache": "test",
+            "socket": "test",
+            "integrated graphics": "test",
+            "hyper-threading": "test",
+            "dimensions": "test",
+            "compatibility": "test",
+            "tdp (thermal design power)": "test"
+        }
     },
     {
         "sku": "item0005",
         "name": "Intel Core i7-13700K 3.4GHz 16-Core",
-        "price": 24.49
-    },
-    {
-        "sku": "item0006",
-        "name": "item007",
-        "price": 15
+        "price": 24.49,
+        "priceDiscount": 15.49,
+        "stock": 10,
+        "category": "processor",
+        "description": "Short description about the processor.",
+        "warranty": "2 years",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "Intel",
+            "model": "Core i9-13900K",
+            "architecture": "0",
+            "cores": "test",
+            "threads": "test",
+            "clock speed": "test",
+            "cache": "test",
+            "socket": "test",
+            "integrated graphics": "test",
+            "hyper-threading": "test",
+            "dimensions": "test",
+            "compatibility": "test",
+            "tdp (thermal design power)": "test"
+        }
     },
     {
         "sku": "item0007",
         "name": "item0007",
-        "price": 74.99
+        "price": 74.99,
+        "priceDiscount": 50.99,
+        "stock": 10,
+        "category": "ram",
+        "description": "test",
+        "warranty": "test",
+        "retailer": "Acme shop",
+        "properties": {
+            "type": "test",
+            "capacity": "test",
+            "speed": "test",
+            "cas latency": "test",
+            "voltage": "test",
+            "form factor": "test",
+            "ecc support": "test",
+            "heat spreader": "test",
+            "number of modules": "test",
+            "compatibility": "test"
+        }
     },
     {
         "sku": "item0008",
         "name": "item0008",
-        "price": 32
+        "price": 350,
+        "priceDiscount": 300,
+        "stock": 10,
+        "category": "mobile",
+        "description": "test",
+        "warranty": "test",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "test",
+            "model": "test",
+            "operating system": "test",
+            "processor": "test",
+            "ram": "test",
+            "storage": "test",
+            "display size": "test",
+            "display resolution": "test",
+            "camera": "test",
+            "battery capacity": "test"
+        }
     },
     {
         "sku": "item0009",
         "name": "item0009",
-        "price": 10
+        "price": 10,
+        "priceDiscount": 5,
+        "stock": 10,
+        "category": "videocard",
+        "description": "test",
+        "warranty": "test",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "test",
+            "model": "test",
+            "gpu architecture": "test",
+            "vram": "test",
+            "processing units": "test",
+            "clock speed": "test",
+            "memory bus": "test",
+            "memory speed": "test",
+            "memory bandwidth": "test",
+            "video output ports": "test",
+            "ray tracing support": "test",
+            "tdp (thermal design power)": "test"
+        }
     },
     {
         "sku": "item0010",
         "name": "item0010",
-        "price": 100
+        "price": 100,
+        "priceDiscount": 75,
+        "stock": 10,
+        "category": "videocard",
+        "description": "test",
+        "warranty": "test",
+        "retailer": "Acme shop",
+        "properties": {
+            "brand": "test",
+            "model": "test",
+            "gpu architecture": "test",
+            "vram": "test",
+            "processing units": "test",
+            "clock speed": "test",
+            "memory bus": "test",
+            "memory speed": "test",
+            "memory bandwidth": "test",
+            "video output ports": "test",
+            "ray tracing support": "test",
+            "tdp (thermal design power)": "test"
+        }
     }
   ]
 }
