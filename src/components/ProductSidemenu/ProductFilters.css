@@ -1,0 +1,12 @@
+.product-filter {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.product-sidemenu-divider {
+  display: flex;
+  height: 2px;
+  background-color: var(--color-1);
+  width: 100%;
+}
