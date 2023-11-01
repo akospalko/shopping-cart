@@ -18,7 +18,6 @@ const CONSTANT = {
 // CUSTOM HOOK
 const useProductStockElement = () => {
   const productStock = (stock: number, style?: string): ReactElement | undefined => {
-    if(!stock) return;
     // ELEMENTS
     // Displayed stock
     let displayedStock: DisplayedStockType = {
