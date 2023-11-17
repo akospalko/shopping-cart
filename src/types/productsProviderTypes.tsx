@@ -65,12 +65,12 @@ export type ProductItemType = {
   sku: string,
   name: string,
   price: number,
-  priceDiscount: 0,
+  priceDiscount: number,
   category: string
   stock: number,
-  description: '',
-  warranty: '',
-  retailer: '',
+  description: string,
+  warranty: string,
+  retailer: string,
   properties: ProductProcessorPropertyType | ProductRamPropertyType | 
   ProductVideoCardPropertyType | 
   ProductMobilePropertyType | ProductItemType | undefined
@@ -86,6 +86,7 @@ export type ReducerAction = {
 export type ProductStateType = {
   products?: ProductItemType[],
   filteredProducts?: ProductItemType[],
+  categoryProducts?: ProductItemType[],
   searchTerm?: string,
   activePage?: number,
 }
