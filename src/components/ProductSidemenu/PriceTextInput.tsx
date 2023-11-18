@@ -1,18 +1,18 @@
 // Filter by price min and max input fields with update logic
 import React, { ReactElement } from 'react';
+import { PriceTextInputPropsType } from '../../types/ProductFilterTypes';
+import './PriceTextInput.css';
 
-// TYPES
-type PriceValueType = { minValue: string, maxValue: string }
-type PriceSliderPropsTypes = {
-  inputValue: PriceValueType
-  setInputValue: React.Dispatch<React.SetStateAction<PriceValueType>>,
-}
+// CONSTANTS
+const CONSTANTS = { 
+  DASH: '-'
+ }
 
 // COMPONENT
-const PriceInput = ({
+const PriceTextInput = ({
   inputValue,
   setInputValue
-}: PriceSliderPropsTypes) => {
+}: PriceTextInputPropsType) => {
 
   // HANDLERS
   const changeMinValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,13 +35,14 @@ const PriceInput = ({
   )
 
   return (
-    <div>
+    <div className='price-filter__text-input'>
       {/* Input min */}
-      {displayedInputField(inputValue.minValue, changeMinValueHandler, 'text') }
+      {displayedInputField(parseInt(inputValue.minValue).toString(), changeMinValueHandler, 'text') }
+      <span> { CONSTANTS.DASH } </span>
       {/* Input max */}
-      {displayedInputField(inputValue.maxValue, changeMaxValueHandler, 'text') }
+      {displayedInputField(parseInt(inputValue.maxValue).toString(), changeMaxValueHandler, 'text') }
     </div>
   )
 }
 
-export default PriceInput;
+export default PriceTextInput;

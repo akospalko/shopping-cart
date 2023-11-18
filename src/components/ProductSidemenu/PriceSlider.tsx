@@ -1,128 +1,156 @@
-// Price slider with min - max range
+// Price slider UI element with min - max range slider and displayed values
 import {
   ChangeEvent,
   useCallback,
   useEffect,
-  useRef
+  useRef,
+  ReactElement,
+  ChangeEventHandler
 } from 'react';
+import { SliderValueType, PriceSliderPropsType } from '../../types/ProductFilterTypes';
+import { floatRegEx } from '../../utility/regexPatterns';
 import './PriceSlider.css';
-
-// TYPE
-type PriceSliderPropsTypes = {
-  minValue: string,
-  maxValue: string,
-  minInitialValue: string,
-  maxInitialValue: string,
-  setMinValue: React.Dispatch<React.SetStateAction<string>>,
-  setMaxValue: React.Dispatch<React.SetStateAction<string>>,
-  setInputMinValue: React.Dispatch<React.SetStateAction<string>> 
-  setInputMaxValue: React.Dispatch<React.SetStateAction<string>> 
-}
-
-// REGEX PATTERN
-const integerRegEx = /^\d+$/;
 
 // COMPONENT
 const PriceSlider = ({
-    minValue,
-    maxValue,
-    setMinValue,
-    setMaxValue,
-    minInitialValue,
-    maxInitialValue,
-    setInputMinValue,
-    setInputMaxValue
-  }: PriceSliderPropsTypes) => {
+    priceRange,
+    sliderValue,
+    setSliderValue,
+    setInputValue,
+    withDisplayedValues
+  }: PriceSliderPropsType) => {
   
   // REFs
   const minValRef = useRef<HTMLInputElement>(null);
   const maxValRef = useRef<HTMLInputElement>(null);
   const range = useRef<HTMLDivElement>(null);
 
-  // MISC
+  // CALLBACK
   // Convert to percentage
   const getPercent = useCallback((value: number) => {
       // check data validity
-      if(!integerRegEx.test(minInitialValue) && !integerRegEx.test(maxInitialValue)) return;
+      if(!floatRegEx.test(priceRange.minValue) && !floatRegEx.test(priceRange.maxValue)) return;
       // convert used props to numbers
-      const minInitial = parseInt(minInitialValue)
-      const maxInitial = parseInt(maxInitialValue)
+      const minInitial = parseFloat(priceRange.minValue);
+      const maxInitial = parseFloat(priceRange.maxValue);
       // check if min - max are valid integers
-      return Math.round(((value - minInitial) / (maxInitial - minInitial)) * 100) || 0
-    },
-    [minInitialValue, maxInitialValue]
+      return Math.round(((value - minInitial) / (maxInitial - minInitial)) * 100) || 0;
+    }, [priceRange.maxValue, priceRange.minValue]
   );
 
   // EFFECTS
-  // Set width of the range to decrease from the left side
+  // Update left side range width
   useEffect(() => {
     if (maxValRef.current && maxValRef.current.value !== undefined) {
-      if (!integerRegEx.test(minValue)) return;
-      const min = parseInt(minValue);
-      const max = parseInt(maxValRef.current.value || '1');
-      const minPercent = getPercent(min) || 0; // Provide a default value (0 in this case)
-      const maxPercent = getPercent(max) || 1; // Provide a default value (100 in this case)
+      if (!floatRegEx.test(sliderValue.minValue)) return;
+      const min = parseFloat(sliderValue.minValue);
+      const max = parseFloat(maxValRef.current.value);
+      const minPercent = getPercent(min) || 0; 
+      const maxPercent = getPercent(max) || 100;
       const calculatedRangeWidth = maxPercent - minPercent;
-
       if (range.current) {
-        range.current.style.left = `${minPercent}%`;
-        range.current.style.width = `${calculatedRangeWidth}%`;
+        range.current.style.left = `${ minPercent }%`;
+        range.current.style.width = `${ calculatedRangeWidth }%`;
       }
     }
-  }, [minValue, getPercent]);
+  }, [sliderValue.minValue, getPercent]);
 
-  // Set width of the range to decrease from the right side
+  // Update right side range width
   useEffect(() => {
     if (minValRef.current && minValRef.current.value !== undefined) {
-      if (!integerRegEx.test(minValue)) return;
-      const min = parseInt(minValRef.current.value || '0');
-      const max = parseInt(maxValue)
+      if (!floatRegEx.test(sliderValue.minValue)) return;
+      const min = parseFloat(minValRef.current.value);
+      const max = parseFloat(sliderValue.maxValue)
       const minPercent = getPercent(min) || 0;
-      const maxPercent = getPercent(max) || 1;
+      const maxPercent = getPercent(max) || 100;
       const calculatedRangeWidth = maxPercent - minPercent;
-      
       if (range.current) {
-        range.current.style.width = `${calculatedRangeWidth}%`;
+        range.current.style.width = `${ calculatedRangeWidth }%`;
       }
     }
-  }, [maxValue, getPercent, minValue]);
+  }, [getPercent, sliderValue.maxValue, sliderValue.minValue]);
+
+  // HANDLERS
+  const sliderChangeHandler = (event: ChangeEvent<HTMLInputElement>, valueToUpdate: SliderValueType): void => {
+    const currentValue = parseFloat(event.target.value);
+    const minValue = parseFloat(sliderValue.minValue);
+    const maxValue = parseFloat(sliderValue.maxValue);
+
+    let getValue: string = '';
+  
+    if (valueToUpdate === 'minValue') {
+      getValue = Math.min(currentValue, maxValue - 1).toString();
+    } else if (valueToUpdate === 'maxValue') {
+      getValue = Math.max(currentValue, minValue + 1).toString();
+    }
+  
+    setSliderValue(value => ({
+      ...value, [valueToUpdate]: getValue
+    }));
+  
+    setInputValue(value => ({
+      ...value, [valueToUpdate]: getValue
+    }));
+    event.target.value = getValue;
+  };
+
+  // ELEMENTS
+  const displayedSliderValue = (style: string, value: string): ReactElement => (
+    <div className={ `price-filter__slider-value ${ style }` }> 
+      <span> { value } </span>
+    </div>
+  )
+  
+  const displayedSliderRange = (
+    minPriceRange: string,
+    maxPriceRange: string,
+    value: string,
+    changeHandler: ChangeEventHandler<HTMLInputElement>,
+    style: string,
+    inputRef: React.RefObject<HTMLInputElement>
+  ): ReactElement => {
+    return (
+      <input
+        type='range'
+        min={ minPriceRange || '0' }
+        max={ maxPriceRange }
+        value={ value || '0' }
+        ref={ inputRef }
+        onChange={ changeHandler }
+        className={ `price-filter__thumb ${ style }` }
+      />
+    )
+  }
 
   return (
-    <div className='container'>
-      <input
-        type='range'
-        min={minInitialValue}
-        max={maxInitialValue}
-        value={minValue}
-        ref={minValRef}
-        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          const value = Math.min(+event.target.value, parseInt(maxValue) - 1);
-          setMinValue(value.toString());
-          setInputMinValue(value.toString());
-
-          event.target.value = value.toString();
-        }}
-        className={`thumb thumb--zindex-3 ${parseInt(minValue) > (parseInt(maxInitialValue) - 100) ? 'thumb--zindex-5' : ''}`}
-      />
-      <input
-        type='range'
-        min={minInitialValue + 1}
-        max={maxInitialValue}
-        value={maxValue}
-        ref={maxValRef}
-        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          const value = Math.max(+event.target.value, parseInt(minValue) + 1);
-          setMaxValue(value.toString());
-          setInputMaxValue(value.toString());
-          event.target.value = value.toString();
-        }}
-        className='thumb thumb--zindex-4'
-      />
-      <div className='slider'>
-        <div className='slider__track'></div>
-        <div ref={range} className='slider__range'></div>
-        <div className='slider__left-value'>{minValue}</div>
-        <div className='slider__right-value'>{maxValue}</div>
+    <div className='price-filter__slider-container'>
+      { displayedSliderRange(
+          priceRange.minValue, 
+          priceRange.maxValue, 
+          sliderValue.minValue,
+          (event) => sliderChangeHandler(event, 'minValue'), 
+          'price-filter__thumb--left',
+          minValRef
+        )
+      }
+      { displayedSliderRange(
+          (parseFloat(priceRange.minValue) + 1).toString(), 
+          priceRange.maxValue, 
+          sliderValue.maxValue,
+          (event) => sliderChangeHandler(event, 'maxValue'), 
+          'price-filter__thumb--right',
+          maxValRef
+        ) 
+      }
+      <div className='price-filter__slider'>
+        <div className='price-filter__slider-track'></div>
+        <div ref={ range } className='price-filter__slider-range'></div>
+        { withDisplayedValues && (
+          <div className='price-filter__slider-value-container'>
+            { displayedSliderValue('price-filter__slider-value--left', sliderValue.minValue) }
+            { displayedSliderValue('price-filter__slider-value--right', sliderValue.maxValue) }
+          </div> ) 
+        }
       </div>
     </div>
   );
