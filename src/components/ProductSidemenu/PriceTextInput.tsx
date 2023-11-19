@@ -6,27 +6,23 @@ import './PriceTextInput.css';
 // CONSTANTS
 const CONSTANTS = { 
   DASH: '-'
- }
+}
 
 // COMPONENT
-const PriceTextInput = ({
-  inputValue,
-  setInputValue
-}: PriceTextInputPropsType) => {
-
+const PriceTextInput = ({ inputValue, setInputValue }: PriceTextInputPropsType) => {
   // HANDLERS
   const changeMinValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setInputValue(value => ({...value, minValue: inputValue}));
+    const newInputValue = e.target.value;
+    setInputValue(value => ({...value, minValue: newInputValue}));
   }
-  
+
   const changeMaxValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setInputValue(value => ({...value, maxValue: inputValue}));
+    const newInputValue = e.target.value;
+    setInputValue(value => ({...value, maxValue: newInputValue}));
   }
 
   // ELEMENTS
-  const displayedInputField = (value: string, handler: (e: React.ChangeEvent<HTMLInputElement>) => void, type: string='text'): ReactElement=> (
+  const displayedInputField = (value: string, handler: (e: React.ChangeEvent<HTMLInputElement>) => void, type: string='text'): ReactElement => (
     <input
       type={ type }
       value={ value }
@@ -36,11 +32,11 @@ const PriceTextInput = ({
 
   return (
     <div className='price-filter__text-input'>
-      {/* Input min */}
-      {displayedInputField(parseInt(inputValue.minValue).toString(), changeMinValueHandler, 'text') }
+      { /* Input min */ }
+      { displayedInputField(inputValue.minValue, changeMinValueHandler, 'text') }
       <span> { CONSTANTS.DASH } </span>
-      {/* Input max */}
-      {displayedInputField(parseInt(inputValue.maxValue).toString(), changeMaxValueHandler, 'text') }
+      { /* Input max */ }
+      { displayedInputField(inputValue.maxValue, changeMaxValueHandler, 'text') }
     </div>
   )
 }

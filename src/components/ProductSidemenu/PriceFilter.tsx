@@ -27,40 +27,47 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
   const [inputValue, setInputValue] = useState<PriceValueType>(PriceFilterInitializer);
   const [priceRange, setPriceRange] = useState<PriceValueType>(PriceFilterInitializer);
 
+  // UTILITY
+  // Validate price input (slider and text): check if input strings are valid numbers and min < max
+  const isValidPriceInput = (minValue: string, maxValue: string): boolean => {
+    if(!minValue.length || !maxValue.length) return false;
+    return (
+      (floatRegEx.test(minValue) && floatRegEx.test(maxValue)) 
+      && 
+      (parseFloat(minValue) < parseFloat(maxValue))
+    )  
+  }
+
   // EFFECTS
   // Update slider values when price range changes (when product changes) 
   useEffect(() => {
-    setSliderValue({ minValue: priceRange.minValue,  maxValue: priceRange.maxValue });
-    setInputValue({ minValue: priceRange.minValue, maxValue: priceRange.maxValue });
+    const ceiledMaxValue = Math.min(parseFloat(priceRange.minValue)).toString();
+    const flooredMaxValue = Math.max(parseFloat(priceRange.maxValue)).toString();
+    setSliderValue({ minValue: ceiledMaxValue,  maxValue: flooredMaxValue });
+    setInputValue({ minValue: ceiledMaxValue, maxValue: flooredMaxValue });
   }, [priceRange]);
 
   // Calculate the price ranges
   useEffect(() => {
     // map product prices
     const productPrices: number[] = categoryProducts.map((product: ProductItemType) => {
-      const activePrice = 'discountPrice' in product && product.priceDiscount !== undefined ? product.priceDiscount : product.price;
+      const activePrice = product.priceDiscount !== undefined ? product.priceDiscount : product.price;
       return activePrice;
     });
     
     // determine the min and max prices
-    const minValue = productPrices.length ? Math.min(...productPrices).toString() : '0';
-    const maxValue = productPrices.length ? Math.max(...productPrices).toString() : '0';
+    const minValue = productPrices.length ? Math.floor(Math.min(...productPrices)).toString() : '0';
+    const maxValue = productPrices.length ? Math.ceil(Math.max(...productPrices)).toString() : '0';
     
     // set the price range state
     setPriceRange({ minValue, maxValue });
   }, [categoryProducts]);
-
-  // VALIDATION
-  // Check if string input is a valid number
-  const isInputFieldValid = (minValue: string, maxValue: string): boolean => {
-    if(!minValue.length || !maxValue.length) return false;
-    return floatRegEx.test(minValue) && floatRegEx.test(maxValue) && (parseFloat(minValue) < parseFloat(maxValue));
-  }
   
   // HANDLER
   // Search product between the min - max price range 
   const filterProductsByPriceHandler = (): void => {
-    const inputFieldValidity = isInputFieldValid(inputValue.minValue, inputValue.maxValue);
+    // validate text input fields (min - max)
+    const inputFieldValidity = isValidPriceInput(inputValue.minValue, inputValue.maxValue);
     const areValuesSynchronized = sliderValue.minValue === inputValue.minValue && sliderValue.maxValue === inputValue.maxValue;
 
     if (inputFieldValidity && !areValuesSynchronized) {
@@ -68,18 +75,19 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
         Math.max(parseFloat(inputValue.minValue), parseFloat(priceRange.minValue)),
         parseFloat(priceRange.maxValue)
       ).toString();
-
       const conditionalMaxValue = Math.min(parseFloat(inputValue.maxValue), parseFloat(priceRange.maxValue)).toString();
 
-      setSliderValue((value) => ({ ...value, minValue: conditionalMinValue, maxValue: conditionalMaxValue }));
-      setInputValue((value) => ({ ...value, minValue: conditionalMinValue, maxValue: conditionalMaxValue }));
+      setSliderValue(value => ({ ...value, minValue: conditionalMinValue, maxValue: conditionalMaxValue }));
+      setInputValue(value => ({ ...value, minValue: conditionalMinValue, maxValue: conditionalMaxValue }));
     }
 
+    // filter products btw price ranges 
     const filteredCategoryProducts = categoryProducts?.filter((item: ProductItemType) => {
       const activePrice = item.priceDiscount || item.price; // use discount price if available
       return activePrice >= parseFloat(inputValue.minValue) && activePrice <= parseFloat(inputValue.maxValue);
-    });
+    }) || [];
 
+    // update store with filtered products
     dispatch({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS, payload: { categoryProducts: filteredCategoryProducts } });
   };
 
@@ -94,7 +102,7 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
         <div className='price-filter__button-container'>
           <button
             className='button--price-filter'
-            disabled={ !isInputFieldValid(inputValue.minValue, inputValue.maxValue) }
+            disabled={ !isValidPriceInput(inputValue.minValue, inputValue.maxValue) }
             onClick={ filterProductsByPriceHandler }
             > { CONSTANTS.OK }
           </button>

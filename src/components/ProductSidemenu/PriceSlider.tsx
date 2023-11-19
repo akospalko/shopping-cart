@@ -26,49 +26,47 @@ const PriceSlider = ({
   const range = useRef<HTMLDivElement>(null);
 
   // CALLBACK
-  // Convert to percentage
-  const getPercent = useCallback((value: number) => {
-      // check data validity
-      if(!floatRegEx.test(priceRange.minValue) && !floatRegEx.test(priceRange.maxValue)) return;
-      // convert used props to numbers
-      const minInitial = parseFloat(priceRange.minValue);
-      const maxInitial = parseFloat(priceRange.maxValue);
-      // check if min - max are valid integers
-      return Math.round(((value - minInitial) / (maxInitial - minInitial)) * 100) || 0;
-    }, [priceRange.maxValue, priceRange.minValue]
-  );
-
+  // Convert price slider values to percentage
+  const calculateSliderPercentage = useCallback((inputValue: string, priceMin: string, priceMax: string): number | undefined => {
+    // parse to float
+    const minPriceParsed = parseFloat(priceMin);
+    const maxPriceParsed = parseFloat(priceMax);
+    const inputValueParsed = parseFloat(inputValue);
+    // calc percentage    
+    return Math.round(((inputValueParsed - minPriceParsed) / (maxPriceParsed - minPriceParsed)) * 100) || 0;
+  }, []);
+  
   // EFFECTS
   // Update left side range width
   useEffect(() => {
     if (maxValRef.current && maxValRef.current.value !== undefined) {
       if (!floatRegEx.test(sliderValue.minValue)) return;
-      const min = parseFloat(sliderValue.minValue);
-      const max = parseFloat(maxValRef.current.value);
-      const minPercent = getPercent(min) || 0; 
-      const maxPercent = getPercent(max) || 100;
-      const calculatedRangeWidth = maxPercent - minPercent;
+      const min = sliderValue.minValue;
+      const max = maxValRef.current.value;
+      const minPercentage = calculateSliderPercentage(min, priceRange.minValue, priceRange.maxValue) || 0; 
+      const maxPercentage = calculateSliderPercentage(max, priceRange.minValue, priceRange.maxValue) || 100;
+      const calculatedRangeWidth = maxPercentage - minPercentage;
       if (range.current) {
-        range.current.style.left = `${ minPercent }%`;
+        range.current.style.left = `${ minPercentage }%`;
         range.current.style.width = `${ calculatedRangeWidth }%`;
       }
     }
-  }, [sliderValue.minValue, getPercent]);
+  }, [calculateSliderPercentage, priceRange.maxValue, priceRange.minValue, sliderValue.minValue]);
 
   // Update right side range width
   useEffect(() => {
     if (minValRef.current && minValRef.current.value !== undefined) {
       if (!floatRegEx.test(sliderValue.minValue)) return;
-      const min = parseFloat(minValRef.current.value);
-      const max = parseFloat(sliderValue.maxValue)
-      const minPercent = getPercent(min) || 0;
-      const maxPercent = getPercent(max) || 100;
-      const calculatedRangeWidth = maxPercent - minPercent;
+      const min = minValRef.current.value;
+      const max = sliderValue.maxValue;
+      const minPercentage = calculateSliderPercentage(min, priceRange.minValue, priceRange.maxValue) || 0; 
+      const maxPercentage = calculateSliderPercentage(max, priceRange.minValue, priceRange.maxValue) || 100;
+      const calculatedRangeWidth = maxPercentage - minPercentage;
       if (range.current) {
         range.current.style.width = `${ calculatedRangeWidth }%`;
       }
     }
-  }, [getPercent, sliderValue.maxValue, sliderValue.minValue]);
+  }, [calculateSliderPercentage, priceRange.maxValue, priceRange.minValue, sliderValue.maxValue, sliderValue.minValue]);
 
   // HANDLERS
   const sliderChangeHandler = (event: ChangeEvent<HTMLInputElement>, valueToUpdate: SliderValueType): void => {
@@ -76,22 +74,23 @@ const PriceSlider = ({
     const minValue = parseFloat(sliderValue.minValue);
     const maxValue = parseFloat(sliderValue.maxValue);
 
-    let getValue: string = '';
-  
+    // check which slider to update: min or max
+    let updatedValue: string = '';
     if (valueToUpdate === 'minValue') {
-      getValue = Math.min(currentValue, maxValue - 1).toString();
+      updatedValue = Math.min(currentValue, maxValue - 50).toString();
     } else if (valueToUpdate === 'maxValue') {
-      getValue = Math.max(currentValue, minValue + 1).toString();
+      updatedValue = Math.max(currentValue, minValue + 50).toString();
     }
-  
+    
+    // update slider / text price input 
     setSliderValue(value => ({
-      ...value, [valueToUpdate]: getValue
+      ...value, [valueToUpdate]: updatedValue
     }));
   
     setInputValue(value => ({
-      ...value, [valueToUpdate]: getValue
+      ...value, [valueToUpdate]: updatedValue
     }));
-    event.target.value = getValue;
+    event.target.value = updatedValue;
   };
 
   // ELEMENTS
