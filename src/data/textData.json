@@ -1,0 +1,18 @@
+{
+  "error-default": "Oops! Page Error.",
+  "error-try-again-later": "Try again later!",
+  "title-search-result": "Search Result",
+  "title-search-no-products": "Oops! Couldn't find the searched product.",
+  "title-products-not-available": "No Available Products",
+  "title-products-filtered": "Filtered Products",
+  "title-products-filter-no-result": "No Filter Result",
+  "title-products-default": "Browse Products",
+  "title-product-empty-category": "There Is Nothing To Find Here",
+  "subtitle-search-try-with-other-keyword": "Try a different keyword or browse from our list of products.",
+  "subtitle-products-not-available": "Couldn't fetch data",
+  "subtitle-product-empty-category": "Check out other categories",
+  "subtitle-products-filter-no-result": "Check out some alternative products below",
+  "button-navigate-to-products": "Back to products",
+  "button-navigate-to": "Back to"
+
+}
