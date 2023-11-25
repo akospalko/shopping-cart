@@ -10,7 +10,7 @@ type IndexRangePriceType = {
 const paginateProducts = (data: ProductItemType[] | undefined, itemsPerPage: number, pageNumber: number): ProductItemType[] => {
   const indexRange: IndexRangePriceType = {
     start: (pageNumber - 1) * itemsPerPage,
-    end: (pageNumber - 1) * itemsPerPage + itemsPerPage
+    end: ((pageNumber - 1) * itemsPerPage) + itemsPerPage
   }
   
   return data?.slice(indexRange.start, indexRange.end) ?? [];

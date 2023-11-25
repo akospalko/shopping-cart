@@ -1,7 +1,15 @@
 import { ReactElement } from "react";
 
+
+export type pageURLParamsType = {
+  category: string,
+  page: number
+} 
+
+
 export type PaginationPropsType = {
-  totalPages: number;
+  totalPages: number,
+  pageURLParams: pageURLParamsType 
 };
 
 export type NavigationButtonPropsType = {
