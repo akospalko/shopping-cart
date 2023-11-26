@@ -1,0 +1,11 @@
+.product-sidemenu-divider {
+  display: flex;
+  height: 2px;
+  background-color: var(--color-2);
+  width: 100%;
+  opacity: 0.25;
+}
+
+.product-sidemenu-divider--product-page {
+  margin: 1rem 0;
+}
