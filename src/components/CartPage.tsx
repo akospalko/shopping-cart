@@ -1,9 +1,9 @@
 // Cart page
-import {useState, useEffect} from 'react'
-import CartProduct from './CartProduct'
-import useCart from '../hooks/useCart'
-import {CartItemType} from '../types/cartProviderTypes'
-import './CartPage.css'
+import {useState, useEffect} from 'react';
+import CartProduct from './CartProduct';
+import useCart from '../hooks/useCart';
+import {CartItemType} from '../types/cartProviderTypes';
+import './CartPage.css';
 
 // CONSTANTS
 const CONSTANTS = {
@@ -28,19 +28,19 @@ enum HEADER_LABELS {
 // COMPONENT
 const CartPage = () => {
   // STATE
-  const [confirm, setConfirm] = useState<boolean>(false);
+  const [ confirm, setConfirm ] = useState<boolean>(false);
 
   // CONTEXT
-  const {dispatch, REDUCER_ACTIONS_CART, totalItems, totalPrice, cart} = useCart()  
+  const { dispatch, REDUCER_ACTIONS_CART, totalItems, totalPrice, cart } = useCart();  
 
   // EFFECTS
   useEffect(() => {
     sessionStorage.setItem('lastVisitedPage', 'cart');
-  },[])
+  }, []);
 
   // HANDLER
   const onSubmitOrder = () => {
-    dispatch({type: REDUCER_ACTIONS_CART.SUBMIT_ORDER })
+    dispatch({ type: REDUCER_ACTIONS_CART.SUBMIT_ORDER });
     setConfirm(true);
   }
 
@@ -49,28 +49,28 @@ const CartPage = () => {
   const cartProductListTable = (
     <>
       <div className='cart-page__header'> 
-        {Object.keys(HEADER_LABELS).map((key, i) => <span key={i}> {HEADER_LABELS[key as keyof typeof HEADER_LABELS]} </span>)}
+        { Object.keys(HEADER_LABELS).map((key: string, i: number) => <span key={ i }> { HEADER_LABELS[ key as keyof typeof HEADER_LABELS ] } </span>) }
       </div>
       <ul className='cart-page__products'>
-        {totalItems > 0 ? 
+        { totalItems > 0 ? 
           <>
-            {cart.map((product: CartItemType) => {
+            { cart.map((product: CartItemType) => {
               return(
                 <CartProduct
-                  key={product.sku}
-                  product={product}
-                  dispatch={dispatch}
-                  REDUCER_ACTIONS_CART={REDUCER_ACTIONS_CART}
+                  key={ product.sku }
+                  product={ product }
+                  dispatch={ dispatch }
+                  REDUCER_ACTIONS_CART={ REDUCER_ACTIONS_CART }
                 />
-              )})}
+              ) }) }
             <li className='cart-page__products-total'>
-              <h3> {CONSTANTS.TOTAL_PRODUCTS} {totalItems} </h3>
-              <h3> {CONSTANTS.TOTAL_PRICE} {totalPrice} </h3>
+              <h3> { CONSTANTS.TOTAL_PRODUCTS } { totalItems } </h3>
+              <h3> { CONSTANTS.TOTAL_PRICE } { totalPrice } </h3>
             </li>
           </>
         :  
         <li className='cart-page__products-empty'>
-            <h2> {CONSTANTS.EMPTY_CART} </h2>
+            <h2> { CONSTANTS.EMPTY_CART } </h2>
           </li>
         }
       </ul>
@@ -82,31 +82,31 @@ const CartPage = () => {
     <div className='cart-page__order'>
       <button 
         className='button--order-products' 
-        disabled={!totalItems}
-        onClick={onSubmitOrder}
-      > {totalItems > 0 ? CONSTANTS.PLACE_ORDER : CONSTANTS.FILL_YOUR_CART} </button>
+        disabled={ !totalItems }
+        onClick={ onSubmitOrder }
+      > { totalItems > 0 ? CONSTANTS.PLACE_ORDER : CONSTANTS.FILL_YOUR_CART } </button>
     </div>
   )
 
   // LAYOUT
-  const orderedProductLayout = <h1 className='cart-page__title'>{CONSTANTS.THANKS_FOR_THE_ORDER}</h1>
+  const orderedProductLayout = <h1 className='cart-page__title'>{ CONSTANTS.THANKS_FOR_THE_ORDER }</h1>
   const cartContentLayout = (
     <>
-      <h1 className='cart-page__title'> {CONSTANTS.YOUR_CART} </h1>
+      <h1 className='cart-page__title'> { CONSTANTS.YOUR_CART } </h1>
       <div className='cart-page__wrapper'>
         <div className='cart'>
-          {cartProductListTable}
+          { cartProductListTable }
         </div>
       </div>
-      {orderButton}
+      { orderButton }
     </>  
   )
 
   return (
     <main className='main main--cart'>
-      {confirm ? orderedProductLayout : cartContentLayout}
+      { confirm ? orderedProductLayout : cartContentLayout }
     </main>
   )
 }
 
-export default CartPage
+export default CartPage;
