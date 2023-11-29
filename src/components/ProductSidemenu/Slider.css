@@ -17,6 +17,10 @@
   height: 65px;
 }
 
+.slider.disabled {
+  pointer-events: none;
+}
+
 .slider-thumb {
   cursor: pointer;
   position: absolute;
@@ -25,7 +29,7 @@
   border: 3px solid var(--color-2);
   border-radius: 100%;
   display: block;
-  box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
+  box-shadow: 0 0 3px 0 rgb(0 0 0 / 50%);
 }
 
 .slider-thumb.active {
