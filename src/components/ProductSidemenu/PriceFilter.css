@@ -51,16 +51,16 @@
   outline-offset: -3px;
 }
 
-.button--price-filter:disabled {
-  background-color: var(--color-5);
-  color: var(--color-6);
-  cursor: default;
-}
-
 .button--price-filter:hover {
   background-color: var(--color-1);
   border: 1px solid var(--color-1);
   color: var(--color-5);
+}
+
+.button--price-filter:disabled {
+  background-color: var(--color-5);
+  color: var(--color-6);
+  cursor: default;
 }
 
 .price-filter__values-container {
@@ -77,13 +77,16 @@
 .price-filter__value {
   width: 50%;
   text-align: center;
-  user-select: none;
   color: var(--color-2);
   font-size: 0.8rem;
 }
 
 .price-filter__divider {
   color: var(--color-2);
+}
+
+.price-filter__values-container {
+  user-select: none;
 }
 
 @media screen and (min-width: 768px) {

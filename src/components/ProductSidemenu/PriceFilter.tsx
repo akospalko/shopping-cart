@@ -6,34 +6,24 @@ import useProducts from "../../hooks/useProducts";
 import { ProductItemType } from "../../types/productsProviderTypes";
 import { PriceFilterPropsType, PriceRangeAndValueType } from "../../types/ProductFilterTypes";
 import Slider from "./Slider";
+import { priceFilterStateInitializer } from "../../utility/constants";
 import textData from "../../data/textData.json";
-import { validatePageParam } from "../../utility/validatePageParam";
 import "./PriceFilter.css";
-
-// import PriceTextInput from "./PriceTextInput";
-// import { floatRegEx } from "../../utility/regexPatterns";
 
 // COMPONENT
 const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
   // ROUTE
   const navigate = useNavigate();
-  const { category, page } = useParams();
-  const pageNumber: number = validatePageParam(page);
-  console.log('price filter active page: ', pageNumber)
+  const { category } = useParams();
 
-  // CONTEXTS
+  // CONTEXT
   const { dispatch, REDUCER_ACTIONS_PRODUCT } = useProducts();
 
-  // INITIALIZERS
-  const MIN = 1;
-  const MAX = 100;
-  
   // STATES
-  const [sliderValues, setSliderValues] = useState<PriceRangeAndValueType>([MIN, MAX]);
-  const [priceRange, setPriceRange] = useState<PriceRangeAndValueType>([MIN, MAX]);
+  const [sliderValues, setSliderValues] = useState<PriceRangeAndValueType>([priceFilterStateInitializer.min, priceFilterStateInitializer.max]);
+  const [priceRange, setPriceRange] = useState<PriceRangeAndValueType>([priceFilterStateInitializer.min, priceFilterStateInitializer.max]);
 
   // UTILITY
-  // check if user input min and max prices are within the allowed price range
   const isPriceWithinRange = (min: number, max: number): boolean => {
     if(!min || !max || !priceRange[0] || !priceRange[1]) return false;
     return min >= priceRange[0] && max <= priceRange[1]; 
@@ -55,7 +45,6 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
   };
   
   // HANDLER
-  // test slider change handler
   // Search product between the min - max price range 
   const filterByPriceHandler = debounce((min: number, max: number): void => {
     dispatch({ type: REDUCER_ACTIONS_PRODUCT.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: true } });
@@ -75,9 +64,10 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
   }, 300);
 
   // EFFECTS
+  // Calculate price range, update slider and range
   useEffect(() => {
     if (!categoryProducts.length) {
-      setPriceRange([0, 0]);
+      setPriceRange([0, 100]);
       setSliderValues([0, 100]);
       return;
     }
@@ -88,8 +78,8 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
         return activePrice;
       });
   
-      const minPriceRange = productPrices.length ? Math.floor(Math.min(...productPrices)) : MIN;
-      const maxPriceRange = productPrices.length ? Math.ceil(Math.max(...productPrices)) + 10 : MAX;
+      const minPriceRange = productPrices.length ? Math.floor(Math.min(...productPrices)) : priceFilterStateInitializer.min;
+      const maxPriceRange = productPrices.length ? Math.ceil(Math.max(...productPrices)) + 10 : priceFilterStateInitializer.max;
       
       setPriceRange([minPriceRange, maxPriceRange]);
       setSliderValues([minPriceRange, maxPriceRange]);
