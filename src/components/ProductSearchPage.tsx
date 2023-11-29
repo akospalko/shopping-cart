@@ -10,6 +10,7 @@ import textData from "../data/textData.json";
 import paginateProducts from "../utility/paginateProducts";
 import { validatePageParam } from "../utility/validatePageParam";
 import { ProductPagePropsType } from "../types/productPageTypes";
+import { SEARCH } from '../../src/utility/constants';
 import "./ProductPage.css";
 
 // COMPONENT
@@ -69,10 +70,10 @@ const ProductSearchPage = ({ productData }: ProductPagePropsType) => {
   // Conditionally display found prorducts or no result window 
   let dislayedContent;
   switch(searchStatus) {
-    case "SEARCH_NO_RESULT":
+    case SEARCH.NO_RESULT:
       dislayedContent = noResult;
       break;
-    case "SEARCH_RESULT":
+    case SEARCH.RESULT:
       dislayedContent = productFound;
       break;
     default:
