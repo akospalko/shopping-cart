@@ -1,11 +1,9 @@
 import { ReactElement } from "react";
 
-
 export type pageURLParamsType = {
   category: string,
-  page: number
+  page: number,
 } 
-
 
 export type PaginationPropsType = {
   totalPages: number,
