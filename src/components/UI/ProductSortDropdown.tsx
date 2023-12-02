@@ -3,16 +3,16 @@ import { useEffect, ReactElement, ChangeEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useProducts from "../../hooks/useProducts";
 import { SORT_OPTION_VALUE } from "../../utility/constants";
-import "./ProductSortSelector.css";
 import textData from "../../data/textData.json";
+import "./ProductSortDropdown.css";
 
 // TYPE
-type SortOptionType = {
+type ProductSortDropdownOptionType = {
   value: string,
   label: string
 }
 
-const ProductSortSelector = () => {
+const ProductSortDropdown = () => {
   // ROUTE
   const navigate = useNavigate();  
   const { category } = useParams();
@@ -22,7 +22,6 @@ const ProductSortSelector = () => {
   
   // EFFECT 
   useEffect(() => {
-    if(!activeSortOption) return;
     navigate(`/${ category }/1`);
   }, [category, navigate, activeSortOption])
   
@@ -35,32 +34,33 @@ const ProductSortSelector = () => {
     })
   }
 
+  // STYLE
+  const isActiveSortOption = (value: string) => activeSortOption === value ? "product-sort-dropdown__option--active" : "";
+
+
   // ELEMENTS
   // Sort Options
-  const sortOptions: SortOptionType[] = [
-    { value: SORT_OPTION_VALUE.RATING,
-      label: textData["sort-option-rating"] }, 
-    { value: SORT_OPTION_VALUE.PRICE_EXPENSIVE_TO_CHEAP,
-      label: textData["sort-option-expensive-to-cheap"] },
-    { value: SORT_OPTION_VALUE.PRICE_CHEAP_TO_EXPENSIVE,
-      label: textData["sort-option-cheap-to-expensive"] },
+  const sortOptions: ProductSortDropdownOptionType[] = [
+    { value: SORT_OPTION_VALUE.RATING, label: textData["sort-option-rating"] }, 
+    { value: SORT_OPTION_VALUE.PRICE_EXPENSIVE_TO_CHEAP, label: textData["sort-option-expensive-to-cheap"] },
+    { value: SORT_OPTION_VALUE.PRICE_CHEAP_TO_EXPENSIVE, label: textData["sort-option-cheap-to-expensive"] },
   ];
 
-  const options: ReactElement[] = sortOptions.map((option: SortOptionType) => {
-    return (
-      <option 
-        key={ `opt${ option.value }` } 
-        className={ `product-sort-by__option ${ activeSortOption === option.value && "product-sort-by__option--active" }` }
-        value={ option.value }
-      > { option.label }
-      </option>
-    )
-  }) 
+  // Mapped option
+  const options: ReactElement[] = sortOptions.map(({ value, label }) => (
+    <option 
+      key={`${ category }-opt-${ value }`} 
+      className={ `product-sort-dropdown__option ${ isActiveSortOption(value) }` }
+      value={ value }
+    >
+      { label }
+    </option>
+  ));
 
   return (
-    <div className="product-sort-by">
+    <div className="product-sort-dropdown">
       <select 
-        className="select--product-sort-by"
+        className="select--product-sort-dropdown"
         name="sort-by" 
         id="sort-by"
         onChange={ onChangeSortOption }
@@ -70,4 +70,4 @@ const ProductSortSelector = () => {
   )
 }
 
-export default ProductSortSelector;
+export default ProductSortDropdown;
