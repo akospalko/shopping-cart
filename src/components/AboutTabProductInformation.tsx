@@ -4,7 +4,7 @@ import {ProductItemType} from '../types/productsProviderTypes'
 import useCart from '../hooks/useCart'
 import {useIsItemInCart} from '../hooks/useIsItemInCart'
 import useCartProductHandler from '../hooks/useCartProductHandler'
-import useProductPriceElement from '../hooks/useProductPriceElement'
+import ProductDisplayedPrice from './UI/ProductDisplayedPrice'
 import useProductStockElement from '../hooks/useProductStockElement'
 import './AboutTabProductInformation.css'
 
@@ -38,7 +38,6 @@ const AboutTabProductInformation = ({activeProduct}: AboutTabPropsType) => {
 
   // HOOK
   const isInCart = useIsItemInCart(cart, activeProduct);
-  const productPriceElement = useProductPriceElement();
   const productStockElement = useProductStockElement();
   const {addToCartHandler, removeFromCartHandler} = useCartProductHandler();
 
@@ -92,8 +91,11 @@ const AboutTabProductInformation = ({activeProduct}: AboutTabPropsType) => {
   // Product Price: price, stock
   const productPrice = (
     <div className="about-tab__product-price">
-      {productPriceElement(activeProduct, {priceMainStyle: 'about-tab__product-price-main', priceSecondaryStyle: 'about-tab__product-price-secondary'})}
-      {productStockElement(activeProduct?.stock, 'about-tab__product-stock')}
+      <ProductDisplayedPrice
+        product={ activeProduct }
+        customStyle={ { priceMainStyle: 'about-tab__product-price-main', priceSecondaryStyle: 'about-tab__product-price-secondary' } }
+      />
+      { productStockElement(activeProduct?.stock, 'about-tab__product-stock') }
     </div>
   )
 
@@ -102,8 +104,8 @@ const AboutTabProductInformation = ({activeProduct}: AboutTabPropsType) => {
     <div className='about-tab__buttons'> 
       <button 
         className='button--about-tab-add-to-cart'
-        onClick={cartToggleHandler}
-        disabled={!activeProduct?.stock}
+        onClick={ cartToggleHandler }
+        disabled={ !activeProduct?.stock }
       > {isInCart ? CONSTANT.REMOVE_FROM_CART : CONSTANT.ADD_TO_CART}</button>
       <button 
         className='button--about-tab-product-order'

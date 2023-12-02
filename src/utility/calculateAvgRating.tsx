@@ -21,7 +21,7 @@ import textData from '../data/textData.json';
   // Function to update products array with calculatedRatingAvg
   export const updateProductsWithAverageRating = (products: ProductItemType[]) => {
     return products.map((product: ProductItemType) => {
-      const averageRating = calculateAverageRating(product.review);
+      const averageRating = Math.round(calculateAverageRating(product.review));
       return { ...product, calculatedRatingAvg: averageRating };
     });
   };

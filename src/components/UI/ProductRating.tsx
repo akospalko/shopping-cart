@@ -58,7 +58,7 @@ const ProductRating = ({ readOnly = false, productRating = 0, displaydRatingElem
               tabIndex={ readOnly ? -1 : 0 }
             />
             <div
-              className="product-rating"
+              className={ `product-rating ${ readOnly ? "product-rating--read-only" : "" }` }
               onClick={ () => ElementClickHandler(currentRating) }
               onKeyDown={ (event: KeyboardEvent<HTMLDivElement>) => KeyDownHandler(event, currentRating) }
               onMouseEnter={ () => !readOnly && setHover(currentRating) }

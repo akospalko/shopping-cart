@@ -1,7 +1,6 @@
 .product-rating-container {
   display: flex;
   align-items: center;
-  width: 100%;
 }
 
 .product-label {
@@ -10,14 +9,15 @@
   flex-direction: column; 
   align-items: center;
   justify-content: center;
-  margin: 0 0px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
   cursor: pointer;
 }
 
 .product-radio {
   display: none;
   position: absolute;
-  cursor: pointer;
   width: 100%; 
   height: 100%; 
 }
@@ -26,14 +26,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  transition: transform 0.4s ease-in-out;
   position: relative;
   border: 2px solid transparent;
+  transition: transform 0.4s ease-in-out;
+}
+
+.product-rating--read-only {
+  cursor: default;
 }
 
 .product-rating:hover {
   transform: scale(1.1); 
+}
+
+.product-rating--read-only:hover {
+  transform: none; 
 }
 
 .product-rating:focus-visible {
