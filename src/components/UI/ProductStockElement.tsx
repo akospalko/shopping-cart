@@ -1,7 +1,6 @@
 // Product display stock infromation
 import { ReactElement } from 'react';
 import textData from '../../data/textData.json';
-import '../index.css';
 
 // TYPE
 type ProductStockElementPropsType = {
