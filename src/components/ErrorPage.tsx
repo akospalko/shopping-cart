@@ -1,15 +1,21 @@
 // Page to display status messages related to various page events (e.g. displaying search results, error )
-import './StatusPage.css'
-import  STATUS_CONTENT from '../data/statusMessages.json'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import textData from '../data/textData.json';
+import './ErrorPage.css';
 
 // TYPE
-type PropsType = {
-  statusType: keyof typeof STATUS_CONTENT
+type textContentType = {
+  title: string,
+  subtitle: string
 }
 
+type ErrorPagePropsType = {
+  content: textContentType
+};
+
+
 // COMPONENT
-const StatusPage = ({statusType}: PropsType) => {
+const ErrorPage = ({ content }: ErrorPagePropsType) => {
 
   // ROUTE
   const navigate = useNavigate();
@@ -31,21 +37,17 @@ const StatusPage = ({statusType}: PropsType) => {
     }
   };
 
-  
-  // DATA
-  const statusContent = STATUS_CONTENT[statusType];
-
   return ( 
     <main className='main main--status-page'>
       <div className='main--status-page-wrapper'>
-        <h1> {statusContent?.h1} </h1>
-        <h2> {statusContent?.h2} </h2>
+        <h1> { content.title } </h1>
+        <h2> { content.subtitle } </h2>
         <div className='status-page__button'>
-          <button className='button--navigate-back' onClick={navigateToLastVisited}> Back to {lastVisitedPage} </button>
+          <button className='button--navigate-back' onClick={ navigateToLastVisited }> { textData['button-navigate-to'] } { lastVisitedPage } </button>
         </div>
       </div>
     </main>
   )
 }
 
-export default StatusPage
+export default ErrorPage;
