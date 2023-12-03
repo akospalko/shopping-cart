@@ -14,7 +14,7 @@
   width: 0.5rem;
 }
 
-.price-filter__text-input input {
+.input--price-filter-input {
   height: 30px;
   width: 100%;
   border-radius: var(--border-radius);
@@ -25,7 +25,11 @@
   font-size: 1rem;
 }
 
-.price-filter__text-input input:focus {
+.input--price-filter-input:disabled {
+  color: var(--color-5__50);
+}
+
+.input--price-filter-input:focus {
   border: 2px solid var(--color-2);
   outline: none;
 }
