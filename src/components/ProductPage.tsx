@@ -7,25 +7,34 @@ import ProductList from "./ProductList";
 import ProductSidemenu from "./ProductSidemenu/ProductSidemenu";
 import useProducts from "../hooks/useProducts";
 import DividerLine from "./UI/DividerLine";
+import ProductSortDropdown from "./UI/ProductSortDropdown";
 import paginateProducts from "../utility/paginateProducts";
 import { validatePageParam } from "../utility/validatePageParam";
+import { SORT_OPTION_VALUE, itemsPerPage} from "../utility/constants";
+import { sortBy } from "../utility/sortProduct";
 import textData from "../data/textData.json";
-import { ProductPagePropsType } from "../types/productPageTypes";
 import productCategories from "../data/productCategories.json";
 import "./ProductPage.css";
 
+// CONSTANT 
+const CONSTANT = {
+  CATEGORY_ALL: "all"
+}; 
+
 // COMPONENT
-const ProductPage = ({ productData }: ProductPagePropsType) => {
+const ProductPage = () => {
   // ROUTE
   const navigate = useNavigate();
   const { category, page } = useParams();
-  const activeCategory = category || "all"; 
+  const activeCategory = category || CONSTANT.CATEGORY_ALL; 
 
   // CONTEXT
   const { 
+    products,
     isFilteringProduct,
     categoryProducts, 
     categoryProductsFiltered, 
+    activeSortOption,
     dispatch, 
     REDUCER_ACTIONS_PRODUCT } = useProducts();
 
@@ -40,7 +49,7 @@ const ProductPage = ({ productData }: ProductPagePropsType) => {
   const pageNumber: number = validatePageParam(page);
 
   const conditonalDisplayCategoryProducts = (): void => {
-    if(productData === undefined || !productData.length) {
+    if(products === undefined || !products.length) {
       titleContent = textData["title-products-not-available"]; 
       subtitleContent = textData["subtitle-products-not-available"];
     }
@@ -70,16 +79,18 @@ const ProductPage = ({ productData }: ProductPagePropsType) => {
 
   conditonalDisplayCategoryProducts();
 
+  // Sort products based on active sort option
+  const sortedProducts = sortBy(productListContent, activeSortOption || SORT_OPTION_VALUE.RATING);
+  
   // Paginate filtered products
-  const itemsPerPage: number = 5;
-  const totalPages = Math.ceil((productListContent?.length ?? 1) / itemsPerPage);
-  const paginatedProducts = paginateProducts(productListContent, itemsPerPage, pageNumber);
+  const totalPages = Math.ceil((sortedProducts?.length ?? 1) / itemsPerPage);
+  const paginatedProducts = paginateProducts(sortedProducts, itemsPerPage, pageNumber);
 
   // EFFECTS
   // Store last visited page
   useEffect(() => {
     sessionStorage.setItem("lastVisitedPage", "products");
-  }, [])
+  }, []);
 
   // Navigate to conditional route
   useEffect(() => {
@@ -91,8 +102,8 @@ const ProductPage = ({ productData }: ProductPagePropsType) => {
   // Filter and store active category products
   useEffect(() => {
     // filter products
-    const categoryProductData = productData?.filter((product: ProductItemType) => {
-      if(activeCategory === "all") {
+    const categoryProductData = products?.filter((product: ProductItemType) => {
+      if(activeCategory === CONSTANT.CATEGORY_ALL) {
         return product;
       } else {
         return product.category === activeCategory;
@@ -100,7 +111,7 @@ const ProductPage = ({ productData }: ProductPagePropsType) => {
     }); 
     // update store with filtered products
     dispatch({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS, payload: { categoryProducts: categoryProductData } });
-  }, [REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS, activeCategory, dispatch, productData])
+  }, [REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS, activeCategory, dispatch, products]);
 
   return (
     <main className="main main__product-page">
@@ -110,6 +121,7 @@ const ProductPage = ({ productData }: ProductPagePropsType) => {
           <h1 className="product-page__header--1">{ titleContent }</h1>
           { !!subtitleContent.length && <h3 className="product-page__header--2"> { subtitleContent } </h3> }
           { !!productListContent.length && <DividerLine style="product-sidemenu-divider--product-page"/> }
+          { !!productListContent.length && <ProductSortDropdown/> }
           <ProductList productsData={ paginatedProducts ?? [] }/>
           { (totalPages > 1 && pageNumber <= totalPages) && <Pagination totalPages={ totalPages } pageURLParams={ { category: activeCategory, page: pageNumber } } /> }
         </div>

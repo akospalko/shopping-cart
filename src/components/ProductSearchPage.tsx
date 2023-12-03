@@ -1,29 +1,27 @@
 // Component to hold the product items and related pagination
 import { useEffect, ReactElement } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ProductItemType } from "../types/productsProviderTypes";
 import Pagination from "./Pagination";
 import ProductList from "./ProductList";
 import useProducts from "../hooks/useProducts";
 import DividerLine from "./UI/DividerLine";
-import textData from "../data/textData.json";
+import ProductSortDropdown from "./UI/ProductSortDropdown";
 import paginateProducts from "../utility/paginateProducts";
 import { validatePageParam } from "../utility/validatePageParam";
-import { ProductPagePropsType } from "../types/productPageTypes";
-import { SEARCH } from '../../src/utility/constants';
+import { itemsPerPage, SEARCH } from "../../src/utility/constants";
+import { sortBy } from "../utility/sortProduct";
+import { SORT_OPTION_VALUE } from "../../src/utility/constants";
+import textData from "../data/textData.json";
 import "./ProductPage.css";
 
 // COMPONENT
-const ProductSearchPage = ({ productData }: ProductPagePropsType) => {
+const ProductSearchPage = () => {
   // ROUTE
   const navigate = useNavigate();
   const { page } = useParams();
 
   // CONTEXT
-  const { searchStatus, filteredProducts } = useProducts();
-
-  // DATA
-  const pageNumber: number = validatePageParam(page);
+  const { activeSortOption, searchStatus, filteredProducts } = useProducts();
 
   // EFFECTS
   useEffect(() => {
@@ -32,11 +30,12 @@ const ProductSearchPage = ({ productData }: ProductPagePropsType) => {
   }, [])
 
   // DATA
+  const pageNumber: number = validatePageParam(page);
+  // Sort products based on active sort option
+  const sortedProducts = sortBy(filteredProducts ?? [], activeSortOption || SORT_OPTION_VALUE.RATING);
   // Paginate filtered products
-  const productListContent: ProductItemType[] = productData ?? [];
-  const itemsPerPage: number = 10;
-  const totalPages = Math.ceil((filteredProducts?.length ?? 1) / itemsPerPage);
-  const paginatedProducts = paginateProducts(filteredProducts, itemsPerPage, pageNumber);
+  const totalPages = Math.ceil((sortedProducts?.length ?? 1) / itemsPerPage);
+  const paginatedProducts = paginateProducts(sortedProducts, itemsPerPage, pageNumber);
 
   // ELEMENTS
   // Display products search - found product
@@ -44,7 +43,8 @@ const ProductSearchPage = ({ productData }: ProductPagePropsType) => {
     <div className="product-page__wrapper">
       <div className="product-page__content">
         <h1 className="product-page__header--1"> { textData["title-search-result"] } </h1>
-        { !!productListContent.length && <DividerLine style="product-sidemenu-divider--product-page"/> }
+        { !!filteredProducts?.length && <DividerLine style="product-sidemenu-divider--product-page"/> }
+        { !!filteredProducts?.length && <ProductSortDropdown/> }
         <ProductList productsData={ paginatedProducts ?? [] }/>
         { totalPages > 1 && <Pagination totalPages={ totalPages } pageURLParams={ { category: "search", page: pageNumber } } /> }
       </div>
