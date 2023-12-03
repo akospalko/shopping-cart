@@ -10,23 +10,18 @@ import DividerLine from "./UI/DividerLine";
 import ProductSortDropdown from "./UI/ProductSortDropdown";
 import paginateProducts from "../utility/paginateProducts";
 import { validatePageParam } from "../utility/validatePageParam";
-import { SORT_OPTION_VALUE, itemsPerPage} from "../utility/constants";
+import { PRODUCT_CATEGORY, SORT_OPTION_VALUE, itemsPerPage} from "../utility/constants";
 import { sortBy } from "../utility/sortProduct";
 import textData from "../data/textData.json";
 import productCategories from "../data/productCategories.json";
 import "./ProductPage.css";
-
-// CONSTANT 
-const CONSTANT = {
-  CATEGORY_ALL: "all"
-}; 
 
 // COMPONENT
 const ProductPage = () => {
   // ROUTE
   const navigate = useNavigate();
   const { category, page } = useParams();
-  const activeCategory = category || CONSTANT.CATEGORY_ALL; 
+  const activeCategory = category || PRODUCT_CATEGORY.ALL; 
 
   // CONTEXT
   const { 
@@ -103,7 +98,7 @@ const ProductPage = () => {
   useEffect(() => {
     // filter products
     const categoryProductData = products?.filter((product: ProductItemType) => {
-      if(activeCategory === CONSTANT.CATEGORY_ALL) {
+      if(activeCategory === PRODUCT_CATEGORY.ALL) {
         return product;
       } else {
         return product.category === activeCategory;
