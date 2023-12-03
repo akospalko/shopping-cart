@@ -10,6 +10,7 @@
         "description": "Short description about the processor.",
         "warranty": "2 years",
         "retailer": "Acme shop",
+        "review": [{ "userID": "test1@email.com", "username": "test1", "rating": 4, "review": "test review" }],
         "properties": {
             "brand": "AMD",
             "model": "Ryzen 7",
@@ -29,13 +30,19 @@
     {
         "sku": "item0002",
         "name": "AMD Ryzen 7 7800X3D 4.4GHz 8-Cores",
-        "price": 369.90,
-        "priceDiscount": 449.50,
+        "price": 1550,
+        "priceDiscount": 999.99,
         "stock": 2,
         "category": "processor",
         "description": "Short description about the processor.",
         "warranty": "2 years",
         "retailer": "Acme shop",
+        "review": [
+            { "userID": "test2@email.com", "username": "test2", "rating": 3, "review": "mediocre review" },
+            { "userID": "test3@email.com", "username": "test3", "rating": 5, "review": "a good review" },
+            { "userID": "test4@email.com", "username": "test4", "rating": 1, "review": "a low review" },
+            { "userID": "test5@email.com", "username": "test5", "rating": 2, "review": "a kinda low review" }
+        ],
         "properties": {
             "brand": "AMD",
             "model": "Ryzen 7",
@@ -60,6 +67,7 @@
         "description": "Short description about the processor.",
         "warranty": "2 years",
         "retailer": "Acme shop",
+        "review": [],
         "properties": {
             "brand": "AMD",
             "model": "Ryzen 7",
@@ -86,6 +94,7 @@
         "description": "Short description about the processor.",
         "warranty": "2 years",
         "retailer": "Acme shop",
+        "review": [{ "userID": "test2@email.com", "username": "test2", "rating": 2, "review": "test review" }],
         "properties": {
             "brand": "Intel",
             "model": "Core i9-13900K",
@@ -112,6 +121,7 @@
         "description": "Short description about the processor.",
         "warranty": "2 years",
         "retailer": "Acme shop",
+        "review": [{ "userID": "test3@email.com", "username": "test3", "rating": 5, "review": "test review" }],
         "properties": {
             "brand": "Intel",
             "model": "Core i9-13900K",
@@ -138,6 +148,7 @@
         "description": "test",
         "warranty": "test",
         "retailer": "Acme shop",
+        "review": [{ "userID": "test3@email.com", "username": "test3", "rating": 1, "review": "test review" }],
         "properties": {
             "type": "test",
             "capacity": "test",
@@ -157,10 +168,11 @@
         "price": 350,
         "priceDiscount": 300,
         "stock": 10,
-        "category": "mobile",
+        "category": "processor",
         "description": "test",
         "warranty": "test",
         "retailer": "Acme shop",
+        "review": [{ "userID": "test3@email.com", "username": "test3", "rating": 4, "review": "test review" }],
         "properties": {
             "brand": "test",
             "model": "test",
@@ -184,6 +196,7 @@
         "description": "test",
         "warranty": "test",
         "retailer": "Acme shop",
+        "review": [{ "userID": "test1@email.com", "username": "test1", "rating": 1, "review": "test review" }],
         "properties": {
             "brand": "test",
             "model": "test",
@@ -209,6 +222,7 @@
         "description": "test",
         "warranty": "test",
         "retailer": "Acme shop",
+        "review": [{ "userID": "test6@email.com", "username": "test6", "rating": 2, "review": "test review" }],
         "properties": {
             "brand": "test",
             "model": "test",
