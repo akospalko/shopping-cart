@@ -144,7 +144,7 @@ const PriceAndStock = ({ product }: ProductCardPropsType) => (
       product={ product }
       customStyle={{ priceMainStyle: "product-card__price-main", priceSecondaryStyle: "product-card__price-secondary" }}
     />
-    <ProductStockElement stock={ product?.stock || 0 } customStyle="about-product__stock" />
+    <ProductStockElement stock={ product?.stock || 0 } />
   </div>
 );
 

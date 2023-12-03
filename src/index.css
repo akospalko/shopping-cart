@@ -34,9 +34,11 @@ select {
     --color-5: #ced7e0;
     --color-5__50: rgba(206, 215, 224, 0.5);
     --color-6: #878787;
+    --color-7: rgb(255, 184, 51);
     --color--light: #fff; 
     --color--light__50: rgb(255, 255, 255, 0.5); 
     --border-radius: 6px;
+    
 }
 
 .page {
@@ -81,6 +83,17 @@ select {
   gap: 0.5em;
 }
 
+.nav:focus-visible {
+    outline: none;
+    border-radius: var(--border-radius);
+}
+
+.nav:focus-visible .button--toggle-cart {
+    background-color: var(--color-1);
+    border: 1px solid var(--color-7);
+    color: var(--color-7);
+}
+
 /* FOOTER */
 .footer {
     display: grid;
@@ -91,7 +104,6 @@ select {
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: var(--border-radius) var(--border-radius) 0 0;
     padding: 0.5rem;
-    /* margin-top: 0.5rem; */
 }
 
 .footer__branding {
@@ -122,56 +134,37 @@ button {
 }
 
 .button--toggle-cart {
-    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--border-radius);
     width: 75px;
     height: 40px;
     padding: 0.25rem;
     background-color: var(--color-5);
+    border: 1px solid var(--color-5);
     color: var(--color-1);
-    transition: transform 0.2s ease;
+    user-select: none;
+    transition: 
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border 0.2s ease;
 }
 
 .button--toggle-cart:hover {
-    transform: scale(1.05);
-}
-
-.button--search-bar__submit {
-    width: 75px;
-    height: 100%;
     background-color: var(--color-1);
-    border: 2px solid var(--color-5);
+    border: 1px solid var(--color-5);
     color: var(--color-5);
-    padding: 0.5rem;
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
-.button--search-bar-remove-term {
-    position: absolute;
-    right: calc(75px + 0.5rem);
-    height: 30px;
-    width: 30px;
-    align-self: center;
-    display: flex;
-    background-color: transparent;
-}
-
-.button--navigate-back {
+.button--navigate-back:hover {
     height: 50px;
-    background-color: var(--color-5);
+    background-color: var(--color-7);
     border-radius: var(--border-radius);
     color: var(--color-1);
     font-size: 1.2rem;
     margin: 1rem 0;
     padding: 0.5rem;
-}
-
-/* PRODUCT STOCK */
-.about-product__stock {
-
-}
-
-.product-card__stock {
-
 }
 
 .product-stock-element__container {
@@ -221,15 +214,11 @@ button {
         justify-content: end;
         text-align: end;
     }
-}
 
-@media screen and (min-width: 768px) {
     .main {
         width: 100%;
     }
-}
 
-@media screen and (min-width: 1024px) {
     .main__product-page {
         flex-direction: initial;
         justify-content: center;

@@ -103,10 +103,7 @@ const AboutTabProductInformation = ({ activeProduct }: AboutTabPropsType) => {
           product={ activeProduct }
           customStyle={ { priceMainStyle: "about-tab__product-price-main", priceSecondaryStyle: "about-tab__product-price-secondary" } }
         />
-        <ProductStockElement 
-          stock={ activeProduct?.stock || 0 } 
-          customStyle="about-product__stock" 
-        />
+        <ProductStockElement stock={ activeProduct?.stock || 0 }/>
       </div>
       {/* Buttons container: add/remove cart item, order */}
       { renderButtonsContainer() }
