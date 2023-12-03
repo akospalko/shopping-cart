@@ -22,7 +22,11 @@ const ProductSortDropdown = () => {
   
   // EFFECT 
   useEffect(() => {
-    navigate(`/${ category }/1`);
+    if(!category) {
+      navigate(`/search/1`);
+    } else {
+      navigate(`/${ category }/1`);
+    }
   }, [category, navigate, activeSortOption])
   
   // HANDLER
@@ -36,7 +40,6 @@ const ProductSortDropdown = () => {
 
   // STYLE
   const isActiveSortOption = (value: string) => activeSortOption === value ? "product-sort-dropdown__option--active" : "";
-
 
   // ELEMENTS
   // Sort Options
