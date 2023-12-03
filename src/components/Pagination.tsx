@@ -7,7 +7,7 @@ import {
   NavigationButtonPropsType, 
   GoToPageButtonParameterType, 
   GoToPageButtonType } from '../types/paginationTypes';
-  import './Pagination.css';
+import './Pagination.css';
 
 // PAGINATION COMPONENT
 const Pagination = ({ totalPages, pageURLParams }: PaginationPropsType) => {
@@ -17,7 +17,7 @@ const Pagination = ({ totalPages, pageURLParams }: PaginationPropsType) => {
   // EFFECT
   useEffect(() => {
     navigate(`/${ pageURLParams.category }/${ pageURLParams.page }`);
-  }, [navigate, pageURLParams.page, pageURLParams.category]); 
+  }, [navigate, pageURLParams.category, pageURLParams.page]); 
   
   // HANDLER
   const navToPageHandler = (page: number): void => {
@@ -38,7 +38,6 @@ const Pagination = ({ totalPages, pageURLParams }: PaginationPropsType) => {
       <NavigationButton 
         key={ page }
         style={ pageURLParams.page === page ? navigationActiveButtonStyle : '' } 
-        // clicked={ () => updateActivePageHandler(page) }
         clicked={ () => navToPageHandler(page) }
         disabled={ pageURLParams.page === page } 
         label={ page }
@@ -92,7 +91,6 @@ const Pagination = ({ totalPages, pageURLParams }: PaginationPropsType) => {
         <NavigationButton
           style={ navigationPrevNextButtonStyle }
           clicked={ () => navToPageHandler(pageURLParams.page - 1) }
-          // clicked={ () => updateActivePageHandler(pageNumber - 1) }
           disabled={ pageURLParams.page === 1 }
           label={ <ArrowIcon  width={ iconSize } height={ iconSize } fill={ iconColor } /> }
         />
@@ -100,7 +98,6 @@ const Pagination = ({ totalPages, pageURLParams }: PaginationPropsType) => {
         <NavigationButton
           style={ navigationPrevNextButtonStyle }
           clicked={ () => navToPageHandler(pageURLParams.page + 1) }
-          // clicked={ () => updateActivePageHandler(pageNumber + 1) }
           disabled={ pageURLParams.page === totalPages }
           label={ <ArrowIcon width={ iconSize } height={ iconSize } fill={ iconColor } wrapperCustomStyle={ { 'transform': 'rotate(180deg)' } }/> }
         />
