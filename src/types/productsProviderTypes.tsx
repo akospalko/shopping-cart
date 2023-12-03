@@ -1,7 +1,7 @@
-import { ReactElement } from "react"
-import { useProductContext } from "../context/ProductsProvider"
-
-// TYPE
+import { ReactElement } from "react";
+import { useProductContext } from "../context/ProductsProvider";
+import { SORT_OPTION_VALUE } from "../utility/constants";
+// TYPES
 // Product item properties type based on different category
 export type ProductProcessorPropertyType = {
   ['brand']: string,
@@ -60,6 +60,14 @@ export type ProductMobilePropertyType = {
   ['battery capacity']: string
 }
 
+// product property review type
+export type ProductReviewPropertyType = {
+  ["userID"]: string, 
+  ["username"]: string, 
+  ["rating"]: number, 
+  ["review"]: string
+} 
+
 // Product type
 export type ProductItemType = {
   sku: string,
@@ -71,6 +79,8 @@ export type ProductItemType = {
   description: string,
   warranty: string,
   retailer: string,
+  review: ProductReviewPropertyType[],
+  calculatedRatingAvg: number,
   properties: ProductProcessorPropertyType | ProductRamPropertyType | 
   ProductVideoCardPropertyType | 
   ProductMobilePropertyType | ProductItemType | undefined
@@ -89,9 +99,9 @@ export type ProductStateType = {
   categoryProducts?: ProductItemType[],
   categoryProductsFiltered?: ProductItemType[],
   searchTerm?: string,
-  activePage?: number,
   isFilteringProduct?: boolean,
-  searchStatus?: string
+  searchStatus?: string,
+  activeSortOption?: SORT_OPTION_VALUE
 }
 
 // ----------CREATE CONTEXT----------
