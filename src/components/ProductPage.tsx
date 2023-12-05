@@ -115,7 +115,7 @@ const ProductPage = () => {
         <div className="product-page__content">
           <h1 className="product-page__header--1">{ titleContent }</h1>
           { !!subtitleContent.length && <h3 className="product-page__header--2"> { subtitleContent } </h3> }
-          { !!productListContent.length && <DividerLine style="product-sidemenu-divider--product-page"/> }
+          { !!productListContent.length && <DividerLine/> }
           { !!productListContent.length && <ProductSortDropdown/> }
           <ProductList productsData={ paginatedProducts ?? [] }/>
           { (totalPages > 1 && pageNumber <= totalPages) && <Pagination totalPages={ totalPages } pageURLParams={ { category: activeCategory, page: pageNumber } } /> }

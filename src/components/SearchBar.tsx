@@ -67,10 +67,6 @@ const SearchBar: React.FC = () => {
         type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
         payload: { filteredProducts: foundProducts },
       });
-      dispatch({
-        type: REDUCER_ACTIONS_PRODUCT.UPDATE_ACTIVE_PAGE,
-        payload: { activePage: 1 },
-      });
     } else {
       dispatch({
         type: REDUCER_ACTIONS_PRODUCT.SEARCH_STATUS,
