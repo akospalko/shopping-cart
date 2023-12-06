@@ -65,6 +65,12 @@ const reducer = (state: ProductStateType, action: ReducerAction): ProductStateTy
       throw new Error('action.payload missing in UPDATE_SORT_VALUE action')
     }
     return {...state, activeSortOption: action.payload.activeSortOption}
+    // UPDATE PROPERTY FILTER VALUE
+    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PROPERTY_FILTER_GROUPS: 
+    if(!action.payload) {
+      throw new Error('action.payload missing in UPDATE_PROPERTY_FILTER_GROUPS action')
+    }
+    return {...state, propertyFilterGroups: action.payload.propertyFilterGroups}
     // DEFAULT
     default: {
       throw new Error('Unindentified reducer action type')
@@ -83,6 +89,7 @@ const initProductState: ProductStateType = {
   isFilteringProduct: false,
   searchStatus: '',
   activeSortOption: SORT_OPTION_VALUE.RATING,
+  propertyFilterGroups: []
 }
 
 export const useProductContext = (initProductState: ProductStateType) => {
@@ -129,7 +136,8 @@ export const useProductContext = (initProductState: ProductStateType) => {
     searchTerm: state.searchTerm,
     isFilteringProduct: state.isFilteringProduct,
     searchStatus: state.searchStatus,
-    activeSortOption: state.activeSortOption
+    activeSortOption: state.activeSortOption,
+    propertyFilterGroups: state.propertyFilterGroups
   }
 }
 
@@ -145,7 +153,8 @@ const initContextState: UseProductContextType = {
   searchTerm: '',
   searchStatus: '',
   isFilteringProduct: false,
-  activeSortOption: SORT_OPTION_VALUE.RATING
+  activeSortOption: SORT_OPTION_VALUE.RATING,
+  propertyFilterGroups: []
 }
 
 // Create context
