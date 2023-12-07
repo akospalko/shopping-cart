@@ -1,5 +1,5 @@
 // Component to hold the product items and related pagination
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductItemType } from "../types/productsProviderTypes";
 import Pagination from "./Pagination";
@@ -125,4 +125,6 @@ const ProductPage = () => {
   )
 }
 
-export default ProductPage;
+const MemoizedProductPage = memo(ProductPage);
+
+export default MemoizedProductPage;
