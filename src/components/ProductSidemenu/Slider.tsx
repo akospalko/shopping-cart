@@ -1,9 +1,15 @@
-// A  slider with 2 thumbs to filer product by min - max prices  
+// 2 thumbs slider for products filtering, based on input min - max prices
 import ReactSlider from "react-slider";
 import { SliderPropsTypes } from "../../types/ProductFilterTypes";
 import "./Slider.css";
+import useFilter from "../../hooks/useFilter";
 
-const Slider = ({ priceRange, priceValues, onChange, disabled }: SliderPropsTypes) => {
+const Slider = ({ disabled }: SliderPropsTypes) => {
+// CONTEXT
+const { 
+  priceFilterSlider, setPriceFilterSlider, 
+  priceFilterRange
+} = useFilter();
 
   return (
     <div className="slider-container">
@@ -11,14 +17,14 @@ const Slider = ({ priceRange, priceValues, onChange, disabled }: SliderPropsType
         className="slider"
         thumbClassName="slider-thumb"
         trackClassName="slider-track"
-        value={ priceValues }
-        min={ priceRange[0] }
-        max={ priceRange[1] }
-        onChange={ onChange }
+        value={ priceFilterSlider }
+        min={ priceFilterRange[0] }
+        max={ priceFilterRange[1] }
+        onChange={ setPriceFilterSlider }
         ariaLabel={ ["Lower thumb", "Upper thumb"] }
-        ariaValuetext={ state => `Thumb value ${state.valueNow}` }
+        ariaValuetext={ state => `Thumb value ${ state.valueNow }` }
         pearling
-        // step={10}
+        // step={ 10 }
         minDistance={ 5 }
         disabled={ disabled }
       />
