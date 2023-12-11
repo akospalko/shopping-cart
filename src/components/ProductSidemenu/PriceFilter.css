@@ -13,65 +13,17 @@
   color: var(--color-2);
 }
 
-.price-filter__group-1 {
+.price-filter__values-container {
   display: flex;
   width: 100%;
   max-width: 350px;
   height: 30px;
   align-self: center;
+  align-items: center;
   background-color: var(--color--light);
   border-radius: var(--border-radius);
-}
-
-.price-filter__button-container {
-  display: flex;
-  grid-column: 3 / 4;
-  justify-content: center;
-  align-items: center;
-  width: 75px;
-  height: 100%;
-}
-
-.button--price-filter {
-  height: 100%;
-  width: 100%;
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
   border: 1px solid var(--color-2);
-  padding: 0.25rem;
-  color: var(--color--light);
-  background-color: var(--color-2);
-  transition:
-    background-color 0.2s ease-in,
-    color 0.2s ease-in;
-}
-
-.button--price-filter:focus-visible {
-  background-color: var(--color-2);
-  outline: 1px solid var(--color-7);
-  outline-offset: -3px;
-}
-
-.button--price-filter:hover {
-  background-color: var(--color-1);
-  border: 1px solid var(--color-1);
-  color: var(--color-5);
-}
-
-.button--price-filter:disabled {
-  background-color: var(--color-5);
-  color: var(--color-6);
-  cursor: default;
-}
-
-.price-filter__values-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  border-radius: var(--border-radius)  0 0 var(--border-radius);
-  border: 1px solid var(--color-2);
-  border-right: var(--color--light);
+  user-select: none;
 }
 
 .price-filter__value {
@@ -83,10 +35,6 @@
 
 .price-filter__divider {
   color: var(--color-2);
-}
-
-.price-filter__values-container {
-  user-select: none;
 }
 
 @media screen and (min-width: 768px) {
