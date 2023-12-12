@@ -1,15 +1,28 @@
 // Reusable checkbox
-const Checkbox = ({ label="test", isChecked=false, onChange }) => {
+import { ChangeEventHandler } from "react";
+import "./Checkbox.css";
+
+// TYPE
+type CheckboxType = {
+  label: string,
+  isChecked: boolean,
+  onChange: ChangeEventHandler<HTMLInputElement>;
+}
+
+const Checkbox = ({ label="test", isChecked=false, onChange }: CheckboxType) => {
 
   return (
-    <label>
-      <input
-        type="checkbox"
-        checked={ isChecked }
-        onChange={ onChange }
-      />
-      {label}
-    </label>
+    <>
+      <div className="checkbox__wrapper">
+        <input
+          className="checkbox"
+          type="checkbox"
+          checked={ isChecked }
+          onChange={ onChange }
+        />
+      </div>
+      { label }
+    </>
   );
 };
 
