@@ -1,0 +1,56 @@
+/* Tooltip wrapper */
+.group-header-info-tooltip__wrapper {
+  grid-column: 2 / 3;
+  cursor: pointer;
+}
+
+/* Tooltip container */
+.group-header-info-tooltip__wrapper .group-header-info-tooltip {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: transparent;
+  width: calc(100% - 1rem);
+  border-radius: var(--border-radius);
+  z-index: 100;
+  padding: 0;
+}
+
+/* Tooltip content title */
+.group-header-info-tooltip__wrapper .group-header-info-tooltip .group-header-info-title {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-1);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  padding: 0.5rem;
+}
+
+.group-header-info-tooltip__wrapper .group-header-info-tooltip .group-header-info-title span {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* Tooltip content description */
+.group-header-info-tooltip__wrapper .group-header-info-tooltip .group-header-info-tooltip__description {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px;
+  background-color: var(--color-2);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  padding: 0.5rem;
+}
+
+.group-header-info-tooltip__wrapper .group-header-info-tooltip .group-header-info-tooltip__description span {
+  font-size: 0.9rem;
+  text-align: justify;
+}
+
+@media screen and (min-width: 500px) {
+  /* Tooltip container */
+  .group-header-info-tooltip__wrapper .group-header-info-tooltip {
+    width: 250px;
+  }
+}
