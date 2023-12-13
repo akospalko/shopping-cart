@@ -2,15 +2,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 1rem 0;
 }
 
 .price-filter--disabled {
   opacity: 0.5;
-}
-
-.price-filter__title {
-  color: var(--color-2);
 }
 
 .price-filter__values-container {

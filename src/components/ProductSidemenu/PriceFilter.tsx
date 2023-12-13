@@ -46,8 +46,8 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
   }, [categoryProducts, priceFilterRange, setPriceFilterRange, setPriceFilterSlider]);
 
   return (
-    <div className={ `price-filter ${ !categoryProducts.length && "price-filter--disabled" }` }>
-      <span className="price-filter__title"> { textData["price"] } </span>
+    <div className={ `price-filter ${ !categoryProducts.length ? "price-filter--disabled" : "" }` }>
+      <h3 className="product-sidemenu__subtitle"> { textData["price"] } </h3>
         <div className="price-filter__values-container"> 
           <span className="price-filter__value">{ priceFilterSlider[0] }</span>
           <span className="price-filter__divider">{ ("-").trim() }</span>
