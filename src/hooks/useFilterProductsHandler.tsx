@@ -4,7 +4,8 @@ import useProducts from "./useProducts";
 import { debounce } from "lodash";
 import { ProductItemType } from "../types/productsProviderTypes";
 import { useNavigate, useParams } from "react-router-dom";
-import { FilterOptionsType, GroupKeysType } from "../data/filterGroupPropertyInitializer";
+import { FilterOptionsType } from "../types/ProductFilterTypes";
+import { GroupKeysType } from "../types/productsProviderTypes";
 import { ProductMergedPropertiesType } from "../types/productsProviderTypes";
 import textData from "../data/textData.json";
 
@@ -22,24 +23,6 @@ const useProductsFilterHandler = () => {
     REDUCER_ACTIONS_FILTER, 
     dispatch: dispatchFilter 
   } = useFilter();
-
-  // reset filter options
-  const resetFilterOptions = () => {
-    // create copy
-    const updatedFilterOptions: FilterOptionsType = JSON.parse(JSON.stringify(filterOptions));
-    // loop through filter options 
-    for(const key in updatedFilterOptions ) {
-      for(const option of updatedFilterOptions[key as GroupKeysType]) {
-        // reset all isChecked values to false
-        option.isChecked = false;
-      }
-    }
-
-    return updatedFilterOptions;
-    // update filterOptions reducer state
-  }
-  resetFilterOptions()
-
 
   // UTILITY
   // Filter by price 
@@ -121,6 +104,20 @@ const useProductsFilterHandler = () => {
     });
   }
 
+    // reset filter options
+    const resetFilterCheckedState = (filterOptions: FilterOptionsType) => {
+      // create copy
+      const updatedFilterOptions: FilterOptionsType = JSON.parse(JSON.stringify(filterOptions));
+      // loop through filter options 
+      for(const key in updatedFilterOptions ) {
+        for(const option of updatedFilterOptions[key as GroupKeysType]) {
+          // reset all isChecked values to false
+          option.isChecked = false;
+        }
+      }
+      return updatedFilterOptions;
+    }
+
   // HANDLERS
   // Filter products 
   const debouncedFilterProductsHandler = debounce((activeCategoryProducts) => {
@@ -142,7 +139,7 @@ const useProductsFilterHandler = () => {
     dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, payload: { categoryProductsFiltered: [] } });
     dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: false } });
 
-    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, payload: { filterOptions: resetFilterOptions() } })
+    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, payload: { filterOptions: resetFilterCheckedState(filterOptions) } })
     setPriceFilterSlider([priceFilterRange[0], priceFilterRange[1]])
   }, 300)
 
