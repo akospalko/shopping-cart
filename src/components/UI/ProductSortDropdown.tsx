@@ -1,10 +1,10 @@
 // Sort product dropdown with multiple options
 import { useEffect, ReactElement, ChangeEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useProducts from "../../hooks/useProducts";
 import { SORT_OPTION_VALUE } from "../../utility/constants";
 import textData from "../../data/textData.json";
 import "./ProductSortDropdown.css";
+import useFilter from "../../hooks/useFilter";
 
 // TYPE
 type ProductSortDropdownOptionType = {
@@ -18,7 +18,7 @@ const ProductSortDropdown = () => {
   const { category } = useParams();
 
   // CONTEXT
-  const { activeSortOption, dispatch, REDUCER_ACTIONS_PRODUCT } = useProducts();
+  const { activeSortOption, dispatch: dispatchFilter, REDUCER_ACTIONS_FILTER } = useFilter();
   
   // EFFECT 
   useEffect(() => {
@@ -32,8 +32,8 @@ const ProductSortDropdown = () => {
   // HANDLER
   // Switch to another option for sorting products
   const onChangeSortOption = (e: ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: REDUCER_ACTIONS_PRODUCT.UPDATE_SORT_VALUE,
+    dispatchFilter({
+      type: REDUCER_ACTIONS_FILTER.UPDATE_SORT_VALUE,
       payload: { activeSortOption: e.target.value as SORT_OPTION_VALUE }
     })
   }

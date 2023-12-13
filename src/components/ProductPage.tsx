@@ -12,6 +12,7 @@ import paginateProducts from "../utility/paginateProducts";
 import { validatePageParam } from "../utility/validatePageParam";
 import { PRODUCT_CATEGORY, SORT_OPTION_VALUE, itemsPerPage} from "../utility/constants";
 import { sortBy } from "../utility/sortProduct";
+import useFilter from "../hooks/useFilter";
 import textData from "../data/textData.json";
 import productCategories from "../data/productCategories.json";
 import "./ProductPage.css";
@@ -26,12 +27,12 @@ const ProductPage = () => {
   // CONTEXT
   const { 
     products,
-    isFilteringProduct,
     categoryProducts, 
     categoryProductsFiltered, 
-    activeSortOption,
     dispatch, 
     REDUCER_ACTIONS_PRODUCT } = useProducts();
+
+  const { isFilteringProduct, activeSortOption } = useFilter();
 
   // DATA
   // Filter out which products to display 
@@ -92,7 +93,7 @@ const ProductPage = () => {
     if(totalPages > 1 && pageNumber <= totalPages) {
       navigate(`/${ activeCategory }/${ pageNumber }`);
     }
-  }, [REDUCER_ACTIONS_PRODUCT.IS_FILTERING_PRODUCT, REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, activeCategory, dispatch, navigate, pageNumber, totalPages]); 
+  }, [activeCategory, navigate, pageNumber, totalPages]); 
  
   // Filter and store active category products
   useEffect(() => {

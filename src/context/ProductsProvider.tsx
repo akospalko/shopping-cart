@@ -11,69 +11,39 @@ The context fetches mockup data from fake server using json-server
 import { createContext, useEffect, useReducer, useMemo } from 'react';
 import { ProductStateType, ReducerAction, UseProductContextType, ChildrenType } from '../types/productsProviderTypes';
 import { REDUCER_ACTION_TYPE_PRODUCT } from '../data/reducerActionTypeConstant';
-import { SORT_OPTION_VALUE } from '../utility/constants';
 import { updateProductsWithAverageRating } from '../utility/calculateAvgRating';
+import textData from '../data/textData.json';
 
 // REDUCER
 const reducer = (state: ProductStateType, action: ReducerAction): ProductStateType => {
   switch(action.type) {
-    // UPDATE SEARCH VALUE
-    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_SEARCH_TERM:
-      if(!action.payload) {
-        throw new Error('action.payload missing in UPDATE_SEARCH_TERM action')
-      }
-      return {...state, searchTerm: action.payload.searchTerm}
     // UPDATE PRODUCTS
     case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS: 
       if(!action.payload) {
-        throw new Error('action.payload missing in UPDATE_PRODUCTS action')
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
       }
-      return {...state, products: action.payload.products}
+      return { ...state, products: action.payload.products }
     // UPDATE FILTERED PRODUCTS
     case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_FILTERED_PRODUCTS: 
       if(!action.payload) {
-        throw new Error('action.payload missing in UPDATE_FILTERED_PRODUCTS action')
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
       }
       return {...state, filteredProducts: action.payload.filteredProducts}
     // UPDATE CATEGORY PRODUCTS
     case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_CATEGORY_PRODUCTS: 
-    if(!action.payload) {
-      throw new Error('action.payload missing in UPDATE_CATEGORY_PRODUCTS action')
-    }
-    return {...state, categoryProducts: action.payload.categoryProducts}
+      if(!action.payload) {
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
+      }
+      return {...state, categoryProducts: action.payload.categoryProducts}
     // UPDATE CATEGORY PRODUCTS FILTERED
     case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED: 
-    if(!action.payload) {
-      throw new Error('action.payload missing in UPDATE_CATEGORY_PRODUCTS_FILTERED action')
-    }
-    return {...state, categoryProductsFiltered: action.payload.categoryProductsFiltered}
-    // UPDATE SEARCH STATUS
-    case REDUCER_ACTION_TYPE_PRODUCT.SEARCH_STATUS:
       if(!action.payload) {
-        throw new Error('action.payload missing in SEARCH_STATUS action')
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
       }
-      return {...state, searchStatus: action.payload.searchStatus}
-    // IS FILTERING PRODUCT
-    case REDUCER_ACTION_TYPE_PRODUCT.IS_FILTERING_PRODUCT: 
-    if(!action.payload) {
-      throw new Error('action.payload missing in IS_FILTERING_PRODUCT action')
-    }
-    return {...state, isFilteringProduct: action.payload.isFilteringProduct}
-    // UPDATE ACTIVE ORDER VALUE
-    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_SORT_VALUE: 
-    if(!action.payload) {
-      throw new Error('action.payload missing in UPDATE_SORT_VALUE action')
-    }
-    return {...state, activeSortOption: action.payload.activeSortOption}
-    // UPDATE PROPERTY FILTER VALUE
-    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PROPERTY_FILTER_GROUPS: 
-    if(!action.payload) {
-      throw new Error('action.payload missing in UPDATE_PROPERTY_FILTER_GROUPS action')
-    }
-    return {...state, propertyFilterGroups: action.payload.propertyFilterGroups}
+      return {...state, categoryProductsFiltered: action.payload.categoryProductsFiltered}
     // DEFAULT
     default: {
-      throw new Error('Unindentified reducer action type')
+      throw new Error(textData["error-unidentified-reducer-action-type"])
     }
   }
 }
@@ -85,11 +55,6 @@ const initProductState: ProductStateType = {
   filteredProducts: [],
   categoryProducts: [],
   categoryProductsFiltered: [],
-  searchTerm: '',
-  isFilteringProduct: false,
-  searchStatus: '',
-  activeSortOption: SORT_OPTION_VALUE.RATING,
-  propertyFilterGroups: []
 }
 
 export const useProductContext = (initProductState: ProductStateType) => {
@@ -114,7 +79,6 @@ export const useProductContext = (initProductState: ProductStateType) => {
 
       // Calculate average rating and update products
       const productsWithAverageRating = updateProductsWithAverageRating(data);
-      console.log(productsWithAverageRating) 
       // Dispatch the updated products to the state
       dispatch({
         type: REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS,
@@ -133,11 +97,6 @@ export const useProductContext = (initProductState: ProductStateType) => {
     filteredProducts: state.filteredProducts,
     categoryProducts: state.categoryProducts,
     categoryProductsFiltered: state.categoryProductsFiltered,
-    searchTerm: state.searchTerm,
-    isFilteringProduct: state.isFilteringProduct,
-    searchStatus: state.searchStatus,
-    activeSortOption: state.activeSortOption,
-    propertyFilterGroups: state.propertyFilterGroups
   }
 }
 
@@ -150,23 +109,18 @@ const initContextState: UseProductContextType = {
   filteredProducts: [],
   categoryProducts: [],
   categoryProductsFiltered: [],
-  searchTerm: '',
-  searchStatus: '',
-  isFilteringProduct: false,
-  activeSortOption: SORT_OPTION_VALUE.RATING,
-  propertyFilterGroups: []
 }
 
 // Create context
 const ProductsContext = createContext<UseProductContextType>(initContextState);
 // ----------CREATE PROVIDER----------
-export const ProductsProvider = ({children}: ChildrenType) => {
+export const ProductsProvider = ({ children }: ChildrenType) => {
 
  return(
-    <ProductsContext.Provider value={useProductContext(initProductState)}>
-      {children}
+    <ProductsContext.Provider value={ useProductContext(initProductState) }>
+      { children }
     </ProductsContext.Provider>
   )
 }
 
-export default ProductsContext
+export default ProductsContext;

@@ -9,6 +9,7 @@ import ProductSortDropdown from "./UI/ProductSortDropdown";
 import paginateProducts from "../utility/paginateProducts";
 import { validatePageParam } from "../utility/validatePageParam";
 import { itemsPerPage, SEARCH } from "../../src/utility/constants";
+import useFilter from "../hooks/useFilter";
 import { sortBy } from "../utility/sortProduct";
 import { SORT_OPTION_VALUE } from "../../src/utility/constants";
 import textData from "../data/textData.json";
@@ -21,7 +22,8 @@ const ProductSearchPage = () => {
   const { page } = useParams();
 
   // CONTEXT
-  const { activeSortOption, searchStatus, filteredProducts } = useProducts();
+  const { filteredProducts } = useProducts();
+  const { searchStatus, activeSortOption } = useFilter();
 
   // EFFECTS
   useEffect(() => {

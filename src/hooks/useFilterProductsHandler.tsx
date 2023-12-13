@@ -15,8 +15,14 @@ const useProductsFilterHandler = () => {
   const { category } = useParams();
 
   // CONTEXT
-  const { categoryProductsFiltered, REDUCER_ACTIONS_PRODUCT, dispatch: dispatchProduct } = useProducts();
-  const { priceFilterSlider, 
+  const { 
+    categoryProductsFiltered, 
+    REDUCER_ACTIONS_PRODUCT, 
+    dispatch: dispatchProduct 
+  } = useProducts();
+
+  const { 
+    priceFilterSlider, 
     priceFilterRange, 
     filterOptions, 
     setPriceFilterSlider,
@@ -98,31 +104,29 @@ const useProductsFilterHandler = () => {
             return true;
           }
         }
-
         return false;
       });
     });
   }
 
-    // reset filter options
-    const resetFilterCheckedState = (filterOptions: FilterOptionsType) => {
-      // create copy
-      const updatedFilterOptions: FilterOptionsType = JSON.parse(JSON.stringify(filterOptions));
-      // loop through filter options 
-      for(const key in updatedFilterOptions ) {
-        for(const option of updatedFilterOptions[key as GroupKeysType]) {
-          // reset all isChecked values to false
-          option.isChecked = false;
-        }
+  // reset filter options
+  const resetFilterCheckedState = (filterOptions: FilterOptionsType) => {
+    // create copy
+    const updatedFilterOptions: FilterOptionsType = JSON.parse(JSON.stringify(filterOptions));
+    // loop through filter options 
+    for(const key in updatedFilterOptions ) {
+      for(const option of updatedFilterOptions[key as GroupKeysType]) {
+        // reset all isChecked values to false
+        option.isChecked = false;
       }
-      return updatedFilterOptions;
     }
+    return updatedFilterOptions;
+  }
 
   // HANDLERS
   // Filter products 
   const debouncedFilterProductsHandler = debounce((activeCategoryProducts) => {
-    dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: true } });
-
+    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: true } });
     // filter by price
     const filteredByPrice = filterProductsByPrice(activeCategoryProducts, priceFilterSlider[0], priceFilterSlider[1])
     // filter by properties
@@ -137,10 +141,11 @@ const useProductsFilterHandler = () => {
   const debouncedClearFilteredProductsHandler = debounce((): void => {
     if( categoryProductsFiltered === undefined || !categoryProductsFiltered.length ) return;
     dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, payload: { categoryProductsFiltered: [] } });
-    dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: false } });
-
-    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, payload: { filterOptions: resetFilterCheckedState(filterOptions) } })
-    setPriceFilterSlider([priceFilterRange[0], priceFilterRange[1]])
+    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: false } });
+    if(filterOptions) {
+      dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, payload: { filterOptions: resetFilterCheckedState(filterOptions) } });
+    }
+    setPriceFilterSlider([priceFilterRange[0], priceFilterRange[1]]);
   }, 300)
 
   return { debouncedFilterProductsHandler, debouncedClearFilteredProductsHandler };

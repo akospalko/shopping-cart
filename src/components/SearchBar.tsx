@@ -3,11 +3,12 @@ import React, { useState, ChangeEvent, CSSProperties, FocusEventHandler } from "
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import useProducts from "../hooks/useProducts";
+import useFilter from "../hooks/useFilter";
 import { ProductItemType } from "../types/productsProviderTypes";
 import { RemoveIcon, SearchIcon } from "./SVGComponents";
 import { trimInput } from "../utility/trimInput";
 import { SEARCH } from "../utility/constants";
-import textData from '../data/textData.json';
+import textData from "../data/textData.json";
 import "./SearchBar.css";
 
 // COMPONENT
@@ -20,19 +21,25 @@ const SearchBar: React.FC = () => {
 
   // CONTEXTS
   const {
-    dispatch,
-    searchStatus,
+    dispatch: dispatchProducts,
     REDUCER_ACTIONS_PRODUCT,
     products,
     filteredProducts,
-    searchTerm,
   } = useProducts();
+
+  const { 
+    dispatch: dispatchFilter, 
+    searchStatus, 
+    searchTerm, 
+    REDUCER_ACTIONS_FILTER, 
+  } = useFilter();
 
   // HANDLERS
   // Update search bar input field content
   const searchBarHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: REDUCER_ACTIONS_PRODUCT.UPDATE_SEARCH_TERM,
+    console.log('updating search bar', e.target.value)
+    dispatchFilter({
+      type: REDUCER_ACTIONS_FILTER.UPDATE_SEARCH_TERM,
       payload: { searchTerm: e.target.value },
     });
   };
@@ -45,8 +52,8 @@ const SearchBar: React.FC = () => {
     navigate(`/search/1`, { replace: true });
 
     if (searchTermFormatted?.length < 2) {
-      dispatch({
-        type: REDUCER_ACTIONS_PRODUCT.SEARCH_STATUS,
+      dispatchFilter({
+        type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS,
         payload: { searchStatus: textData["search-bar-placeholder"] },
       });
       return;
@@ -59,20 +66,20 @@ const SearchBar: React.FC = () => {
 
     // checks: found / not found products
     if (foundProducts.length) {
-      dispatch({
-        type: REDUCER_ACTIONS_PRODUCT.SEARCH_STATUS,
+      dispatchFilter({
+        type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS,
         payload: { searchStatus: SEARCH.RESULT },
       });
-      dispatch({
+      dispatchProducts({
         type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
         payload: { filteredProducts: foundProducts },
       });
     } else {
-      dispatch({
-        type: REDUCER_ACTIONS_PRODUCT.SEARCH_STATUS,
+      dispatchFilter({
+        type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS,
         payload: { searchStatus: SEARCH.NO_RESULT },
       });
-      dispatch({
+      dispatchProducts({
         type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
         payload: { filteredProducts: [] },
       });
@@ -83,11 +90,11 @@ const SearchBar: React.FC = () => {
   const removeSearchResultsHandler = debounce(() => {
     if(searchStatus === "" && !searchTerm?.length) return;
     // empty input field
-    dispatch({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_SEARCH_TERM, payload: { searchTerm: "" } });
-    dispatch({ type: REDUCER_ACTIONS_PRODUCT.SEARCH_STATUS, payload: { searchStatus: "" } });
+    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_SEARCH_TERM, payload: { searchTerm: "" } });
+    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS, payload: { searchStatus: "" } });
 
     if (filteredProducts?.length) {
-      dispatch({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS, payload: { filteredProducts: [] } });
+      dispatchProducts({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS, payload: { filteredProducts: [] } });
     }
     navigate("/", { replace: true }); 
   }, 500);

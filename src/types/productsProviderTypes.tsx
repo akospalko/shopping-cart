@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
 import { useProductContext } from "../context/ProductsProvider";
-import { SORT_OPTION_VALUE } from "../utility/constants";
 
 // TYPES
 // Product item properties type based on different category
@@ -115,10 +114,6 @@ export type ProductStateType = {
   filteredProducts?: ProductItemType[],
   categoryProducts?: ProductItemType[],
   categoryProductsFiltered?: ProductItemType[],
-  searchTerm?: string,
-  isFilteringProduct?: boolean,
-  searchStatus?: string,
-  activeSortOption?: SORT_OPTION_VALUE,
 }
 
 // ----------REDUCER----------
