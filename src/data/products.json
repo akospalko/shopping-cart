@@ -15,16 +15,16 @@
             "brand": "AMD",
             "model": "Ryzen 7",
             "architecture": "0",
-            "cores": "test",
-            "threads": "test",
-            "clock speed": "test",
+            "cores": "12",
+            "threads": "24",
+            "clock speed": "5",
             "cache": "test",
             "socket": "test",
             "integrated graphics": "test",
-            "hyper-threading": "test",
+            "hyper-threading": "yes",
             "dimensions": "test",
             "compatibility": "test",
-            "tdp (thermal design power)": "test"
+            "tdp (thermal design power)": "40"
         }
     },
     {
@@ -49,13 +49,13 @@
             "architecture": "Zen 4",
             "cores": "8",
             "threads": "16",
-            "clock speed": "4.2 GHz to 5.0 GHz",
+            "clock speed": "3",
             "cache": ["L2: 8MB", "L3: 96MB"],
             "socket": "AM5",
             "integrated graphics": "RDNA 2",
             "hyper-threading": "yes",
             "dimensions": "13 x 9.09 x 12.9 cm; 79.38 Grams",
-            "tdp (thermal design power)": "120W"
+            "tdp (thermal design power)": "80"
         }
     },
     {
@@ -72,23 +72,23 @@
             "brand": "AMD",
             "model": "Ryzen 7",
             "architecture": "0",
-            "cores": "test",
-            "threads": "test",
-            "clock speed": "test",
+            "cores": "6",
+            "threads": "12",
+            "clock speed": "2",
             "cache": "test",
             "socket": "test",
             "integrated graphics": "test",
-            "hyper-threading": "test",
+            "hyper-threading": "yes",
             "dimensions": "test",
             "compatibility": "test",
-            "tdp (thermal design power)": "test"
+            "tdp (thermal design power)": "120"
         }
     },
     {
         "sku": "item0004",
         "name": "Intel Core i9-13900K 3.0GHz 24-Core",
-        "price": 34.99,
-        "priceDiscount": 25.99,
+        "price": 350.99,
+        "priceDiscount": 250.99,
         "stock": 10,
         "category": "processor",
         "description": "Short description about the processor.",
@@ -99,16 +99,16 @@
             "brand": "Intel",
             "model": "Core i9-13900K",
             "architecture": "0",
-            "cores": "test",
-            "threads": "test",
-            "clock speed": "test",
+            "cores": "6",
+            "threads": "12",
+            "clock speed": "3",
             "cache": "test",
             "socket": "test",
             "integrated graphics": "test",
-            "hyper-threading": "test",
+            "hyper-threading": "yes",
             "dimensions": "test",
             "compatibility": "test",
-            "tdp (thermal design power)": "test"
+            "tdp (thermal design power)": "45"
         }
     },
     {
@@ -124,18 +124,18 @@
         "review": [{ "userID": "test3@email.com", "username": "test3", "rating": 5, "review": "test review" }],
         "properties": {
             "brand": "Intel",
-            "model": "Core i9-13900K",
+            "model": "Core i7-13900K",
             "architecture": "0",
-            "cores": "test",
-            "threads": "test",
-            "clock speed": "test",
+            "cores": "16",
+            "threads": "32",
+            "clock speed": "2.9",
             "cache": "test",
             "socket": "test",
             "integrated graphics": "test",
-            "hyper-threading": "test",
+            "hyper-threading": "yes",
             "dimensions": "test",
             "compatibility": "test",
-            "tdp (thermal design power)": "test"
+            "tdp (thermal design power)": "55"
         }
     },
     {
@@ -168,13 +168,13 @@
         "price": 350,
         "priceDiscount": 300,
         "stock": 10,
-        "category": "processor",
+        "category": "mobile",
         "description": "test",
         "warranty": "test",
         "retailer": "Acme shop",
         "review": [{ "userID": "test3@email.com", "username": "test3", "rating": 4, "review": "test review" }],
         "properties": {
-            "brand": "test",
+            "brand": "Intel",
             "model": "test",
             "operating system": "test",
             "processor": "test",
@@ -192,7 +192,7 @@
         "price": 10,
         "priceDiscount": 5,
         "stock": 10,
-        "category": "videocard",
+        "category": "mobile",
         "description": "test",
         "warranty": "test",
         "retailer": "Acme shop",
@@ -203,13 +203,13 @@
             "gpu architecture": "test",
             "vram": "test",
             "processing units": "test",
-            "clock speed": "test",
+            "clock speed": "3.1",
             "memory bus": "test",
             "memory speed": "test",
             "memory bandwidth": "test",
             "video output ports": "test",
             "ray tracing support": "test",
-            "tdp (thermal design power)": "test"
+            "tdp (thermal design power)": "90"
         }
     },
     {
@@ -229,13 +229,13 @@
             "gpu architecture": "test",
             "vram": "test",
             "processing units": "test",
-            "clock speed": "test",
+            "clock speed": "7",
             "memory bus": "test",
             "memory speed": "test",
             "memory bandwidth": "test",
             "video output ports": "test",
             "ray tracing support": "test",
-            "tdp (thermal design power)": "test"
+            "tdp (thermal design power)": "105"
         }
     }
   ]

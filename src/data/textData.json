@@ -19,6 +19,7 @@
   "categories": "Categories",
   "ok": "OK",
   "price": "Price",
+  "property": "Property",
   "search-button-label": "Search",
   "search-bar-placeholder": "Search for a product (min. 3 char.)",
   "dash": "-",
@@ -41,6 +42,9 @@
   "warranty": "warranty",
   "in-stock": "In stock:",
   "last-products": "Last products",
-  "stock-coming-soon": "Fresh stock is coming soon"
-  
+  "stock-coming-soon": "Fresh stock is coming soon",
+  "error-unidentified-reducer-action-type": "unidentified reducer action type",
+  "error-action-payload-missing-for-type-filter": "action payload missing for REDUCER_ACTION_TYPE_FILTER",
+  "error-action-payload-missing-for-type-products": "action payload missing for REDUCER_ACTION_TYPE_PRODUCTS",
+  "slider-values-are-out-of-range": "Slider values are out of range"
 }
