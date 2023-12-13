@@ -1,12 +1,12 @@
 // Opened product detailed view
-import {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
-import useProducts from '../hooks/useProducts'
-import ProductViewHeader from './ProductViewNavigation'
-import {ProductItemType} from '../types/productsProviderTypes'
-import AboutTab from './AboutTab'
-import CharacteristicsTab from './CharacteristicsTab'
-import './ProductView.css'
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useProducts from '../hooks/useProducts';
+import ProductViewHeader from './ProductViewNavigation';
+import { ProductItemType } from '../types/productsProviderTypes';
+import AboutTab from './AboutTab';
+import CharacteristicsTab from './CharacteristicsTab';
+import './ProductView.css';
 
 // TYPES
 type ProductViewHeaderPropsType = {
@@ -23,6 +23,8 @@ const activeProductInitializer: ProductItemType = {
   description: '',
   warranty: '',
   retailer: '',
+  calculatedRatingAvg: 0,
+  review: [],
   properties: undefined
 }
 
@@ -34,10 +36,10 @@ const CONSTANT = {
 
 const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
   // ROUTE
-  const {product} = useParams();
+  const { product } = useParams();
 
   // CONTEXT
-  const {products} = useProducts();
+  const { products } = useProducts();
   
   // STATE
   const [activeProduct, setActiveProduct] = useState<ProductItemType>(activeProductInitializer);
@@ -82,10 +84,10 @@ const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
     <main className='main main__product-page'>
       <div className='product-view'>
         <ProductViewHeader/>
-        {displayedTab}
+        { displayedTab }
       </div>
     </main>
   )
 }
 
-export default ProductView
+export default ProductView;

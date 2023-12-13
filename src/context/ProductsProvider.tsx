@@ -9,38 +9,41 @@ The context fetches mockup data from fake server using json-server
 */
 
 import { createContext, useEffect, useReducer, useMemo } from 'react';
-import { ProductItemType, ProductStateType, ReducerAction, UseProductContextType, ChildrenType } from '../types/productsProviderTypes';
+import { ProductStateType, ReducerAction, UseProductContextType, ChildrenType } from '../types/productsProviderTypes';
 import { REDUCER_ACTION_TYPE_PRODUCT } from '../data/reducerActionTypeConstant';
+import { updateProductsWithAverageRating } from '../utility/calculateAvgRating';
+import textData from '../data/textData.json';
 
 // REDUCER
 const reducer = (state: ProductStateType, action: ReducerAction): ProductStateType => {
   switch(action.type) {
-    // UPDATE SEARCH VALUE
-    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_SEARCH_VALUE:
-      if(!action.payload) {
-        throw new Error('action.payload missing in UPDATE_SEARCH_VALUE action')
-      }
-      return {...state, searchTerm: action.payload.searchTerm}
     // UPDATE PRODUCTS
     case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS: 
       if(!action.payload) {
-        throw new Error('action.payload missing in UPDATE_SEARCH_VALUE action')
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
       }
-      return {...state, products: action.payload.products}
+      return { ...state, products: action.payload.products }
     // UPDATE FILTERED PRODUCTS
     case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_FILTERED_PRODUCTS: 
       if(!action.payload) {
-        throw new Error('action.payload missing in UPDATE_FILTERED_PRODUCTS action')
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
       }
       return {...state, filteredProducts: action.payload.filteredProducts}
-    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_ACTIVE_PAGE:
+    // UPDATE CATEGORY PRODUCTS
+    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_CATEGORY_PRODUCTS: 
       if(!action.payload) {
-        throw new Error('action.payload missing in UPDATE_ACTIVE_PAGE action')
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
       }
-      return {...state, activePage: action.payload.activePage}
+      return {...state, categoryProducts: action.payload.categoryProducts}
+    // UPDATE CATEGORY PRODUCTS FILTERED
+    case REDUCER_ACTION_TYPE_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED: 
+      if(!action.payload) {
+        throw new Error(textData["error-action-payload-missing-for-type-products"])
+      }
+      return {...state, categoryProductsFiltered: action.payload.categoryProductsFiltered}
     // DEFAULT
     default: {
-      throw new Error('Unindentified reducer action type')
+      throw new Error(textData["error-unidentified-reducer-action-type"])
     }
   }
 }
@@ -50,70 +53,52 @@ const reducer = (state: ProductStateType, action: ReducerAction): ProductStateTy
 const initProductState: ProductStateType = {
   products: [],
   filteredProducts: [],
-  searchTerm: '',
-  activePage: 1
+  categoryProducts: [],
+  categoryProductsFiltered: [],
 }
 
 export const useProductContext = (initProductState: ProductStateType) => {
   // REDUCER
-  const [state, dispatch] = useReducer(reducer, initProductState)
+  const [state, dispatch] = useReducer(reducer, initProductState);
 
   // MEMO
   const REDUCER_ACTIONS_PRODUCT = useMemo(()=> {
-    return REDUCER_ACTION_TYPE_PRODUCT
+    return REDUCER_ACTION_TYPE_PRODUCT;
   }, []) 
 
+  // EFFECTS
   useEffect(() => {
-    const fetchProducts = async (): Promise<ProductItemType[]> => {
-      const data = await fetch('http://localhost:3500/products') // create a json-server (mockup data): npx json-server -w data/products.json -p 3500 
-      .then(res => {
-        return res.json()
-      })
-      .catch(err => {
-        if(err instanceof Error) {
-          console.log(err)
-        }
-      })
-      return data
-    }
-    
-    // fetch data, update state
-    fetchProducts().then(products => {
+    const fetchProducts = async (): Promise<void> => {
+      const data = await fetch('http://localhost:3500/products')
+        .then((res) => res.json())
+        .catch((err) => {
+          if (err instanceof Error) {
+            console.log(err);
+          }
+        });
+
+      // Calculate average rating and update products
+      const productsWithAverageRating = updateProductsWithAverageRating(data);
+      // Dispatch the updated products to the state
       dispatch({
-        type: REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS, 
-        payload: {products: products}
-      })
-    })
-  }, [])
+        type: REDUCER_ACTION_TYPE_PRODUCT.UPDATE_PRODUCTS,
+        payload: { products: productsWithAverageRating },
+      });
+    };
+
+    // fetch data, update state
+    fetchProducts();
+  }, []);
 
   return {
     dispatch, 
     REDUCER_ACTIONS_PRODUCT,  
     products: state.products, 
     filteredProducts: state.filteredProducts,
-    searchTerm: state.searchTerm,
-    activePage: state.activePage
+    categoryProducts: state.categoryProducts,
+    categoryProductsFiltered: state.categoryProductsFiltered,
   }
 }
-
-// Init state - static items
-// const initState: ProductType[] = [
-//   {
-//     "sku": "item0001",
-//     "name": "Widget",
-//     "price": 9.99
-//   },
-//   {
-//     "sku": "item0002",
-//     "name": "Premium Widget",
-//     "price": 19.99
-//   },
-//   {
-//     "sku": "item0003",
-//     "name": "Deluxe Widget",
-//     "price": 29.99
-//   }
-// ]; 
 
 // ----------CREATE CONTEXT----------
 // State init
@@ -122,20 +107,20 @@ const initContextState: UseProductContextType = {
   REDUCER_ACTIONS_PRODUCT: REDUCER_ACTION_TYPE_PRODUCT,  
   products: [],
   filteredProducts: [],
-  searchTerm: '',
-  activePage: 1
+  categoryProducts: [],
+  categoryProductsFiltered: [],
 }
 
 // Create context
 const ProductsContext = createContext<UseProductContextType>(initContextState);
 // ----------CREATE PROVIDER----------
-export const ProductsProvider = ({children}: ChildrenType) => {
+export const ProductsProvider = ({ children }: ChildrenType) => {
 
  return(
-    <ProductsContext.Provider value={useProductContext(initProductState)}>
-      {children}
+    <ProductsContext.Provider value={ useProductContext(initProductState) }>
+      { children }
     </ProductsContext.Provider>
   )
 }
 
-export default ProductsContext
+export default ProductsContext;

@@ -1,0 +1,35 @@
+/* PRICE TEXT INPUT */
+.price-filter__text-input {
+  display: grid;
+  grid-column: 1 / 3;
+  align-items: center;
+  justify-content: center;
+  grid-auto-flow: column;
+  height: auto;
+  gap: 0.5rem;
+}
+
+.price-filter__text-input span {
+  margin: 0.5rem 0;
+  width: 0.5rem;
+}
+
+.input--price-filter-input {
+  height: 30px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  padding: 0.25rem;
+  color: var(--color-2);
+  border: 2px solid transparent;
+  background-color: var(--color--light);
+  font-size: 1rem;
+}
+
+.input--price-filter-input:disabled {
+  color: var(--color-5__50);
+}
+
+.input--price-filter-input:focus {
+  border: 2px solid var(--color-2);
+  outline: none;
+}

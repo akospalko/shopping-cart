@@ -1,127 +1,166 @@
 // Products search bar and related logic
-import { ChangeEvent, CSSProperties } from 'react'
-import './SearchBar.css'
-import useProducts from '../hooks/useProducts';
-import { ProductItemType } from '../types/productsProviderTypes';
-import { RemoveIcon, SearchIcon } from './SVGComponents';
-import { useNavigate } from 'react-router-dom';
-
-const CONSTANTS = {
-  SEARCH: 'Search'
-}
+import React, { useState, ChangeEvent, CSSProperties, FocusEventHandler } from "react";
+import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
+import useProducts from "../hooks/useProducts";
+import useFilter from "../hooks/useFilter";
+import { ProductItemType } from "../types/productsProviderTypes";
+import { RemoveIcon, SearchIcon } from "./SVGComponents";
+import { trimInput } from "../utility/trimInput";
+import { SEARCH } from "../utility/constants";
+import textData from "../data/textData.json";
+import "./SearchBar.css";
 
 // COMPONENT
-const SearchBar = () => {
+const SearchBar: React.FC = () => {
   // ROUTE
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
+  // STATE
+  const [isRemoveIconFocused, setIsRemoveIconFocused] = useState<boolean>(false);
+
   // CONTEXTS
-  const {dispatch, 
-    REDUCER_ACTIONS_PRODUCT, 
-    products, 
-    filteredProducts, 
-    searchTerm,
+  const {
+    dispatch: dispatchProducts,
+    REDUCER_ACTIONS_PRODUCT,
+    products,
+    filteredProducts,
   } = useProducts();
 
-  // HANDLERS
-  const searchBarHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    dispatch({
-      type: REDUCER_ACTIONS_PRODUCT.UPDATE_SEARCH_VALUE, 
-      payload: {searchTerm: value}
-    })
-  }
+  const { 
+    dispatch: dispatchFilter, 
+    searchStatus, 
+    searchTerm, 
+    REDUCER_ACTIONS_FILTER, 
+  } = useFilter();
 
-  // HANDLER
-  const SearchProductHandler = () => {
+  // HANDLERS
+  // Update search bar input field content
+  const searchBarHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log('updating search bar', e.target.value)
+    dispatchFilter({
+      type: REDUCER_ACTIONS_FILTER.UPDATE_SEARCH_TERM,
+      payload: { searchTerm: e.target.value },
+    });
+  };
+
+  // Search product (debounced)
+  const debouncedSearchProductHandler = debounce((term: string = "") => {
     // check if search term was provided
-    const searchTermFormatted: string = searchTerm?.trim() || '';
-    if (!searchTermFormatted?.length) {
-      navigate('/search/empty');
-      return;
-    }  
+    const searchTermFormatted: string = trimInput(term);
     
-    // find products where product name is matching the search term  
-    let foundProducts: ProductItemType[] = [];
-    foundProducts = products?.filter((product: ProductItemType) => {
-      return product.name.toLowerCase().includes(searchTermFormatted?.toLowerCase())}) ?? []
-      
-    // checks: found / not found products
-    if(foundProducts.length) {
-      navigate(`/search/1`, {replace: true});
-      dispatch({
-        type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
-        payload: {filteredProducts: foundProducts}
-      })
-      dispatch({
-        type: REDUCER_ACTIONS_PRODUCT.UPDATE_ACTIVE_PAGE,
-        payload: {activePage: 1}
-      })
-    } else if(!foundProducts.length) {
-      dispatch({
-        type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
-        payload: {filteredProducts: []}
-      })
-      navigate('/search/no-result');
+    navigate(`/search/1`, { replace: true });
+
+    if (searchTermFormatted?.length < 2) {
+      dispatchFilter({
+        type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS,
+        payload: { searchStatus: textData["search-bar-placeholder"] },
+      });
+      return;
     }
-  }
+
+    // find products where product name is matching the search term
+    const foundProducts: ProductItemType[] = products?.filter((product: ProductItemType) =>
+      product.name.toLowerCase().includes(searchTermFormatted?.toLowerCase())
+    ) ?? [];
+
+    // checks: found / not found products
+    if (foundProducts.length) {
+      dispatchFilter({
+        type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS,
+        payload: { searchStatus: SEARCH.RESULT },
+      });
+      dispatchProducts({
+        type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
+        payload: { filteredProducts: foundProducts },
+      });
+    } else {
+      dispatchFilter({
+        type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS,
+        payload: { searchStatus: SEARCH.NO_RESULT },
+      });
+      dispatchProducts({
+        type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS,
+        payload: { filteredProducts: [] },
+      });
+    }
+  }, 500);  
 
   // Remove search results empty search bar input field
-  const RemoveSearchResultsHandler = () => {
+  const removeSearchResultsHandler = debounce(() => {
+    if(searchStatus === "" && !searchTerm?.length) return;
     // empty input field
-    dispatch({type: 'UPDATE_SEARCH_VALUE', payload: {searchTerm: ''} })
-    if(filteredProducts?.length) {
-      dispatch({type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS, payload: {filteredProducts: []}})
+    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_SEARCH_TERM, payload: { searchTerm: "" } });
+    dispatchFilter({ type: REDUCER_ACTIONS_FILTER.SEARCH_STATUS, payload: { searchStatus: "" } });
+
+    if (filteredProducts?.length) {
+      dispatchProducts({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS, payload: { filteredProducts: [] } });
     }
-    navigate('/all/1'); // navigate back to products
-  }
+    navigate("/", { replace: true }); 
+  }, 500);
+
+  // Reusable handlers for focusing and blurring various elements: value -> true - focus / value -> false - blur
+  const createFocusBlurHandler = (setStateFunction: React.Dispatch<React.SetStateAction<boolean>>, value: boolean): (() => void) => () => (
+    setStateFunction(value)
+  );
+
+  const onRemoveIconFocusHandler: FocusEventHandler<HTMLButtonElement> = createFocusBlurHandler(setIsRemoveIconFocused, true);
+  const onRemoveIconBlurHandler: FocusEventHandler<HTMLButtonElement> = createFocusBlurHandler(setIsRemoveIconFocused, false);
 
   // STYLE
   const searchIconStyle: CSSProperties = {
-    'width': 'auto', 
-    'height': '100%',
-    'position': 'absolute',
-    'left': '0.5rem',
-  }
+    width: "40px", 
+    height: "100%",
+    position: "absolute",
+    left: "0",
+    zIndex: "3",
+  };
+  const iconSize: string = "20px";
+  const iconColor: string = "var(--color-1)";
 
   // ELEMENTS
   const RemoveSearchTermButton = (
-    <button 
-      className='button--search-bar-remove-term'
-      onClick={RemoveSearchResultsHandler}
-      disabled={!searchTerm?.length}
+    <button
+      className="button--search-bar-remove-term"
+      onClick={ removeSearchResultsHandler }
+      onFocus={ onRemoveIconFocusHandler }
+      onBlur={ onRemoveIconBlurHandler }
     >
-       <RemoveIcon 
-        width='20px' 
-        height='20px' 
-        fill='var(--color-1)'
-        strokeWidth='0'
+      <RemoveIcon 
+        wrapperCustomStyle={{ zIndex: "3" }} 
+        width={ iconSize } 
+        height={ iconSize } 
+        fill={ isRemoveIconFocused ? "var(--color-7)" : iconColor } 
+        strokeWidth="0" 
       />
     </button>
-  )
-    
+  );
+
   return (
     <div className="search-bar">
       <SearchIcon 
-        width='20px' 
-        height='20px' 
-        stroke='var(--color-1)' 
-        wrapperCustomStyle={searchIconStyle}
+        width={ iconSize} 
+        height={ iconSize } 
+        stroke={ iconColor } 
+        wrapperCustomStyle={ searchIconStyle } 
       />
-      {RemoveSearchTermButton}
-      <input 
-        className="search-bar__input-field" 
-        name='search-bar' 
-        onChange={searchBarHandler}
-        value={searchTerm}
+      <input
+        className="input--search-bar"
+        placeholder={ textData["search-bar-placeholder"] }
+        name="search-bar"
+        onChange={ searchBarHandler }
+        value={ searchTerm }
+        autoComplete="off"
       />
-      <button 
-        className='button--search-bar__submit'
-        onClick={SearchProductHandler}
-      > {CONSTANTS.SEARCH}
+      { RemoveSearchTermButton }
+      <button
+        className="button--search-bar-submit"
+        onClick={ () => debouncedSearchProductHandler(searchTerm) }
+      >
+        { textData["search-button-label"] }
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default SearchBar
+export default SearchBar;

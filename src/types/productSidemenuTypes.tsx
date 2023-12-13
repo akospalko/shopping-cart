@@ -1,7 +1,7 @@
-import {ReactElement} from 'react'
+import {ReactElement} from 'react';
 
 // ProductSidemenu & ProductCategory 
-export type ProductsSidemenuPropsType = {activeCategory: string}
+export type ProductsSidemenuPropsType = { activeCategory: string }
 
 // ProductCategory
 // category item type
@@ -12,4 +12,4 @@ export type ProductCategoryItemType = {
 }
 
 // category icon type
-export type CategoryIconType = {[key: string]: ReactElement}
+export type CategoryIconType = { [key: string]: ReactElement }

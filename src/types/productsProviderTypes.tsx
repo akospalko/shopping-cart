@@ -1,13 +1,13 @@
-import { ReactElement } from "react"
-import { useProductContext } from "../context/ProductsProvider"
+import { ReactElement } from "react";
+import { useProductContext } from "../context/ProductsProvider";
 
-// TYPE
+// TYPES
 // Product item properties type based on different category
 export type ProductProcessorPropertyType = {
   ['brand']: string,
   ['model']: string,
   ['architecture']: string,
-  ['cores']: string | number,
+  ['cores']: string,
   ['threads']: string,
   ['clock speed']: string,
   ['cache']: string,
@@ -60,34 +60,66 @@ export type ProductMobilePropertyType = {
   ['battery capacity']: string
 }
 
-// Product type
+// product property review type
+export type ProductReviewPropertyType = {
+  ["userID"]: string, 
+  ["username"]: string, 
+  ["rating"]: number, 
+  ["review"]: string
+} 
+
+// Product property type
+export type ProductMergedPropertiesType = ProductProcessorPropertyType | ProductRamPropertyType | 
+ProductVideoCardPropertyType | 
+ProductMobilePropertyType;
+
+// Product property type string literal keys
+// define the mapped type to extract string keys
+export type ExtractStringKeys<T> = {
+  [K in keyof T]: T[K] extends string ? K : never;
+};
+
+// use the mapped type to extract string keys from each property type
+export type VideoCardKeys = ExtractStringKeys<ProductVideoCardPropertyType>;
+export type MobileKeys = ExtractStringKeys<ProductMobilePropertyType>;
+export type ProcessorKeys = ExtractStringKeys<ProductProcessorPropertyType>;
+export type RamKeys = ExtractStringKeys<ProductRamPropertyType>;
+
+// combine all extracted keys into a union
+export type GroupKeysType =
+  | VideoCardKeys[keyof VideoCardKeys]
+  | MobileKeys[keyof MobileKeys]
+  | ProcessorKeys[keyof ProcessorKeys]
+  | RamKeys[keyof RamKeys];
+
+// Product Item
 export type ProductItemType = {
   sku: string,
   name: string,
   price: number,
-  priceDiscount: 0,
+  priceDiscount: number,
   category: string
   stock: number,
-  description: '',
-  warranty: '',
-  retailer: '',
-  properties: ProductProcessorPropertyType | ProductRamPropertyType | 
-  ProductVideoCardPropertyType | 
-  ProductMobilePropertyType | ProductItemType | undefined
-}
-
-// ----------REDUCER----------
-export type ReducerAction = {
-  type: string,
-  payload?: ProductStateType
+  description: string,
+  warranty: string,
+  retailer: string,
+  review: ProductReviewPropertyType[],
+  calculatedRatingAvg: number,
+  properties: ProductMergedPropertiesType
 }
 
 // ----------PRODUCT CONTEXT LOGIC----------
 export type ProductStateType = {
   products?: ProductItemType[],
   filteredProducts?: ProductItemType[],
-  searchTerm?: string,
-  activePage?: number,
+  categoryProducts?: ProductItemType[],
+  categoryProductsFiltered?: ProductItemType[],
+}
+
+// ----------REDUCER----------
+export type ReducerAction = {
+  type: string,
+  payload?: ProductStateType
 }
 
 // ----------CREATE CONTEXT----------

@@ -1,89 +1,131 @@
 // Component to hold the product items and related pagination
-import {useEffect, ReactElement} from 'react'
-import './ProductPage.css'
-import {ProductItemType} from '../types/productsProviderTypes'
-import Pagination from './Pagination'
-import ProductList from './ProductList'
-import {useNavigate, useLocation} from 'react-router-dom'
-import ProductSidemenu from './ProductSidemenu/ProductSidemenu'
-import useProducts from '../hooks/useProducts'
-
-const CONSTANT = {
-  HEADER_1_BROWSE_GOODIES: 'Browse Goodies',
-  HEADER_1_NO_PRODUCTS: 'No Available Products',
-  HEADER_2_NEW_PRODUCTS_SOON: 'New products are coming soon...'
-}
-
-// TYPE
-type ProductPagePropsType = {
-  productData: ProductItemType[] | undefined
-}
+import { useEffect, memo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ProductItemType } from "../types/productsProviderTypes";
+import Pagination from "./Pagination";
+import ProductList from "./ProductList";
+import ProductSidemenu from "./ProductSidemenu/ProductSidemenu";
+import useProducts from "../hooks/useProducts";
+import DividerLine from "./UI/DividerLine";
+import ProductSortDropdown from "./UI/ProductSortDropdown";
+import paginateProducts from "../utility/paginateProducts";
+import { validatePageParam } from "../utility/validatePageParam";
+import { PRODUCT_CATEGORY, SORT_OPTION_VALUE, itemsPerPage} from "../utility/constants";
+import { sortBy } from "../utility/sortProduct";
+import useFilter from "../hooks/useFilter";
+import textData from "../data/textData.json";
+import productCategories from "../data/productCategories.json";
+import "./ProductPage.css";
 
 // COMPONENT
-const ProductPage = ({productData}: ProductPagePropsType) => {
+const ProductPage = () => {
   // ROUTE
   const navigate = useNavigate();
-  // const {category, page} = useParams();
-  const location = useLocation();
-  const activeCategory = location.pathname.split('/').filter(segment => segment !== '').slice(0, -1).join('/');
+  const { category, page } = useParams();
+  const activeCategory = category || PRODUCT_CATEGORY.ALL; 
 
   // CONTEXT
-  const {activePage} = useProducts();
-  const pageNumber = activePage || 1
+  const { 
+    products,
+    categoryProducts, 
+    categoryProductsFiltered, 
+    dispatch, 
+    REDUCER_ACTIONS_PRODUCT } = useProducts();
+
+  const { isFilteringProduct, activeSortOption } = useFilter();
+
+  // DATA
+  // Filter out which products to display 
+  let titleContent: string = "";
+  let subtitleContent: string = "";
+  let productListContent: ProductItemType[] = [];
+  const isCategoryProductsAvailable: boolean = !!categoryProducts?.length;
+  const isFilteredCategoryProductsAvailable: boolean = !!categoryProductsFiltered?.length;
+  const productCategoriesArray: string[] = Object.values(productCategories).map((category) => category.category);
+  const pageNumber: number = validatePageParam(page);
+
+  const conditonalDisplayCategoryProducts = (): void => {
+    if(products === undefined || !products.length) {
+      titleContent = textData["title-products-not-available"]; 
+      subtitleContent = textData["subtitle-products-not-available"];
+    }
+    // category products
+    else if(productCategoriesArray.includes(activeCategory)) {
+      // filter result
+      if(isFilteredCategoryProductsAvailable) {
+        titleContent = textData["title-products-filtered"];
+        productListContent = categoryProductsFiltered || [];
+      // filter no result
+      } else if(isCategoryProductsAvailable && isFilteringProduct) {
+        titleContent = textData["title-products-filter-no-result"];
+        subtitleContent = textData["subtitle-products-filter-no-result"];
+        productListContent = categoryProducts || [];
+      // default
+      } else if(isCategoryProductsAvailable) {
+        titleContent = textData["title-products-default"];
+        productListContent = categoryProducts || [];
+      } 
+      // no product in category
+      else if(!isCategoryProductsAvailable) {
+        titleContent = textData["title-product-empty-category"];
+        subtitleContent = textData["subtitle-product-empty-category"];
+      }
+    }
+  }
+
+  conditonalDisplayCategoryProducts();
+
+  // Sort products based on active sort option
+  const sortedProducts = sortBy(productListContent, activeSortOption || SORT_OPTION_VALUE.RATING);
+  
+  // Paginate filtered products
+  const totalPages = Math.ceil((sortedProducts?.length ?? 1) / itemsPerPage);
+  const paginatedProducts = paginateProducts(sortedProducts, itemsPerPage, pageNumber);
 
   // EFFECTS
+  // Store last visited page
   useEffect(() => {
-    sessionStorage.setItem('lastVisitedPage', 'products');
-  }, [])
+    sessionStorage.setItem("lastVisitedPage", "products");
+  }, []);
 
+  // Navigate to conditional route
   useEffect(() => {
-    const activeRoute = activeCategory === 'search' ? '/search/1' : `/${activeCategory}/${pageNumber}`
-    navigate(activeRoute, { replace: true });
-  }, [activeCategory, navigate, pageNumber]);
-
-  // Filter out productsData based on active category
-  const categoryProductData = productData?.filter(product => {
-    return product.category === activeCategory;
-  });
-
-  const filteredProductData = activeCategory === 'all' || activeCategory === 'search'  ? productData : categoryProductData
-
-  // CONSTANT VALUES
-  const itemsPerPage = 10;
-
-  // CALCULATED VALUES
-  const displayedProductData: ProductItemType[] = filteredProductData || []
-  const totalPages = Math.ceil(displayedProductData?.length / itemsPerPage);
-  const startIndex: number = (pageNumber - 1) * itemsPerPage;
-  const endIndex: number = startIndex + itemsPerPage;
-
-  const paginatedProducts: ProductItemType[] = filteredProductData?.slice(startIndex, endIndex) || [];
-
-  // empty products list (fetch ok)
-  const productEmptyList: ReactElement | ReactElement[] = (
-    <div className="product-page__empty-list">
-      <h1 className='product-page__header--1'>{CONSTANT.HEADER_1_NO_PRODUCTS}</h1>
-      <h2 className='product-page__header--2'>{CONSTANT.HEADER_2_NEW_PRODUCTS_SOON}</h2>
-    </div>
-  )
-
-  // products list
-  const productList: ReactElement | ReactElement[] = (
-    <div className='product-page__content'>
-      <h1 className='product-page__header--1'>{CONSTANT.HEADER_1_BROWSE_GOODIES}</h1>
-      <ProductList productsData={paginatedProducts}/>
-      <Pagination totalPages={totalPages}/>
-    </div>
-  )
+    if(totalPages > 1 && pageNumber <= totalPages) {
+      navigate(`/${ activeCategory }/${ pageNumber }`);
+    }
+  }, [activeCategory, navigate, pageNumber, totalPages]); 
+ 
+  // Filter and store active category products
+  useEffect(() => {
+    // filter products
+    const categoryProductData = products?.filter((product: ProductItemType) => {
+      if(activeCategory === PRODUCT_CATEGORY.ALL) {
+        return product;
+      } else {
+        return product.category === activeCategory;
+      }
+    }); 
+    // update store with filtered products
+    dispatch({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS, payload: { categoryProducts: categoryProductData } });
+  }, [REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS, activeCategory, dispatch, products]);
 
   return (
-    <main className='main main__product-page'>
+    <main className="main main__product-page">
       <div className="product-page__wrapper">
-        <ProductSidemenu activeCategory={activeCategory}/>
-        {filteredProductData?.length ? productList : productEmptyList}
+        <ProductSidemenu activeCategory={ activeCategory }/>
+        <div className="product-page__content">
+          <h1 className="product-page__header--1">{ titleContent }</h1>
+          { !!subtitleContent.length && <h3 className="product-page__header--2"> { subtitleContent } </h3> }
+          { !!productListContent.length && <DividerLine/> }
+          { !!productListContent.length && <ProductSortDropdown/> }
+          <ProductList productsData={ paginatedProducts ?? [] }/>
+          { (totalPages > 1 && pageNumber <= totalPages) && <Pagination totalPages={ totalPages } pageURLParams={ { category: activeCategory, page: pageNumber } } /> }
+        </div>
       </div>
     </main>
   )
 }
 
-export default ProductPage
+const MemoizedProductPage = memo(ProductPage);
+
+export default MemoizedProductPage;
