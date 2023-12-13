@@ -1,8 +1,8 @@
 // Sidebar component that displays grouped checkbox logic for product property filtering 
-import { GroupKeysType } from "../../data/filterGroupPropertyInitializer";
 import { Tooltip } from "react-tooltip";
 import { QuestionMarkIcon } from "../SVGComponents";
 import { PRODUCT_GROUP_TOOLTIP_DATA } from "../../data/tooltipDataConstant";
+import { GroupKeysType } from "../../types/productsProviderTypes";
 import "./GroupHeaderInfoTooltip.css";
 
 // TYPES
