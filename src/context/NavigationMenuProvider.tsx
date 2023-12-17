@@ -2,15 +2,7 @@
 import { createContext, useState } from "react";
 import { ChildrenType } from "../types/filterProviderTypes";
 import { modalScrollLock } from "../utility/modalScrollLock";
-
-// TYPES
-type ToggleMenusHandlerType = (shouldClose?: boolean) => void;
-type UseNavigationMenuContextType = {
-  isNavMenuOpen: boolean;
-  isFilterMenuOpen: boolean;
-  toggleNavMenuHandler: ToggleMenusHandlerType;
-  toggleFilterMenuHandler: ToggleMenusHandlerType;
-}
+import { ToggleMenuHandlerType, UseNavigationMenuContextType } from "../types/navigationMenuTypes";
 
 // ---------CONTEXT LOGIC----------
 export const useNavigationMenuContext = () => {
@@ -20,7 +12,7 @@ export const useNavigationMenuContext = () => {
 
   // HANDLERS
   // toggle header menu / force close
-  const toggleNavMenuHandler: ToggleMenusHandlerType = (shouldClose?: boolean) => {
+  const toggleNavMenuHandler: ToggleMenuHandlerType = (shouldClose?: boolean) => {
     setIsNavMenuOpen((prev) => {
       modalScrollLock(prev, shouldClose);
       return shouldClose ? false : !prev;
@@ -28,7 +20,7 @@ export const useNavigationMenuContext = () => {
   };
   
   // toggle filter menu / force close
-  const toggleFilterMenuHandler: ToggleMenusHandlerType = (shouldClose?: boolean) => {
+  const toggleFilterMenuHandler: ToggleMenuHandlerType = (shouldClose?: boolean) => {
     setIsFilterMenuOpen((prev) => {
       modalScrollLock(prev, shouldClose);
       return shouldClose ? false : !prev;

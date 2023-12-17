@@ -44,3 +44,14 @@ export const enum PRODUCT_VIEW_TAB {
   CHARACTERSISTICS = "charactersistics",
   REVIEW = "review"
 } 
+
+// NavigationMenu.tsx
+export const NAVIGATION_MENU_ITEMS_ACTION = {
+  MAIN_MENU: "MAIN_MENU",
+  PRODUCT_CATEGORY: "PRODUCT_CATEGORY",
+} as const;
+
+// Misc
+export const CONSTANT = { 
+  PRODUCT: "product" 
+}
