@@ -1,4 +1,5 @@
 // Get and return navigation menu items as mapped jsx
+// TODO: Navigation bar
 import { ReactElement } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { RemoveIcon } from "../components/SVGComponents";
@@ -15,6 +16,7 @@ import {
   CategoryIconType,
   ItemStylesType
 } from "../types/navigationMenuTypes";
+import textData from "../data/textData.json";
 
 export const useGetNavigationItems = (navigationMenuAction: NavigationMenuActionType): ReactElement[] => {
   // ROUTE
@@ -81,9 +83,10 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
     VideoCardIcon: <RemoveIcon width={ iconSize } height={ iconSize }/>,  
     RAMIcon: <RemoveIcon width={ iconSize } height={ iconSize }/>
   }
-  const productCategoriesIconNamesArray: string[] = Object.keys(MENU_ICON);
+  const menuIconArray: string[] = Object.keys(MENU_ICON);
 
   // RENDER
+  // Data
   let dataInitializerArray: NavigationMenuDataType[] = [
     {
       name: "",
@@ -91,25 +94,37 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
       to: "",
     }
   ]
-
   const itemStyles: ItemStylesType = {
     navLinkStyle: "",
-    navLinkStyleActive: ""
+    navLinkStyleActive: "",
+    navLinkLabel: ""
   }
+  let withIcons: boolean = false;
 
+  // Switch
   switch(navigationMenuAction) {
     case NAVIGATION_MENU_ITEMS_ACTION.PRODUCT_CATEGORY: 
       dataInitializerArray = productCategoriesInitializer || []; 
       itemStyles.navLinkStyle = "navigation-item__product-category";
       itemStyles.navLinkStyleActive = "navigation-item__product-category--active";
+      itemStyles.navLinkLabel = "navigation-item__product-category-label";
+      withIcons = true;
       break;
     case NAVIGATION_MENU_ITEMS_ACTION.MAIN_MENU: 
       dataInitializerArray = navigationMenuInitializerData || [];
-      itemStyles.navLinkStyle = "navigation-item__main";
-      itemStyles.navLinkStyleActive = "navigation-item__main--active";
+      itemStyles.navLinkStyle = "navigation-item__main-menu";
+      itemStyles.navLinkStyleActive = "navigation-item__main-menu--active";
+      itemStyles.navLinkLabel = "navigation-item__main-menu-label";
+      withIcons = true;
+      break;
+    case NAVIGATION_MENU_ITEMS_ACTION.MAIN_BAR: 
+      dataInitializerArray = navigationMenuInitializerData || [];
+      itemStyles.navLinkStyle = "navigation-item__main-bar";
+      itemStyles.navLinkStyleActive = "navigation-item__main-bar--active";
+      itemStyles.navLinkLabel = "navigation-item__main-bar-label";
       break;
     default: 
-      throw new Error("No activate navigation");
+      throw new Error(textData["error-missing-active-navigation"]);
   }
 
   // JSX
@@ -130,8 +145,8 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
           debouncedClearFilteredProductsHandler();
         } }
       > 
-        { productCategoriesIconNamesArray.includes(navItem.icon) ? MENU_ICON[navItem.icon as keyof CategoryIconType] : null }
-        <span>{ navItem.name }</span>
+        { withIcons && menuIconArray.includes(navItem.icon) ? MENU_ICON[navItem.icon as keyof CategoryIconType] : null }
+        <span className={ itemStyles.navLinkLabel }>{ navItem.name }</span>
       </NavLink>
     ))  
   )
