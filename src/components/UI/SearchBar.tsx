@@ -1,18 +1,23 @@
-// Products search bar and related logic
-import React, { useState, ChangeEvent, CSSProperties, FocusEventHandler } from "react";
+// Products search bar and handlers
+import React, { useState, ChangeEvent, FocusEventHandler, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
-import useProducts from "../hooks/useProducts";
-import useFilter from "../hooks/useFilter";
-import { ProductItemType } from "../types/productsProviderTypes";
-import { RemoveIcon, SearchIcon } from "./SVGComponents";
-import { trimInput } from "../utility/trimInput";
-import { SEARCH } from "../utility/constants";
-import textData from "../data/textData.json";
+import useProducts from "../../hooks/useProducts";
+import useFilter from "../../hooks/useFilter";
+import { ProductItemType } from "../../types/productsProviderTypes";
+import { RemoveIcon, SearchIcon } from "../SVGComponents";
+import { trimInput } from "../../utility/trimInput";
+import { SEARCH } from "../../utility/constants";
+import textData from "../../data/textData.json";
 import "./SearchBar.css";
 
+// TYPES
+type SearchBarPropsType = {
+  containerStyle?: string
+}
+
 // COMPONENT
-const SearchBar: React.FC = () => {
+const SearchBar = ({ containerStyle }: SearchBarPropsType) => {
   // ROUTE
   const navigate = useNavigate();
 
@@ -37,7 +42,6 @@ const SearchBar: React.FC = () => {
   // HANDLERS
   // Update search bar input field content
   const searchBarHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log('updating search bar', e.target.value)
     dispatchFilter({
       type: REDUCER_ACTIONS_FILTER.UPDATE_SEARCH_TERM,
       payload: { searchTerm: e.target.value },
@@ -84,7 +88,7 @@ const SearchBar: React.FC = () => {
         payload: { filteredProducts: [] },
       });
     }
-  }, 500);  
+  }, 300);  
 
   // Remove search results empty search bar input field
   const removeSearchResultsHandler = debounce(() => {
@@ -99,7 +103,7 @@ const SearchBar: React.FC = () => {
     navigate("/", { replace: true }); 
   }, 500);
 
-  // Reusable handlers for focusing and blurring various elements: value -> true - focus / value -> false - blur
+  // Focus and blur element handler (reusable): value -> true - focus / value -> false - blur
   const createFocusBlurHandler = (setStateFunction: React.Dispatch<React.SetStateAction<boolean>>, value: boolean): (() => void) => () => (
     setStateFunction(value)
   );
@@ -108,17 +112,11 @@ const SearchBar: React.FC = () => {
   const onRemoveIconBlurHandler: FocusEventHandler<HTMLButtonElement> = createFocusBlurHandler(setIsRemoveIconFocused, false);
 
   // STYLE
-  const searchIconStyle: CSSProperties = {
-    width: "40px", 
-    height: "100%",
-    position: "absolute",
-    left: "0",
-    zIndex: "3",
-  };
   const iconSize: string = "20px";
   const iconColor: string = "var(--color-1)";
 
-  // ELEMENTS
+  // JSX
+  // Remove search term button
   const RemoveSearchTermButton = (
     <button
       className="button--search-bar-remove-term"
@@ -130,35 +128,43 @@ const SearchBar: React.FC = () => {
         wrapperCustomStyle={{ zIndex: "3" }} 
         width={ iconSize } 
         height={ iconSize } 
-        fill={ isRemoveIconFocused ? "var(--color-7)" : iconColor } 
+        fill={ isRemoveIconFocused ? "var(--color-1)" : iconColor } 
         strokeWidth="0" 
       />
     </button>
   );
 
-  return (
-    <div className="search-bar">
+  // Input field
+  const searchInputField: ReactElement = ( 
+    <input
+      className="input--search-bar"
+      placeholder={ textData["search-bar-placeholder"] }
+      name="search-bar"
+      onChange={ searchBarHandler }
+      value={ searchTerm }
+      autoComplete="off"
+    />
+  )
+
+  // Submit button
+  const submitSearchButton: ReactElement = (
+    <button
+      className="button--search-bar-submit"
+      onClick={ () => debouncedSearchProductHandler(searchTerm) }
+    >
       <SearchIcon 
         width={ iconSize} 
         height={ iconSize } 
         stroke={ iconColor } 
-        wrapperCustomStyle={ searchIconStyle } 
       />
-      <input
-        className="input--search-bar"
-        placeholder={ textData["search-bar-placeholder"] }
-        name="search-bar"
-        onChange={ searchBarHandler }
-        value={ searchTerm }
-        autoComplete="off"
-      />
+    </button>
+  )
+
+  return (
+    <div className={ `search-bar ${ containerStyle }` }>
+      { searchInputField }
       { RemoveSearchTermButton }
-      <button
-        className="button--search-bar-submit"
-        onClick={ () => debouncedSearchProductHandler(searchTerm) }
-      >
-        { textData["search-button-label"] }
-      </button>
+      { submitSearchButton }
     </div>
   );
 };
