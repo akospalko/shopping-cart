@@ -1,0 +1,91 @@
+/* LOGO */
+/* Shared */
+.header__logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header__logo span {
+  color: var(--color-4);
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+}
+
+/* Header bar */
+.header-bar__logo span {
+  text-align: center;
+}
+
+/* Header menu */
+.header-menu__logo span {
+  text-align: left;
+}
+
+@media screen and (min-width: 1400px) {
+  .header-bar__logo { 
+    display: flex;
+    justify-content: initial;
+  }
+}
+
+/* MENU TOGGLER BUTTON */
+/* Shared */
+.button--menu-toggler-shared {
+  background-color: var(--color-2);
+  border-radius: var(--border-radius);
+  transition: transform 0.2s ease;
+}
+
+.button--menu-toggler-shared:focus-visible {
+  outline: 2px solid var(--color-7);
+} 
+
+.button--menu-toggler-shared-open {
+  transform: rotate(90deg);
+} 
+
+/* Header bar */
+.button--sidemenu-toggler {
+  margin: auto;
+  width: 30px;
+  height: 30px;
+}
+
+/* Header menu */
+.button--menu-modal-toggler {
+  width: 40px;
+  height: 40px;
+  margin-right: auto;
+}
+
+/* CART AND IN CART COUNTER*/
+/* Shared */
+.header__cart {
+  position: relative;
+  display: flex;
+  justify-content: end;
+  margin-left: auto;
+}
+
+.header__cart-counter {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 30px;
+  height: 100%;
+  color: var(--color-4);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* Header bar */
+.header-bar__cart {
+  height: 25px;
+}
+
+/* Header menu */
+.header-menu__cart {
+  height: 40px;
+}
