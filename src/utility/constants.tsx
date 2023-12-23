@@ -4,13 +4,13 @@ import { ModalTypes } from "../types/navigationMenuTypes";
 export const PRODUCT_CATEGORY = {
   ALL: "all",
   PROCESSOR: "processor",
-  MOBILE: "MOBILE",
-  VIDEO_CARD: "VIDEO_CARD",
-  RAM: "RAM"
+  MOBILE: "mobile",
+  VIDEO_CARD: "videocard",
+  RAM: "ram"
 }
 // PriceFilter.tsx
 export const priceFilterStateInitializer = {
-  min: 1 ,
+  min: 1,
   max: 100
 };
 
@@ -20,7 +20,6 @@ export const itemsPerPage: number = 5;
 export const RATING = {
   TOTAL_STARS: 5,
 };
-
 
 // ENUMS
 export enum SEARCH {
