@@ -5,7 +5,7 @@ import { ProductsSidemenuPropsType, ProductCategoryItemType, CategoryIconType} f
 import { CheckmarkIcon, RemoveIcon } from "../SVGComponents";
 import useProductsFilterHandler from "../../hooks/useFilterProductsHandler";
 import textData from "../../data/textData.json";
-import productCategories from "../../data/productCategories.json";
+import productCategories from "../../data/productCategoriesData.json";
 import "./ProductSidemenu.css";
 
 // COMPONENT

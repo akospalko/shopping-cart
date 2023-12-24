@@ -37,7 +37,6 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
         setPriceFilterSlider([minPriceRange, maxPriceRange]);
       }
     };
-
     try {
       calculatePriceRanges();
     } catch(error) {
