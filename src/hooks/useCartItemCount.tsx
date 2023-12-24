@@ -5,7 +5,6 @@ import { ProductItemType } from '../types/productsProviderTypes';
 
 // CUSTOM HOOK
 const useCartItemCount = (cartItems: CartItemType[], product: ProductItemType): number => {
-  
   // STATE
   const [cartItemCount, setCartItemCount] = useState<number>(0);
   
@@ -13,14 +12,14 @@ const useCartItemCount = (cartItems: CartItemType[], product: ProductItemType): 
   useEffect(() => {
     const foundItem = cartItems.find((item: CartItemType) => item.sku === product.sku);
     if(!foundItem) {
-      setCartItemCount(0)
+      setCartItemCount(0);
     } else {
-      setCartItemCount(foundItem?.qty as number)
+      setCartItemCount(foundItem?.qty as number);
     }
   }, [cartItems, product.sku])
   
 
-  return cartItemCount
+  return cartItemCount;
 }
 
-export default useCartItemCount
+export default useCartItemCount;
