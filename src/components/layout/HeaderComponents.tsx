@@ -1,13 +1,13 @@
 // Shared header components: menu toggler button, logo, cart & counter
 import { MenuIcon, CartIcon } from "../SVGComponents";
 import useNavigationMenu from "../../hooks/useNavigationMenu";
+import { MODAL_TOGGLE_KEY } from "../../utility/constants";
 import useCart from "../../hooks/useCart";
 import textData from "../../data/textData.json";
 import "./HeaderComponents.css";
 
 // TYPE
 type HeaderComponentsPropsType = { style?: string  }
-
 // Logo
 export const HeaderLogo = ({ style }: HeaderComponentsPropsType) => {
   return (
@@ -19,21 +19,18 @@ export const HeaderLogo = ({ style }: HeaderComponentsPropsType) => {
 
 // Menu toggler button
 export const MenuTogglerButton = ({ style }: HeaderComponentsPropsType) => {
-
   // HOOK
-  const { isNavMenuOpen, toggleNavMenuHandler } = useNavigationMenu();
-  // TODO outsource icon style
-  // TODO merge shared style
+  const { modal, toggleModal } = useNavigationMenu();
 
   // STYLE
   const iconSize = "20px";
   const iconStroke = "var(--color-4)";
 
-  const activeNavMenuButtonAnimation = isNavMenuOpen ? "button--menu-toggler-shared-open" : "";
+  const activeNavMenuButtonAnimation = modal[MODAL_TOGGLE_KEY.MAIN_MENU] ? "button--menu-toggler-shared-open" : "";
 
   return (
     <button 
-      onClick={ () => toggleNavMenuHandler() }
+      onClick={ () => toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, true) }
       className={ `button--menu-toggler-shared ${ style } ${ activeNavMenuButtonAnimation }` }
     >
       <MenuIcon 

@@ -2,45 +2,36 @@
 import { createContext, useState } from "react";
 import { ChildrenType } from "../types/filterProviderTypes";
 import { modalScrollLock } from "../utility/modalScrollLock";
-import { ToggleMenuHandlerType, UseNavigationMenuContextType } from "../types/navigationMenuTypes";
+import { MODAL_TOGGLE_STATE_INITIALIZER } from "../utility/constants";
+import { UseNavigationMenuContextType } from "../types/navigationMenuTypes";
+import { ModalTypes } from "../types/navigationMenuTypes";
 
 // ---------CONTEXT LOGIC----------
 export const useNavigationMenuContext = () => {
-  // STATES
-  const [isNavMenuOpen, setIsNavMenuOpen] = useState<boolean>(false);
-  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
+  // STATE
+  const [modal, setModal] = useState<ModalTypes>(MODAL_TOGGLE_STATE_INITIALIZER);
+  
+  // HANDLER
+  const toggleModal = (
+      modalKey: keyof ModalTypes, 
+      switchOffAll?: boolean | undefined
+    ) => {
+      setModal((prevModal) => {
+      modalScrollLock(prevModal[modalKey]); // toggle scrolling
+      if(switchOffAll) {
+        return { ...MODAL_TOGGLE_STATE_INITIALIZER, [modalKey]: !prevModal[modalKey] }
+      }
+      return { ...prevModal, [modalKey]: !prevModal[modalKey] };
+    })
+  };
 
-  // HANDLERS
-  // toggle header menu / force close
-  const toggleNavMenuHandler: ToggleMenuHandlerType = (shouldClose?: boolean) => {
-    setIsNavMenuOpen((prev) => {
-      modalScrollLock(prev, shouldClose);
-      return shouldClose ? false : !prev;
-    });
-  };
-  
-  // toggle filter menu / force close
-  const toggleFilterMenuHandler: ToggleMenuHandlerType = (shouldClose?: boolean) => {
-    setIsFilterMenuOpen((prev) => {
-      modalScrollLock(prev, shouldClose);
-      return shouldClose ? false : !prev;
-    });
-  };
-  
-  return {
-    isNavMenuOpen,
-    isFilterMenuOpen,
-    toggleNavMenuHandler,
-    toggleFilterMenuHandler,
-  }
+  return { modal, toggleModal }
 }
 
 // ----------CREATE CONTEXT----------
 const initContextState: UseNavigationMenuContextType = {
-  isNavMenuOpen: false,
-  isFilterMenuOpen: false,
-  toggleNavMenuHandler: () => {},
-  toggleFilterMenuHandler: () => {},
+  modal: MODAL_TOGGLE_STATE_INITIALIZER,
+  toggleModal: () => {},
 }
 
 const NavigationMenuContext = createContext<UseNavigationMenuContextType>(initContextState);

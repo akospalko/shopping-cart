@@ -1,13 +1,14 @@
 // Header with serach bar and filter toggler menu for small screens
 import useNavigationMenu from "../../hooks/useNavigationMenu";
 import useScrollHeader from "../../hooks/useScrollHeader";
+import { MODAL_TOGGLE_KEY } from "../../utility/constants";
 import { FilterIcon } from "../SVGComponents";
 import SearchBar from "../UI/SearchBar";
 import './HeaderSearchBar.css';
 
 const HeaderSearchBar = () => {
   // CONTEXT
-  const { isNavMenuOpen, toggleFilterMenuHandler } = useNavigationMenu();
+  const { modal, toggleModal } = useNavigationMenu();
   
   // HOOK
   const { showHeader } = useScrollHeader();
@@ -16,12 +17,12 @@ const HeaderSearchBar = () => {
   const iconSize = "25px";
   const iconColor = "var(--color-4)";
   const onScrollSearchBarAnimation = !showHeader ? "header-search-bar-small-screen--scrolled" : ""; 
-  const hideSearchBarOnToMenuOpen = isNavMenuOpen ? "header-search-bar-small-screen--hidden" : "";
+  const hideSearchBarOnMenuOpen = modal[MODAL_TOGGLE_KEY.MAIN_MENU] ? "header-search-bar-small-screen--hidden" : "";
 
   return (
-    <div className={ `header-search-bar-small-screen ${ onScrollSearchBarAnimation } ${ hideSearchBarOnToMenuOpen }` }>
+    <div className={ `header-search-bar-small-screen ${ onScrollSearchBarAnimation } ${ hideSearchBarOnMenuOpen }` }>
       <button 
-        onClick={ () => toggleFilterMenuHandler() }
+        onClick={ () => toggleModal(MODAL_TOGGLE_KEY.FILTER_MENU, true) }
         className="button--filter-menu"
       > 
         <FilterIcon 

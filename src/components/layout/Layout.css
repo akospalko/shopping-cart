@@ -1,0 +1,13 @@
+.layout-wrapper {
+  display: flex;
+  background-color: var(--color-1);
+  z-index: var(--z-10);
+  overflow: scroll;
+}
+
+/* large screen layout */
+.navigation-bar {
+  display: flex;
+  width: 200px;
+  height: 50px;
+}

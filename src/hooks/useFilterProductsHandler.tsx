@@ -6,7 +6,9 @@ import { ProductItemType } from "../types/productsProviderTypes";
 import { useNavigate, useParams } from "react-router-dom";
 import { FilterOptionsType } from "../types/ProductFilterTypes";
 import { GroupKeysType } from "../types/productsProviderTypes";
+import { MODAL_TOGGLE_KEY } from "../utility/constants";
 import { ProductMergedPropertiesType } from "../types/productsProviderTypes";
+import useNavigationMenu from "./useNavigationMenu";
 import textData from "../data/textData.json";
 
 const useProductsFilterHandler = () => {
@@ -20,6 +22,8 @@ const useProductsFilterHandler = () => {
     REDUCER_ACTIONS_PRODUCT, 
     dispatch: dispatchProduct 
   } = useProducts();
+
+  const { toggleModal } = useNavigationMenu();
 
   const { 
     priceFilterSlider, 
@@ -133,18 +137,23 @@ const useProductsFilterHandler = () => {
     const filteredProducts = filterByProperty(filteredByPrice);
     // update state with filtered products
     dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, payload: { categoryProductsFiltered: filteredProducts } });
+    // close filter modal 
+    toggleModal(MODAL_TOGGLE_KEY.FILTER_MENU, true);
     // nav to route with
     navigate(`/${ category }/1`);
   }, 300); 
 
   // Clear products - to default state: []
   const debouncedClearFilteredProductsHandler = debounce((): void => {
-    if( categoryProductsFiltered === undefined || !categoryProductsFiltered.length ) return;
-    dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, payload: { categoryProductsFiltered: [] } });
+    if( categoryProductsFiltered === undefined || !categoryProductsFiltered.length ) {
+      dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, payload: { categoryProductsFiltered: [] } });
+    }
     dispatchFilter({ type: REDUCER_ACTIONS_FILTER.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: false } });
     if(filterOptions) {
       dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, payload: { filterOptions: resetFilterCheckedState(filterOptions) } });
     }
+    // Clear filter options from session storage
+    sessionStorage.removeItem("filterOptions");
     setPriceFilterSlider([priceFilterRange[0], priceFilterRange[1]]);
   }, 300)
 

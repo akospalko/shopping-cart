@@ -3,12 +3,13 @@ import { ReactElement } from "react";
 import { useGetNavigationItems } from "../../hooks/useGetNavigationItems";
 import useNavigationMenu from "../../hooks/useNavigationMenu";
 import { NAVIGATION_MENU_ITEMS_ACTION } from "../../utility/constants";
+import { MODAL_TOGGLE_KEY } from "../../utility/constants";
 import textData from "../../data/textData.json";
 import "./NavigationMenu.css";
 
 const NavigationMenu = (): ReactElement => {
   // CONTEXT
-  const { isNavMenuOpen } = useNavigationMenu();
+  const { modal } = useNavigationMenu();
 
   // HOOKS
   const navigationMainMenuItems = useGetNavigationItems(NAVIGATION_MENU_ITEMS_ACTION.MAIN_MENU);
@@ -37,7 +38,7 @@ const NavigationMenu = (): ReactElement => {
 
   return (
     <>
-      { isNavMenuOpen 
+      {  modal[MODAL_TOGGLE_KEY.MAIN_MENU] 
       ? ( 
           <div className="navigation-menu__backdrop">
             <div className="navigation-menu__modal">

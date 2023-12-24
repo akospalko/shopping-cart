@@ -1,14 +1,12 @@
 // Get and return navigation menu items as mapped jsx
 // TODO: Navigation bar
 import { ReactElement } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { RemoveIcon } from "../components/SVGComponents";
 import useNavigationMenu from "./useNavigationMenu";
 import useProductsFilterHandler from "./useFilterProductsHandler";
 import navigationMainData from "../data/navigationMainData.json";
-import productCategoriesData from "../data/productCategoriesData.json";
-import "./useGetNavigationItems.css";
-import { CONSTANT, NAVIGATION_MENU_ITEMS_ACTION } from "../utility/constants";
+import { CONSTANT, MODAL_TOGGLE_KEY, NAVIGATION_MENU_ITEMS_ACTION } from "../utility/constants";
 import { 
   NavigationMenuActionType,
   NavigationMenuProductCategoriesDataType,
@@ -16,30 +14,27 @@ import {
   CategoryIconType,
   ItemStylesType
 } from "../types/navigationMenuTypes";
+import productCategoriesData from "../data/productCategoriesData.json";
 import textData from "../data/textData.json";
+import "./useGetNavigationItems.css";
 
 export const useGetNavigationItems = (navigationMenuAction: NavigationMenuActionType): ReactElement[] => {
   // ROUTE
-  const location = useLocation();
-  const pathSegments: string[] = location.pathname.split("/").filter(Boolean);
-  const categoriesArray: string[] = productCategoriesData.map((item: NavigationMenuProductCategoriesDataType) => item.category);
+  const { category, page }  = useParams();
 
   // CONTEXT
-  const { toggleNavMenuHandler } = useNavigationMenu();
+  const { toggleModal } = useNavigationMenu();
   
   // HOOK
   const { debouncedClearFilteredProductsHandler } = useProductsFilterHandler();
 
   // UTIL
-  // Extract product link from location path segments
-  const getProductPageLink = (activePath: string[], categoriesArray: string[]): string => {
-    const category = activePath[0];
-    const page: string | null = activePath[1] || null; 
-    if (categoriesArray.includes(category)) {
-      return `${ category }/${ page }`;
-    } else {
+  // Construct active product page route 
+  const getProductPageLink = (category: string | undefined, page: string | undefined): string => {
+    if (!category || !page ) {
       return "/all/1";
     }
+    return `/${ category }/${ page }`;
   }
 
   // INITIALIZERS
@@ -50,7 +45,7 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
       if (item.name === CONSTANT.PRODUCT) {
         return {
           ...initializer,
-          to: getProductPageLink(pathSegments, categoriesArray),
+          to: getProductPageLink(category, page)
         };
       } else {
         return initializer;
@@ -64,7 +59,7 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
       const { category, ...restItems } = item; // remove category entries from new array
         return {
           ...restItems,
-          to: `${ category }/1`, // convert category to route
+          to: getProductPageLink(category, page)
         };
       }
   );
@@ -141,7 +136,7 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
         }
         to={ navItem.to }
         onClick={ () => {
-          toggleNavMenuHandler(true);
+          toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, true);
           debouncedClearFilteredProductsHandler();
         } }
       > 
