@@ -1,17 +1,17 @@
 // Apply scroll lock on modal container
-export const modalScrollLock = (isModalOpen: boolean, shouldClose = false) => {
-  if (shouldClose) {
+export const modalScrollLock = (isModalOpen: boolean, forceClose = false) => {
+  if (forceClose) {
     // Close modal and reset body position
-    document.body.style.position = 'static';
-    document.body.style.removeProperty('width');
+    document.body.style.position = "static";
+    document.body.style.removeProperty("width");
   } else {
     // Toggle modal
     if (isModalOpen) {
-      document.body.style.position = 'static';
-      document.body.style.removeProperty('width');
+      document.body.style.position = "static";
+      document.body.style.removeProperty("width");
     } else {
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
     }
   }
 };
