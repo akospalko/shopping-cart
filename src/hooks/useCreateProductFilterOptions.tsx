@@ -1,7 +1,12 @@
 // Logic to create product filter options for rendering product filter 
 import { useCallback } from "react";
 import { ProductItemType, ProductMergedPropertiesType } from "../types/productsProviderTypes";
-import { RangeFilterMinMaxType, DefaultFilterOptionType, RangeFilterOptionType, FilterOptionsType, FilterGroupType } from "../types/ProductFilterTypes";
+import { RangeFilterMinMaxType, 
+  DefaultFilterOptionType, 
+  RangeFilterOptionType, 
+  FilterOptionsType, 
+  FilterGroupType 
+} from "../types/ProductFilterTypes";
 import { GroupKeysType } from "../types/productsProviderTypes";
 import { useParams } from "react-router-dom";
 import { FILTER_GROUP_PROPERTIES } from "../data/filterGroupPropertyInitializer";
@@ -39,6 +44,7 @@ const useProductFilterOptions = () => {
     }
     return activeGroupInitializer;
   }, [])
+
 
   // Function to sort filters by range
   const sortFilterOptionsByRange = (filterOptions: FilterOptionsType) => {
@@ -109,10 +115,9 @@ function handleNewRangeFilter(
 }
  
 // Function to generate filter options data structure
-const createProductFilterOptions = useCallback(( products: ProductItemType[]) => { 
+const createProductFilterOptions = useCallback(( products: ProductItemType[]): FilterOptionsType => { 
   const filterOptions: FilterOptionsType = {} as FilterOptionsType;
   const activeFilterGroupProperties: FilterGroupType[] = getActiveFilterGroupProperties(category);
-  
   // iterate through products // alternative: use a premade option filter data structure
   products.forEach((product) => {
     // iterate through each active filter group property
