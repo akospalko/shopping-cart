@@ -4,12 +4,13 @@ import { NAVIGATION_MENU_ITEMS_ACTION } from '../utility/constants';
 
 // TYPES
 // NavigationMenuProvider.tsx
-export type ToggleMenuHandlerType = (shouldClose?: boolean) => void;
+export type ModalTypes = {
+  MAIN_MENU: boolean,
+  FILTER_MENU: boolean
+}
 export type UseNavigationMenuContextType = {
-  isNavMenuOpen: boolean;
-  isFilterMenuOpen: boolean;
-  toggleNavMenuHandler: ToggleMenuHandlerType;
-  toggleFilterMenuHandler: ToggleMenuHandlerType;
+  modal: ModalTypes,
+  toggleModal: (modalKey: keyof ModalTypes, switchOffAll?: boolean | undefined) => void
 }
 
 // useGetNavigationItems.tsx
@@ -34,5 +35,6 @@ export type CategoryIconType = {
 // Render active navigation
 export type ItemStylesType = {
   navLinkStyle: string,
-  navLinkStyleActive: string
+  navLinkStyleActive: string,
+  navLinkLabel: string
 }
