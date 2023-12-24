@@ -1,9 +1,11 @@
 // Match media query to current screen size
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useMediaQuery = (query: string): boolean => {
+  // STATE
   const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
 
+  // EFFECT
   useEffect(() => {
     const mediaQueryList = window.matchMedia(query);
     
@@ -11,10 +13,10 @@ const useMediaQuery = (query: string): boolean => {
       setMatches(event.matches);
     };
 
-    mediaQueryList.addEventListener('change', handleMediaQueryChange);
+    mediaQueryList.addEventListener("change", handleMediaQueryChange);
 
     return () => {
-      mediaQueryList.removeEventListener('change', handleMediaQueryChange);
+      mediaQueryList.removeEventListener("change", handleMediaQueryChange);
     };
   }, [query]);
 
