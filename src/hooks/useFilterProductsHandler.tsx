@@ -18,7 +18,6 @@ const useProductsFilterHandler = () => {
 
   // CONTEXT
   const { 
-    categoryProductsFiltered, 
     REDUCER_ACTIONS_PRODUCT, 
     dispatch: dispatchProduct 
   } = useProducts();
@@ -145,9 +144,7 @@ const useProductsFilterHandler = () => {
 
   // Clear products - to default state: []
   const debouncedClearFilteredProductsHandler = debounce((): void => {
-    if( categoryProductsFiltered === undefined || !categoryProductsFiltered.length ) {
-      dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, payload: { categoryProductsFiltered: [] } });
-    }
+    dispatchProduct({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_CATEGORY_PRODUCTS_FILTERED, payload: { categoryProductsFiltered: [] } });
     dispatchFilter({ type: REDUCER_ACTIONS_FILTER.IS_FILTERING_PRODUCT, payload: { isFilteringProduct: false } });
     if(filterOptions) {
       dispatchFilter({ type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, payload: { filterOptions: resetFilterCheckedState(filterOptions) } });
