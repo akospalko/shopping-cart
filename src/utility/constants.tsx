@@ -58,12 +58,14 @@ export const NAVIGATION_MENU_ITEMS_ACTION = {
 // NavigationMenuProvider.tsx
 export const MODAL_TOGGLE_STATE_INITIALIZER: ModalTypes = {
   MAIN_MENU: false,
-  FILTER_MENU: false
+  FILTER_MENU: false,
+  SIDE_MENU: true
 }
 // NavigationMenuProvider.tsx
 export const enum MODAL_TOGGLE_KEY {
   MAIN_MENU = "MAIN_MENU",
-  FILTER_MENU = "FILTER_MENU"
+  FILTER_MENU = "FILTER_MENU",
+  SIDE_MENU = "SIDE_MENU"
 } 
 
 // Misc

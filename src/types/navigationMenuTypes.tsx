@@ -6,11 +6,14 @@ import { NAVIGATION_MENU_ITEMS_ACTION } from '../utility/constants';
 // NavigationMenuProvider.tsx
 export type ModalTypes = {
   MAIN_MENU: boolean,
-  FILTER_MENU: boolean
+  FILTER_MENU: boolean,
+  SIDE_MENU: boolean
 }
+
 export type UseNavigationMenuContextType = {
   modal: ModalTypes,
   toggleModal: (modalKey: keyof ModalTypes, switchOffAll?: boolean | undefined) => void
+  toggleMenu: (modalKey: keyof ModalTypes) => void
 }
 
 // useGetNavigationItems.tsx

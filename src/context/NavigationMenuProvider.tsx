@@ -12,6 +12,7 @@ export const useNavigationMenuContext = () => {
   const [modal, setModal] = useState<ModalTypes>(MODAL_TOGGLE_STATE_INITIALIZER);
   
   // HANDLER
+  // Toggle menu with fixed position (modal)
   const toggleModal = (
       modalKey: keyof ModalTypes, 
       switchOffAll?: boolean | undefined
@@ -25,13 +26,21 @@ export const useNavigationMenuContext = () => {
     })
   };
 
-  return { modal, toggleModal }
+  // Toggle menu with default behavior 
+  const toggleMenu = (modalKey: keyof ModalTypes) => {
+    setModal((prevModal) => {
+      return { ...prevModal, [modalKey]: !prevModal[modalKey] };
+    })
+  };
+
+  return { modal, toggleModal, toggleMenu }
 }
 
 // ----------CREATE CONTEXT----------
 const initContextState: UseNavigationMenuContextType = {
   modal: MODAL_TOGGLE_STATE_INITIALIZER,
   toggleModal: () => {},
+  toggleMenu: () => {},
 }
 
 const NavigationMenuContext = createContext<UseNavigationMenuContextType>(initContextState);
