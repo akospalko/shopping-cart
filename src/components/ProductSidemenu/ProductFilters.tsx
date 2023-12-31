@@ -1,16 +1,18 @@
 // Product filter ui and logic; Filter by property and/or price
-import { useEffect, useMemo, CSSProperties, ReactElement } from "react";
+import { useMemo, CSSProperties, ReactElement } from "react";
 import PriceFilter from "./PriceFilter";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import useProducts from "../../hooks/useProducts";
 import useFilter from "../../hooks/useFilter";
 import useProductsFilterHandler from "../../hooks/useFilterProductsHandler";
-import useProductFilterOptions from "../../hooks/useCreateProductFilterOptions";
 import { ProductItemType } from "../../types/productsProviderTypes";
 import DividerLine from "../UI/DividerLine";
 import PropertyFilter from "./PropertyFilter";
 import { FilterOptionsType } from "../../types/ProductFilterTypes";
+import { MODAL_TOGGLE_KEY } from "../../utility/constants";
 import { FilterResetIcon, FilterIcon } from "../SVGComponents";
+import useNavigationMenu from "../../hooks/useNavigationMenu";
+
 import textData from "../../data/textData.json";
 import "./ProductFilters.css";
 import "./ProductSidemenu.css";
@@ -18,43 +20,22 @@ import "./ProductSidemenu.css";
 const ProductFilters = () => {
   // CONTEXTS
   const { categoryProducts, categoryProductsFiltered } = useProducts();
-  const { filterOptions, dispatch, REDUCER_ACTIONS_FILTER } = useFilter();
+  const { filterOptions } = useFilter();
+  const { modal } = useNavigationMenu();
+
   // VALUE
   const activeCategoryProducts: ProductItemType[] = useMemo(() => {
     return categoryProducts?.length ? categoryProducts : [];
   }, [categoryProducts]);
 
   // HOOKS
-  const { debouncedFilterProductsHandler, debouncedClearFilteredProductsHandler } = useProductsFilterHandler();
-  const createProductFilterOptions = useProductFilterOptions();
-  const isBelow360Px = useMediaQuery("(max-width: 359px)");
-
-  // EFFECT
-  useEffect(() => {
-    // get and store filterOptionsfrom session storage
-    const getFilterOptions = sessionStorage.getItem("filterOptions");
-    const storedFilterOptions = getFilterOptions ? JSON.parse(getFilterOptions) : null;
-    // check available storage filter options, update reducer state
-    if (storedFilterOptions && Object.keys(storedFilterOptions).length) {
-      dispatch({
-        type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS,
-        payload: { filterOptions: storedFilterOptions },
-      });
-    } else {
-      // if not available, calculate filter options: store in session storage and update reducer state 
-      const calculatedFilterOptions = createProductFilterOptions(activeCategoryProducts);
-      dispatch({
-        type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS,
-        payload: { filterOptions: calculatedFilterOptions },
-      });
-      // store filterOptions in session storage
-      sessionStorage.setItem("filterOptions", JSON.stringify(calculatedFilterOptions));
-    }
-  }, [REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, activeCategoryProducts, createProductFilterOptions, dispatch]);
+  const { debouncedFilterProductsHandler, clearFilteredProductsHandler } = useProductsFilterHandler();
+  const isBelow360Px: boolean = useMediaQuery("(max-width: 359px)");
+  const isBelow1024Px: boolean = useMediaQuery("(min-width: 1024px)");
 
   // STYLE
   const filterButtonWrapperStyle: CSSProperties = { height: "auto", width: "auto" };
-  const isClearFilteredButtonDisabled: boolean = categoryProductsFiltered === undefined || !categoryProductsFiltered.length
+  const isClearFilteredButtonDisabled: boolean = categoryProductsFiltered === undefined || !categoryProductsFiltered.length;
   const iconSize: string = "20px"; 
   const iconColor: string = "var(--color-5)";
   const iconColorDisabled: string = "var(--color-6)";
@@ -64,7 +45,7 @@ const ProductFilters = () => {
     <div className="product-filter__buttons">
       <button 
         className={ isClearFilteredButtonDisabled ? "button--product-filter button--product-filter-disabled" : "button--product-filter" }
-        onClick={ debouncedClearFilteredProductsHandler }
+        onClick={ clearFilteredProductsHandler }
         disabled={ isClearFilteredButtonDisabled }  
       > 
         <FilterResetIcon
@@ -90,47 +71,63 @@ const ProductFilters = () => {
     </div>
   )
   
-    // LAYOUT
-    const isPropertyFilterAvailable: boolean = !!Object.keys(filterOptions as FilterOptionsType).length;
+  // LAYOUT
+  const isPropertyFilterAvailable: boolean = !!Object.keys(filterOptions as FilterOptionsType).length;
+  const filterLayoutVerySmallScreen: ReactElement = (
+    <>
+      <h3 className="product-sidemenu__subtitle"> { textData["filter"] } </h3>
+      { productFilterButtons }
+      <DividerLine style="divider-line--horizontal"/>
+      <PriceFilter categoryProducts={ activeCategoryProducts }/>
+      { isPropertyFilterAvailable && (
+        <>
+          <DividerLine style="divider-line--horizontal"/>
+          <h3 className="product-sidemenu__subtitle"> { textData["property"] } </h3>
+          <PropertyFilter/>
+        </>
+        ) 
+      }
+    </>
+  ) 
 
-    const filterLayoutVerySmallScreen: ReactElement = (
-      <>
-        <h3 className="product-sidemenu__subtitle"> { textData["filter"] } </h3>
-        { productFilterButtons }
-        <DividerLine style="divider-line--horizontal"/>
-        <PriceFilter categoryProducts={ activeCategoryProducts }/>
-        { isPropertyFilterAvailable && (
-          <>
-            <DividerLine style="divider-line--horizontal"/>
-            <h3 className="product-sidemenu__subtitle"> { textData["property"] } </h3>
-            <PropertyFilter/>
-          </>
-          ) 
-        }
-      </>
-    ) 
+  const filterLayoutSmallScreen: ReactElement = (
+    <>
+      <PriceFilter categoryProducts={ activeCategoryProducts }/>
+      { isPropertyFilterAvailable && (
+        <>
+          <DividerLine style="divider-line--horizontal"/>
+          <h3 className="product-sidemenu__subtitle"> { textData["property"] } </h3>
+          <PropertyFilter/>
+        </>
+        ) 
+      }
+      { productFilterButtons }
+    </>
+  ) 
 
-    const filterLayoutSmallScreen: ReactElement = (
-      <>
-        <PriceFilter categoryProducts={ activeCategoryProducts }/>
-        { isPropertyFilterAvailable && (
-          <>
-            <DividerLine style="divider-line--horizontal"/>
-            <h3 className="product-sidemenu__subtitle"> { textData["property"] } </h3>
-            <PropertyFilter/>
-          </>
-          ) 
-        }
-        { productFilterButtons }
-      </>
-    ) 
+  const filterLayoutLargeScreen: ReactElement = (
+    <>
+      <PriceFilter categoryProducts={ activeCategoryProducts }/>
+      { isPropertyFilterAvailable && (
+        <>
+          <DividerLine style="divider-line--horizontal"/>
+          <h3 className="product-sidemenu__subtitle"> { textData["property"] } </h3>
+          { modal[MODAL_TOGGLE_KEY.FILTER_MENU] ? <PropertyFilter/> : null }
+        </>
+        ) 
+      }
+      { productFilterButtons }
+    </>
+  ) 
 
-    let activeLayout;
-    if(isBelow360Px) {
-      activeLayout = filterLayoutVerySmallScreen;
-    } else {
-      activeLayout = filterLayoutSmallScreen;
-    }
+  let activeLayout;
+  if(isBelow360Px) {
+    activeLayout = filterLayoutVerySmallScreen;
+  } else if (isBelow1024Px) {
+    activeLayout = filterLayoutLargeScreen;
+  } else {
+    activeLayout = filterLayoutSmallScreen;
+  }
 
   return (
     <div className="product-filter">

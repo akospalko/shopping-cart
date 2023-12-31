@@ -1,46 +1,55 @@
-// TODO: HANDLE ACTIVE CATEGORY REUDNDANCY
-// store and retrieve (session storage) active filter options -> update filter options
-import { useEffect, useMemo } from "react";
+// Create, store and retrieve (using session storage) active filter options;
+// Update filter options state
+import { useCallback, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { ProductItemType } from "../types/productsProviderTypes";
+import { 
+  FilterOptionsType, 
+  FilterOptionsSessionStorageType, 
+  ActiveFilterOptionsStoredType 
+} from "../types/ProductFilterTypes";
 import useProductFilterOptions from "./useCreateProductFilterOptions";
 import useFilter from "./useFilter";
-import useProducts from "./useProducts";
 
-const useStoreAndRetrieveProductFilters = () => {
-  // CONTEXTS
-  const { categoryProducts } = useProducts();
+const useStoreAndRetrieveProductFilters = (activeCategoryProducts: ProductItemType[] = []) => {
+  // ROUTE
+  const { category } = useParams();
+
+  // CONTEXT
   const { dispatch, REDUCER_ACTIONS_FILTER } = useFilter();
 
-  // MEMO
-  const activeCategoryProducts: ProductItemType[] = useMemo(() => {
-    return categoryProducts?.length ? categoryProducts : [];
-  }, [categoryProducts]);
+  // HOOK
+  const { createProductFilterOptions, restoreFilterOptions } = useProductFilterOptions();
 
-  // HOOKS
-  const createProductFilterOptions = useProductFilterOptions();
+  // HANDLER
+  // Update filter options
+  const updateFilterOptions = useCallback((updatedValue: FilterOptionsType): void => {
+    dispatch({
+      type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS,
+      payload: { filterOptions: updatedValue }
+    });
+  }, [REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, dispatch])
 
   // EFFECT
   useEffect(() => {
-    // get and store filterOptionsfrom session storage
-    const getFilterOptions = sessionStorage.getItem("filterOptions");
-    const storedFilterOptions = getFilterOptions ? JSON.parse(getFilterOptions) : null;
-    // check available storage filter options, update reducer state
-    if (storedFilterOptions && Object.keys(storedFilterOptions).length) {
-      dispatch({
-        type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS,
-        payload: { filterOptions: storedFilterOptions },
-      });
+    if(!activeCategoryProducts.length) return;
+    const calculatedFilterOptions: FilterOptionsType = createProductFilterOptions(activeCategoryProducts);
+    const getSessionStorageFilterOptions: string | null = sessionStorage.getItem("filterOptions");
+    const sessionStorageFilterOptions: FilterOptionsSessionStorageType | null = getSessionStorageFilterOptions
+      ? JSON.parse(getSessionStorageFilterOptions)
+      : null;
+    
+    if(sessionStorageFilterOptions) {
+      if(category !== sessionStorageFilterOptions[0]) {
+        sessionStorage.removeItem("filterOptions")
+      }
+      const retrievedFilterOptions: ActiveFilterOptionsStoredType = sessionStorageFilterOptions[1];       
+      const checkedInFilterOptions = restoreFilterOptions(calculatedFilterOptions, retrievedFilterOptions);
+      updateFilterOptions(checkedInFilterOptions);
     } else {
-      // if not available, calculate filter options: store in session storage and update reducer state 
-      const calculatedFilterOptions = createProductFilterOptions(activeCategoryProducts);
-      dispatch({
-        type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS,
-        payload: { filterOptions: calculatedFilterOptions },
-      });
-      // store filterOptions in session storage
-      sessionStorage.setItem("filterOptions", JSON.stringify(calculatedFilterOptions));
+      updateFilterOptions(calculatedFilterOptions);
     }
-  }, [REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS, activeCategoryProducts, createProductFilterOptions, dispatch]);
+  }, [activeCategoryProducts, category, createProductFilterOptions, restoreFilterOptions, updateFilterOptions]);
 }
 
 export default useStoreAndRetrieveProductFilters; 

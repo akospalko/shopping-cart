@@ -52,14 +52,14 @@ export type FilterGroupPropertiesType = {
 
 // Filter options
 export type DefaultFilterOptionType = {
-  filter: string,
+  filter: string | number,
   count: number,
   isChecked: boolean
 };
 
 export type RangeFilterMinMaxType = [number, number] | [number];
 export type RangeFilterOptionType = {
-  filter: number,
+  filter: string | number,
   displayedFilterName: string,
   count: number,
   isChecked: boolean,
@@ -68,8 +68,11 @@ export type RangeFilterOptionType = {
 };
 
 export type FilterOptionsType = {
-  [ key in GroupKeysType ]: (DefaultFilterOptionType | RangeFilterOptionType)[]
-}
+  [key in GroupKeysType]: (DefaultFilterOptionType | RangeFilterOptionType)[];
+} & { [key: string]: (DefaultFilterOptionType | RangeFilterOptionType)[] };
 
+export type ActiveFilterOptionsStoredType = {
+  [key: string]: (string | number)[]
+} 
 
-
+export type FilterOptionsSessionStorageType = [string, ActiveFilterOptionsStoredType];

@@ -3,17 +3,19 @@
   display: flex;
   width: 100%;
   flex-direction: column;
-  margin-bottom: 50px;
 }
 
 .product-filter__buttons {
-  position: fixed;
+  position: sticky;
   display: grid;
-  grid-template-columns: repeat(2, 85px);
-  grid-template-rows: 50px;
-  gap: 1rem;
-  bottom: 1rem;
-  right: 1rem;
+  grid-template-columns: repeat(2, 100px);
+  grid-template-rows: 40px;
+  gap: 0.5rem;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: end;
 }
 
 .button--product-filter {
@@ -26,7 +28,6 @@
   color: var(--color-5);
   gap: 0.5rem;
   padding: 0.5rem;
-  outline: 1px solid var(--color-2);
 }
 
 .button--product-filter:focus-visible {

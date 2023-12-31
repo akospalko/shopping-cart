@@ -21,12 +21,12 @@ import "./useGetNavigationItems.css";
 export const useGetNavigationItems = (navigationMenuAction: NavigationMenuActionType): ReactElement[] => {
   // ROUTE
   const { category, page }  = useParams();
-
+  
   // CONTEXT
   const { toggleModal } = useNavigationMenu();
   
   // HOOK
-  const { debouncedClearFilteredProductsHandler } = useProductsFilterHandler();
+  const { clearFilteredProductsHandler } = useProductsFilterHandler();
 
   // UTIL
   // Construct active product page route 
@@ -137,7 +137,7 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
         to={ navItem.to }
         onClick={ () => {
           toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, true);
-          debouncedClearFilteredProductsHandler();
+          clearFilteredProductsHandler();
         } }
       > 
         { withIcons && menuIconArray.includes(navItem.icon) ? MENU_ICON[navItem.icon as keyof CategoryIconType] : null }

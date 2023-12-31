@@ -1,11 +1,13 @@
 // Logic to create product filter options for rendering product filter 
 import { useCallback } from "react";
 import { ProductItemType, ProductMergedPropertiesType } from "../types/productsProviderTypes";
-import { RangeFilterMinMaxType, 
+import { 
+  RangeFilterMinMaxType, 
   DefaultFilterOptionType, 
   RangeFilterOptionType, 
   FilterOptionsType, 
-  FilterGroupType 
+  FilterGroupType,
+  ActiveFilterOptionsStoredType,
 } from "../types/ProductFilterTypes";
 import { GroupKeysType } from "../types/productsProviderTypes";
 import { useParams } from "react-router-dom";
@@ -18,7 +20,7 @@ const useProductFilterOptions = () => {
   const { category } = useParams();
 
   // UTILITIES
-  // Get active catgory"s filter groups
+  // Get active catgory's filter groups
   const getActiveFilterGroupProperties = useCallback((category: string | undefined) => {
     let activeGroupInitializer: FilterGroupType[] = [];
     if(!category) return activeGroupInitializer;
@@ -44,7 +46,6 @@ const useProductFilterOptions = () => {
     }
     return activeGroupInitializer;
   }, [])
-
 
   // Function to sort filters by range
   const sortFilterOptionsByRange = (filterOptions: FilterOptionsType) => {
@@ -76,14 +77,13 @@ const useProductFilterOptions = () => {
         );
       }
     });
-    
     return filterOptions; 
   };
 
-// create new filter option
+// Create new filter option
 const handleNewFilter = (
   groupFilters: DefaultFilterOptionType[], 
-  propertyValue: string) => {
+  propertyValue: string): void => {
   groupFilters.push({
     filter: String(propertyValue),
     count: 1,
@@ -91,17 +91,16 @@ const handleNewFilter = (
   });
 }
 
-// create new range filter option
-function handleNewRangeFilter(
+// Create new range filter option
+const handleNewRangeFilter = (
   groupFilters: RangeFilterOptionType[],
   propertyValue: number,
   rangeIdentifier: string,
   displayedFilterName: string,
   minMaxRange: RangeFilterMinMaxType
-) {
+): void => {
   const addedRanges = new Set();
   if (!addedRanges.has(rangeIdentifier)) {
-
     groupFilters.push({
       filter: propertyValue,
       displayedFilterName,
@@ -113,7 +112,46 @@ function handleNewRangeFilter(
     addedRanges.add(rangeIdentifier);
   }
 }
- 
+
+// Create active filter options array stored in session storage
+const createActiveFilterOptionsSnapshot = (filterOptions: FilterOptionsType): ActiveFilterOptionsStoredType => {
+  const activeFilterOptions: ActiveFilterOptionsStoredType = {};
+  for (const [option, items] of Object.entries(filterOptions)) {
+    const selectedItems: (string | number)[] = items
+      .filter(item => item.isChecked)
+      .map(item => item.filter);
+    if (selectedItems.length > 0) {
+      activeFilterOptions[option] = selectedItems;
+    }
+  }
+  return activeFilterOptions;
+}
+
+// Restore filter options check state after reload or retoggle side / nav menu
+const restoreFilterOptions = useCallback(
+  ( filterOptions: FilterOptionsType, 
+    sessionStorageFilterOptions: ActiveFilterOptionsStoredType
+  ): FilterOptionsType => {
+  const updatedFilterOptions: FilterOptionsType = JSON.parse(JSON.stringify(filterOptions));
+
+  for (const option in sessionStorageFilterOptions) {
+    const selectedValues = sessionStorageFilterOptions[option];
+
+    if (Array.isArray(selectedValues) && option in updatedFilterOptions) {
+      const filters: (DefaultFilterOptionType | RangeFilterOptionType)[] = updatedFilterOptions[option];
+
+      for (const filter of filters) {
+        const filterValue = filter["filter"];
+
+        if (selectedValues.includes(filterValue)) {
+          filter["isChecked"] = true;
+        }
+      }
+    }
+  }
+  return updatedFilterOptions;
+}, [])
+
 // Function to generate filter options data structure
 const createProductFilterOptions = useCallback(( products: ProductItemType[]): FilterOptionsType => { 
   const filterOptions: FilterOptionsType = {} as FilterOptionsType;
@@ -128,13 +166,13 @@ const createProductFilterOptions = useCallback(( products: ProductItemType[]): F
         ? product.properties[group as keyof ProductMergedPropertiesType]
         : undefined;
       
-      // if the filter group doesn"t exist, create an empty array for it
+      // if the filter group doesn't exist, create an empty array for it
       if (!filterOptions[group]) {
         filterOptions[group] = [];
       }
 
-      // check if there"s an existing filter with the same value
-      const existingFilter = filterOptions[group].find(
+      // check if there's an existing filter with the same value
+      const existingFilter: RangeFilterOptionType | DefaultFilterOptionType | undefined = filterOptions[group].find(
         (filter) => filter.filter === propertyValue
       );
 
@@ -149,7 +187,7 @@ const createProductFilterOptions = useCallback(( products: ProductItemType[]): F
         // loop through each range in the property
         range.ranges.forEach(([ minValue, maxValue ]) => {
           // create a unique identifier for the range
-          const rangeIdentifier = `${ minValue }-${ maxValue || "" }${ range.unit }`;
+          const rangeIdentifier: string = `${ minValue }-${ maxValue || "" }${ range.unit }`;
           
           // check if there"s an existing range filter with the same identifier
           if (
@@ -158,15 +196,14 @@ const createProductFilterOptions = useCallback(( products: ProductItemType[]): F
             (!maxValue || propertyValue <= maxValue)
           ) {
               // check if there"s an existing range filter with the same identifier
-              const existingRangeFilter = filterOptions[group]?.find((filter) => {
+              const existingRangeFilter: DefaultFilterOptionType | RangeFilterOptionType | undefined = filterOptions[group]?.find((filter) => {
               if ("range" in filter) {
-                // TypeScript now knows that "filter" has a "range" property
                 return filter.range === rangeIdentifier;
               }
               return false;
             });
 
-            // if there"s an existing range filter, increment its count
+            // if there's an existing range filter, increment its count
             // otherwise, create a new range filter using the handleNewRangeFilter function
             if (existingRangeFilter) {
               existingRangeFilter.count++;
@@ -187,19 +224,18 @@ const createProductFilterOptions = useCallback(( products: ProductItemType[]): F
         });
       } else {
         const defaultFiltersArray = filterOptions[group] as DefaultFilterOptionType[];  
-        // if there"s no range, create a new filter using the handleNewFilter function
+        // if there's no range, create a new filter using the handleNewFilter function
         if (propertyValue !== undefined) {
           handleNewFilter(defaultFiltersArray, String(propertyValue));
         }
       }
     });
   });
-
   // sort the filter options by range using the sortFilterOptionsByRange function
   return sortFilterOptionsByRange(filterOptions);
   }, [category, getActiveFilterGroupProperties]);
 
-  return createProductFilterOptions;
+  return { createProductFilterOptions, createActiveFilterOptionsSnapshot, restoreFilterOptions };
 };
 
 export default useProductFilterOptions;

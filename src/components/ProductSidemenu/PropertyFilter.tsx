@@ -1,16 +1,18 @@
 // Sidebar component that displays grouped checkbox logic for product property filtering 
 import { ChangeEvent } from "react";
-import Checkbox from "../UI/Checkbox";
+import { useParams } from "react-router-dom";
 import useFilter from "../../hooks/useFilter";
+import useToggleDropdownMenu from "../../hooks/useToggleDropdownMenu";
+import useProductFilterOptions from "../../hooks/useCreateProductFilterOptions";
 import { GroupKeysType } from "../../types/productsProviderTypes";
 import { 
   FilterOptionsType,
   DefaultFilterOptionType, 
-  RangeFilterOptionType
+  RangeFilterOptionType,
+  ActiveFilterOptionsStoredType,
 } from "../../types/ProductFilterTypes";
-import useToggleDropdownMenu from "../../hooks/useToggleDropdownMenu";
-import { useParams } from "react-router-dom";
 import { ArrowIcon } from "../SVGComponents";
+import Checkbox from "../UI/Checkbox";
 import GroupHeaderInfoTooltip from "../UI/GroupHeaderInfoTooltip";
 import { PRODUCT_GROUP_TOOLTIP_DATA } from "../../data/tooltipDataConstant";
 import "./PropertyFilter.css";
@@ -28,13 +30,14 @@ const PropertyFilter = () => {
 
   // HOOK
   const { isOpen, toggleDropdownHandler } = useToggleDropdownMenu();
-  
+  const { createActiveFilterOptionsSnapshot } = useProductFilterOptions();
+
   // HANDLER
   const handleCheckboxChange = (
     e: CheckboxChangeHandlerEventType,
     checkboxName: string | number,
     groupName: GroupKeysType
-  ) => {
+  ): void => {
     // create a deep copy of the state
     const updatedFilterOptionsValue: FilterOptionsType = JSON.parse(JSON.stringify(filterOptions));
   
@@ -42,7 +45,7 @@ const PropertyFilter = () => {
     const checkboxGroup: (DefaultFilterOptionType | RangeFilterOptionType)[] =
       updatedFilterOptionsValue[groupName];
   
-    const updatedCheckbox = checkboxGroup.find(
+    const updatedCheckbox: DefaultFilterOptionType | RangeFilterOptionType | undefined = checkboxGroup.find(
       (checkbox) => String(checkbox.filter) === checkboxName
     );
     
@@ -53,14 +56,17 @@ const PropertyFilter = () => {
         type: REDUCER_ACTIONS_FILTER.UPDATE_FILTER_OPTIONS,
         payload: { filterOptions: updatedFilterOptionsValue },
       });
+      
       // Store filterOptions in session storage
-      sessionStorage.setItem("filterOptions", JSON.stringify(updatedFilterOptionsValue));
+      const sessionStorageFilterOptions: ActiveFilterOptionsStoredType = createActiveFilterOptionsSnapshot(updatedFilterOptionsValue);
+      const storedFilterOptions: string = JSON.stringify([category, sessionStorageFilterOptions]);
+      sessionStorage.setItem("filterOptions", storedFilterOptions);
     }
   };
 
   // STYLE
-  const ArrowIconSize = "12px";
-  const ArrowIconColor = "var(--color-2)";
+  const ArrowIconSize: string = "12px";
+  const ArrowIconColor: string = "var(--color-2)";
  
   // JSX
   const getToggleGroupKey = (group: string, category: string=""): string => `${ group } ${ category }`
@@ -71,7 +77,7 @@ const PropertyFilter = () => {
       .keys(filterOptions)
       ?.map((group: string) => {
 
-        const toggleGroupKey = getToggleGroupKey(group, category)
+        const toggleGroupKey: string = getToggleGroupKey(group, category)
         const groupCheckboxArray: (DefaultFilterOptionType | RangeFilterOptionType)[] = filterOptions[group as GroupKeysType];
         
         return (
@@ -88,7 +94,7 @@ const PropertyFilter = () => {
               />}
               <button 
                 className="button--property-filter-group-toggler"
-                onClick={ () => toggleDropdownHandler(toggleGroupKey)}
+                onClick={ () => toggleDropdownHandler(toggleGroupKey) }
               > 
                 { !isOpen[toggleGroupKey] ? 
                   <ArrowIcon width={ ArrowIconSize } height={ ArrowIconSize } fill={ ArrowIconColor } wrapperCustomStyle={ { "transform": "rotate(90deg)" } }/>
@@ -107,7 +113,7 @@ const PropertyFilter = () => {
                     label={
                       "displayedFilterName" in checkbox
                       ? checkbox.displayedFilterName
-                      : checkbox.filter
+                      : String(checkbox.filter) || ""
                     }
                     isChecked={ checkbox.isChecked }
                     onChange={ (e: CheckboxChangeHandlerEventType) => handleCheckboxChange(e, String(checkbox.filter), group as GroupKeysType) }
