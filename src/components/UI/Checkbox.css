@@ -16,3 +16,7 @@
   outline: 2px solid var(--color-2);
   outline-offset: 1px;
 }
+
+.checkbox__label {
+  font-size: 0.9rem;
+}
