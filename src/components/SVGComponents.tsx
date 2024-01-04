@@ -368,3 +368,35 @@ export function FilterResetIcon({ width, height, stroke, wrapperCustomStyle }: I
     </IconWrapper>
   );
 }
+
+// Options icon
+export function OptionsIcon({ width, height, stroke, wrapperCustomStyle }: IconComponentType): ReactElement | ReactElement[] {
+  return (
+    <IconWrapper wrapperCustomStyle={ wrapperCustomStyle }>
+      <svg 
+        width={ width || "100%" }
+        height={ height || "100%" }
+        xmlns="http://www.w3.org/2000/svg" 
+        viewBox="0 0 512 512"
+      >
+        <g
+          fill="none"
+          stroke={ stroke || "#000" }
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="32"
+        >
+          <path d="M368 128L448 128"></path>
+          <path d="M64 128L304 128"></path>
+          <path d="M368 384L448 384"></path>
+          <path d="M64 384L304 384"></path>
+          <path d="M208 256L448 256"></path>
+          <path d="M64 256L144 256"></path>
+          <circle cx="336" cy="128" r="32"></circle>
+          <circle cx="176" cy="256" r="32"></circle>
+          <circle cx="336" cy="384" r="32"></circle>
+        </g>
+      </svg>
+    </IconWrapper>
+  );
+}
