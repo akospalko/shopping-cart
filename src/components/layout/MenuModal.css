@@ -1,0 +1,125 @@
+.menu-modal__backdrop { 
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  height: 100vh;
+  height: 100svh;
+  width: 100%;
+  z-index: var(--z-10);
+  background-color: var(--color-1__50);
+  transition: 200ms opacity ease;
+}
+
+.menu-modal__modal {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  width: 90%;
+  max-width: 450px;
+  display: flex;
+  z-index: var(--z-10);
+}
+
+/* Modal content */
+.menu-modal__modal-content {
+  position: relative;
+  display: flex;
+  overflow-y: scroll;
+  z-index: var(--z-10);
+  background-color: var(--color-4);
+  width: 100%;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+/* Close menu button wrapper */
+.menu-modal__close-button-wrapper--small-to-large {
+  height: 100vh;
+  height: 100svh;
+  background-color: transparent;
+}
+
+/* Close button */
+.button--close-menu-modal { 
+  width: 40px;
+  height: 40px;
+  margin-bottom: auto;
+  background-color: var(--color-3);
+}
+
+.button--close-menu-modal-small-to-large { 
+  margin: 0 auto;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+/* Scroll bar*/
+.menu-modal__modal-content::-webkit-scrollbar-track {
+	background-color: var(--color-1__20);
+}
+
+.menu-modal__modal-content::-webkit-scrollbar {
+	width: 6px;
+}
+
+.menu-modal__modal-content::-webkit-scrollbar-thumb {
+	background-color: var(--color-2);
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 359px) {
+  .menu-modal__very-small {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-4);
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 1rem;
+    z-index: var(--z-10);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;      
+    width: 100%;
+  }
+
+  /* Modal content */
+  .menu-modal__modal-content--very-small {
+    width: 360px;
+  }
+
+  /* Close menu button wrapper */
+  .menu-modal__close-button-wrapper--very-small {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+  }
+
+  /* Close button */
+  .button--close-menu-modal-very-small { 
+    margin: 0;
+    border-radius: var(--border-radius);
+  }
+
+  /* Scroll bar*/
+  .menu-modal__very-small::-webkit-scrollbar-track {
+    background-color: var(--color-1__20);
+  }
+
+  .menu-modal__very-small::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+
+  .menu-modal__very-small::-webkit-scrollbar-thumb {
+    background-color: var(--color-2);
+  }
+
+  .menu-modal__very-small::-webkit-scrollbar-corner {
+    background-color: var(--color-1__20);
+  }
+}
