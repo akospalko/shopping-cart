@@ -8,9 +8,7 @@ type DividerLinePropsType = {
 
 const DividerLine = ({ style }: DividerLinePropsType) => {
   return (
-    <div 
-      className={`divider-line ${ style }`}>
-    </div>
+    <div className={`divider-line ${ style }`}> &nbsp; </div>
   )
 }
 
