@@ -6,15 +6,15 @@ import { ProductItemType } from "../types/productsProviderTypes";
 import Pagination from "./Pagination";
 import ProductList from "./ProductList";
 import ProductSidemenu from "./ProductSidemenu/ProductSidemenu";
-import useProducts from "../hooks/useProducts";
 import DividerLine from "./UI/DividerLine";
 import ProductSortDropdown from "./UI/ProductSortDropdown";
 import paginateProducts from "../utility/paginateProducts";
 import { validatePageParam } from "../utility/validatePageParam";
+import useProducts from "../hooks/useProducts";
 import { MODAL_TOGGLE_KEY, PRODUCT_CATEGORY, SORT_OPTION_VALUE, itemsPerPage} from "../utility/constants";
 import { sortBy } from "../utility/sortProduct";
-import useFilter from "../hooks/useFilter";
 import { FilterResetIcon, OptionsIcon } from "./SVGComponents";
+import useFilter from "../hooks/useFilter";
 import useNavigationMenu from "../hooks/useNavigationMenu";
 import useProductsFilterHandler from "../hooks/useFilterProductsHandler";
 import useMediaQuery from "../hooks/useMediaQuery";
@@ -22,7 +22,6 @@ import textData from "../data/textData.json";
 import productCategoriesData from "../data/productCategoriesData.json";
 import "./ProductPage.css";
 import "./styleSheets/cssTransition.css";
-
 
 // COMPONENT
 const ProductPage = () => {
@@ -43,10 +42,9 @@ const ProductPage = () => {
     REDUCER_ACTIONS_PRODUCT } = useProducts();
 
   // HOOKS
-  const { modal } = useNavigationMenu();
+  const { modal, toggleModal, toggleMenu } = useNavigationMenu();
   const { isFilteringProduct, activeSortOption } = useFilter();
   const { clearFilteredProductsHandler } = useProductsFilterHandler();
-  const { toggleModal, toggleMenu } = useNavigationMenu();
   const isLargeView = useMediaQuery("(min-width: 1024px)");
 
   // DATA
@@ -186,7 +184,7 @@ const ProductPage = () => {
       <CSSTransition
         in={ isLargeView && modal.SIDE_MENU }
         nodeRef={ slideMenuRef }
-        timeout={ 300 }
+        timeout={ 200 }
         classNames="slide-left-to-right"
         unmountOnExit
       >

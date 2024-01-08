@@ -42,14 +42,12 @@ const ProductSearchPage = () => {
   // ELEMENTS
   // Display products search - found product
   const productFound: ReactElement | ReactElement[] = (
-    <div className="product-page__wrapper">
-      <div className="product-page__content">
-        <h1 className="product-page__header--1"> { textData["title-search-result"] } </h1>
-        { !!filteredProducts?.length && <DividerLine/> }
-        { !!filteredProducts?.length && <ProductSortDropdown/> }
-        <ProductList productsData={ paginatedProducts ?? [] }/>
-        { totalPages > 1 && <Pagination totalPages={ totalPages } pageURLParams={ { category: "search", page: pageNumber } } /> }
-      </div>
+    <div className="product-page__content">
+      <h1 className="product-page__header--1"> { textData["title-search-result"] } </h1>
+      { !!filteredProducts?.length && <DividerLine style="divider-line--horizontal"/> }
+      { !!filteredProducts?.length && <ProductSortDropdown/> }
+      <ProductList productsData={ paginatedProducts ?? [] }/>
+      { totalPages > 1 && <Pagination totalPages={ totalPages } pageURLParams={ { category: "search", page: pageNumber } } /> }
     </div>
   )
 
