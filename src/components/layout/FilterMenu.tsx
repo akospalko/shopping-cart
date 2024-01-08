@@ -1,144 +1,109 @@
-// Menu modal for product filtering
-import { useMemo, ReactElement, CSSProperties } from 'react';
-import useNavigationMenu from "../../hooks/useNavigationMenu";
-import { MODAL_TOGGLE_KEY } from "../../utility/constants";
+// Product filtering menu modal for small to medium screens
+import { ReactElement, useRef } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import useMediaQuery from "../../hooks/useMediaQuery";
 import useFilter from "../../hooks/useFilter";
+import useMemoizedActiveCategoryProducts from '../../hooks/useMemoizedActiveCategoryProducts';
+import { useGetNavigationItems } from '../../hooks/useGetNavigationItems';
 import useStoreAndRetrieveProductFilters from "../../hooks/useStoreAndRetrieveProductFilters";
 import PriceFilter from "../ProductSidemenu/PriceFilter";
-import useProductsFilterHandler from "../../hooks/useFilterProductsHandler";
-import DividerLine from "../UI/DividerLine";
 import PropertyFilter from "../ProductSidemenu/PropertyFilter";
 import { FilterOptionsType } from "../../types/ProductFilterTypes";
-import { FilterResetIcon, FilterIcon, RemoveIcon } from "../SVGComponents";
-import useProducts from '../../hooks/useProducts';
-import { ProductItemType } from '../../types/productsProviderTypes';
+import DividerLine from "../UI/DividerLine";
+import ProductFilterButtons from '../UI/ProductFilterButtons';
+import FilterMenuSectionHeader from '../UI/FilterMenuSectionHeader';
+import { MODAL_TOGGLE_KEY, NAVIGATION_MENU_ITEMS_ACTION } from '../../utility/constants';
+import MenuModal from './MenuModal';
+import useNavigationMenu from '../../hooks/useNavigationMenu';
 import textData from "../../data/textData.json";
-
-// TODO: HANDLE STYLE LOCATION
-import "./FilterMenu.css";
-import "../ProductSidemenu/ProductFilters.css"
-import "../ProductSidemenu/ProductSidemenu.css"
-// import "./ProductFilters.css";
-// import "./ProductSidemenu.css";
+import "../styleSheets/cssTransition.css";
 
 const FilterMenu = () => {
-  // CONTEXT
-  const { toggleModal } = useNavigationMenu();
-  const { filterOptions } = useFilter();
-  const { categoryProducts, categoryProductsFiltered } = useProducts();
+  // REF
+  const slideMenuRef = useRef<HTMLDivElement | null>(null);
 
-  // MEMO
-  const activeCategoryProducts: ProductItemType[] = useMemo(() => {
-    return categoryProducts?.length ? categoryProducts : [];
-  }, [categoryProducts]);
+  // CONTEXT
+  const { filterOptions } = useFilter();
+  const { modal } = useNavigationMenu();
 
   // HOOKS
-  const { debouncedFilterProductsHandler, debouncedClearFilteredProductsHandler } = useProductsFilterHandler();
   const isBelow360px = useMediaQuery("(max-width: 359px)");
   const isBelow1024px = useMediaQuery("(min-width: 360px) and (max-width: 1023px)");
+  const activeCategoryProducts = useMemoizedActiveCategoryProducts();
   useStoreAndRetrieveProductFilters(activeCategoryProducts);
+  const navigationProductCategoryItems = useGetNavigationItems(NAVIGATION_MENU_ITEMS_ACTION.FILTER_MENU_PRODUCT_CATEGORIES);
 
-  // STYLE
-  const filterButtonWrapperStyle: CSSProperties = { height: "auto", width: "auto" };
-  const isClearFilteredButtonDisabled: boolean = categoryProductsFiltered === undefined || !categoryProductsFiltered.length
-  const iconSize: string = "20px"; 
-  const iconColor: string = "var(--color-5)";
-  const iconColorDisabled: string = "var(--color-6)";
-
-  // JSX
-  // Buttons
-  const productFilterButtons: ReactElement = (
-    <div className="product-filter__buttons">
-      <button 
-        className={ isClearFilteredButtonDisabled ? "button--product-filter button--product-filter-disabled" : "button--product-filter" }
-        onClick={ debouncedClearFilteredProductsHandler }
-        disabled={ isClearFilteredButtonDisabled }  
-      > 
-        <FilterResetIcon
-          wrapperCustomStyle={ filterButtonWrapperStyle }
-          width={ iconSize }
-          height={ iconSize }
-          stroke={ isClearFilteredButtonDisabled ? iconColorDisabled : iconColor}
-        />
-        <span> { textData["reset-filters"] } </span>
-      </button>
-      <button 
-        className="button--product-filter"
-        onClick={ () => debouncedFilterProductsHandler(activeCategoryProducts) }
-      >    
-        <FilterIcon
-          wrapperCustomStyle={ filterButtonWrapperStyle }
-          width={ iconSize }
-          height={ iconSize }
-          stroke={ iconColor }
-        />
-        <span> { textData["filter"] } </span>
-      </button>
-    </div>
-  )
-    
-  const closeFilterMenuButton = (
-    <div className="filter-menu__close-button-wrapper">
-      <button 
-        className="button--close-filter-menu"
-        onClick={ () => toggleModal(MODAL_TOGGLE_KEY.FILTER_MENU, true) }
-      > 
-        <RemoveIcon 
-          width={ iconSize }
-          height={ iconSize }
-          fill={ iconColor }
-          stroke={ iconColor }
-        />
-      </button>
-    </div>
-  )
-    
-  // Displayed content
+  // UTIL
   const isPropertyFilterAvailable: boolean = !!Object.keys(filterOptions as FilterOptionsType).length;
+  
+  // JSX
+  // Product categories
+  const navigationProductCategory: ReactElement  = (
+    <nav className="navigation-menu__product-category-container">
+      { navigationProductCategoryItems }
+    </nav>
+  )
 
-  // for very small screen
+  // Modal - very small screen (w: <360)
   const filterLayoutVerySmallScreen: ReactElement = (
-    <div className="filter-menu__backdrop">
-      <div className="filter-menu__modal">
-        <div className="product-filter">
-          <h3 className="product-sidemenu__subtitle"> { textData["filter"] } </h3>
-        { productFilterButtons }
-          <DividerLine style="divider-line--horizontal"/>
-          <PriceFilter categoryProducts={ activeCategoryProducts }/>
-          { isPropertyFilterAvailable && (
+    <CSSTransition
+      in={ modal[MODAL_TOGGLE_KEY.FILTER_MENU] }
+      nodeRef={ slideMenuRef }
+      timeout={ 200 }
+      classNames="slide-left-to-right"
+      unmountOnExit
+    >
+      <MenuModal 
+        toggleModalKey={ MODAL_TOGGLE_KEY.FILTER_MENU }
+        ref={ slideMenuRef }
+      >
+        <FilterMenuSectionHeader textContent={ textData["filter"] }/>
+        <ProductFilterButtons/>
+        <DividerLine style="divider-line--horizontal"/>
+        <FilterMenuSectionHeader textContent={ textData["product-categories"] }/>
+        { navigationProductCategory }
+        <DividerLine style="divider-line--horizontal"/>
+        <PriceFilter categoryProducts={ activeCategoryProducts }/>
+        { isPropertyFilterAvailable && (
             <>
               <DividerLine style="divider-line--horizontal"/>
-              <h3 className="product-sidemenu__subtitle"> { textData["property"] } </h3>
+              <FilterMenuSectionHeader textContent={ textData["property"] }/>
               <PropertyFilter/>
             </>
-            ) 
-          }
-        </div>
-      </div>
-      { closeFilterMenuButton }
-    </div>
+          ) 
+        }
+      </MenuModal>
+    </CSSTransition>
   ) 
 
-  // for small to medium screens
+  // Modal - small and medium screens (w: 360px - 1023px)
   const filterLayoutSmallScreen: ReactElement = (
-    <div className="filter-menu__backdrop">
-      <div className="filter-menu__modal">
-        <div className="product-filter">
-          <PriceFilter categoryProducts={ activeCategoryProducts }/>
-          { isPropertyFilterAvailable && (
+    <CSSTransition
+      in={ modal[MODAL_TOGGLE_KEY.FILTER_MENU] }
+      nodeRef={ slideMenuRef }
+      timeout={ 200 }
+      classNames="slide-left-to-right"
+      unmountOnExit
+    >
+      <MenuModal 
+        toggleModalKey={ MODAL_TOGGLE_KEY.FILTER_MENU }
+        ref={ slideMenuRef }
+      >
+        <FilterMenuSectionHeader textContent={ textData["product-categories"] }/>
+        { navigationProductCategory }
+        <DividerLine style="divider-line--horizontal"/>
+        <PriceFilter categoryProducts={ activeCategoryProducts }/>
+        { isPropertyFilterAvailable && (
             <>
               <DividerLine style="divider-line--horizontal"/>
-              <h3 className="product-sidemenu__subtitle"> { textData["property"] } </h3>
+              <FilterMenuSectionHeader textContent={ textData["property"] } />
               <PropertyFilter/>
             </>
-            ) 
-          }
-        </div>
-        { productFilterButtons }
-      </div>
-      { closeFilterMenuButton }
-    </div> 
+          ) 
+        }
+        <ProductFilterButtons/>
+      </MenuModal>
+    </CSSTransition>
   )
 
   // LAYOUT
@@ -150,11 +115,7 @@ const FilterMenu = () => {
     activeLayout = filterLayoutSmallScreen;
   }
 
-  return (
-    <>
-      { activeLayout }
-    </>
-  )
+  return activeLayout;
 }
 
 export default FilterMenu;
