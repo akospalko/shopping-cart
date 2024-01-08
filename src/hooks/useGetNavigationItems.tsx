@@ -1,5 +1,4 @@
 // Get and return navigation menu items as mapped jsx
-// TODO: Navigation bar
 import { ReactElement } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { RemoveIcon } from "../components/SVGComponents";
@@ -14,6 +13,7 @@ import {
   CategoryIconType,
   ItemStylesType
 } from "../types/navigationMenuTypes";
+import useMediaQuery from "./useMediaQuery";
 import productCategoriesData from "../data/productCategoriesData.json";
 import textData from "../data/textData.json";
 import "./useGetNavigationItems.css";
@@ -27,6 +27,7 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
   
   // HOOK
   const { clearFilteredProductsHandler } = useProductsFilterHandler();
+  const isSmallView = useMediaQuery("(max-width: 1024px)"); // small screens check for modals 
 
   // UTIL
   // Construct active product page route 
@@ -57,15 +58,15 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
   const productCategoriesInitializer: NavigationMenuDataType[] = productCategoriesData.map(
     (item: NavigationMenuProductCategoriesDataType) => {
       const { category, ...restItems } = item; // remove category entries from new array
-        return {
-          ...restItems,
-          to: getProductPageLink(category, page)
-        };
-      }
+      return {
+        ...restItems,
+        to: getProductPageLink(category, page)
+      };
+    }
   );
 
   // Icons initializer
-  const iconSize = "25px";
+  const iconSize: string = "25px";
   const MENU_ICON: CategoryIconType = {
     // Main menu
     HomeIcon: <RemoveIcon width={ iconSize } height={ iconSize }/>,  
@@ -89,30 +90,52 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
       to: "",
     }
   ]
+
   const itemStyles: ItemStylesType = {
     navLinkStyle: "",
     navLinkStyleActive: "",
-    navLinkLabel: ""
+    navLinkLabel: "",
   }
   let withIcons: boolean = false;
+  const closeOnClick: boolean = true;
+  let toggler: () => void = () => {};
 
-  // Switch
+  // Get active navigation item apply style
   switch(navigationMenuAction) {
-    case NAVIGATION_MENU_ITEMS_ACTION.PRODUCT_CATEGORY: 
+    case NAVIGATION_MENU_ITEMS_ACTION.MAIN_MENU_PRODUCT_CATEGORIES:
+      dataInitializerArray = productCategoriesInitializer || [];
+      itemStyles.navLinkStyle = "navigation-item__product-category";
+      itemStyles.navLinkStyleActive = "navigation-item__product-category--active";
+      itemStyles.navLinkLabel = "navigation-item__product-category-label";
+      withIcons = true;
+      if (isSmallView) {
+        toggler = () => toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, closeOnClick);
+      }
+      break;
+    case NAVIGATION_MENU_ITEMS_ACTION.FILTER_MENU_PRODUCT_CATEGORIES:
       dataInitializerArray = productCategoriesInitializer || []; 
       itemStyles.navLinkStyle = "navigation-item__product-category";
       itemStyles.navLinkStyleActive = "navigation-item__product-category--active";
       itemStyles.navLinkLabel = "navigation-item__product-category-label";
       withIcons = true;
       break;
-    case NAVIGATION_MENU_ITEMS_ACTION.MAIN_MENU: 
+    case NAVIGATION_MENU_ITEMS_ACTION.SIDEMENU_PRODUCT_CATEGORIES:
+      dataInitializerArray = productCategoriesInitializer || []; 
+      itemStyles.navLinkStyle = "navigation-item__product-category";
+      itemStyles.navLinkStyleActive = "navigation-item__product-category--active";
+      itemStyles.navLinkLabel = "navigation-item__product-category-label";
+      withIcons = true;
+      toggler = () => toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, closeOnClick);
+      break;
+    case NAVIGATION_MENU_ITEMS_ACTION.MAIN_MENU_NAVIGATION: 
       dataInitializerArray = navigationMenuInitializerData || [];
       itemStyles.navLinkStyle = "navigation-item__main-menu";
       itemStyles.navLinkStyleActive = "navigation-item__main-menu--active";
       itemStyles.navLinkLabel = "navigation-item__main-menu-label";
       withIcons = true;
+      toggler = () => toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, closeOnClick);
       break;
-    case NAVIGATION_MENU_ITEMS_ACTION.MAIN_BAR: 
+    case NAVIGATION_MENU_ITEMS_ACTION.MAIN_BAR_NAVIGATION: 
       dataInitializerArray = navigationMenuInitializerData || [];
       itemStyles.navLinkStyle = "navigation-item__main-bar";
       itemStyles.navLinkStyleActive = "navigation-item__main-bar--active";
@@ -121,30 +144,27 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
     default: 
       throw new Error(textData["error-missing-active-navigation"]);
   }
-
+  
   // JSX
   const getNavigationItems = (navigationData: NavigationMenuDataType[])  => (
     navigationData.map((navItem, i: number): ReactElement => (
       <NavLink 
         key={ i } 
         className={ 
-          ({ isActive }) => 
-            `${ itemStyles.navLinkStyle } 
-            ${ isActive 
-            ? itemStyles.navLinkStyleActive 
-            : "" }` 
+          ({ isActive }) => `${ itemStyles.navLinkStyle } ${ isActive ? itemStyles.navLinkStyleActive : "" }` 
         }
         to={ navItem.to }
-        onClick={ () => {
-          toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, true);
-          clearFilteredProductsHandler();
-        } }
+        onClick={ 
+          () => {
+            toggler && toggler();
+            clearFilteredProductsHandler();
+          } 
+        }
       > 
         { withIcons && menuIconArray.includes(navItem.icon) ? MENU_ICON[navItem.icon as keyof CategoryIconType] : null }
         <span className={ itemStyles.navLinkLabel }>{ navItem.name }</span>
       </NavLink>
     ))  
   )
-
   return getNavigationItems(dataInitializerArray);
 }
