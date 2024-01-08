@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import useProducts from '../hooks/useProducts';
 import ProductViewHeader from './ProductViewNavigation';
 import { ProductItemType } from '../types/productsProviderTypes';
+import { ProductMergedPropertiesType } from '../types/productsProviderTypes';
 import AboutTab from './AboutTab';
 import CharacteristicsTab from './CharacteristicsTab';
 import { PRODUCT_VIEW_TAB } from '../utility/constants';
@@ -26,9 +27,10 @@ const activeProductInitializer: ProductItemType = {
   retailer: '',
   calculatedRatingAvg: 0,
   review: [],
-  properties: undefined
+  properties: {} as ProductMergedPropertiesType
 }
 
+// product-view
 const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
   // ROUTE
   const { product } = useParams();
