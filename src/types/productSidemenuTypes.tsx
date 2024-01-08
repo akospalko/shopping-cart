@@ -1,7 +1,4 @@
-import {ReactElement} from 'react';
-
-// ProductSidemenu & ProductCategory 
-export type ProductsSidemenuPropsType = { activeCategory: string }
+import { ReactElement } from 'react';
 
 // ProductCategory
 // category item type
