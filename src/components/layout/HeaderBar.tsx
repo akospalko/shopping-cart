@@ -3,12 +3,13 @@ import SearchBar from "../UI/SearchBar";
 import { NAVIGATION_MENU_ITEMS_ACTION } from "../../utility/constants";
 import { useGetNavigationItems } from "../../hooks/useGetNavigationItems";
 import { HeaderLogo, MenuTogglerButton, ProductInCartCounter } from "./HeaderComponents";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import "./HeaderBar.css";
 
 const HeaderBar = () => {
   // HOOKS
-  const navigationBarItems = useGetNavigationItems(NAVIGATION_MENU_ITEMS_ACTION.MAIN_BAR);
-
+  const navigationBarItems = useGetNavigationItems(NAVIGATION_MENU_ITEMS_ACTION.MAIN_BAR_NAVIGATION);
+  const isLargeScreen: boolean = useMediaQuery("min-width: 1024px");
   // JSX
   // Navigation items
   const navigationItems = (
@@ -27,7 +28,7 @@ const HeaderBar = () => {
   return (
     <header className="header-bar">
       <div className="group-left">
-        <MenuTogglerButton style="button--sidemenu-toggler"/>
+        { isLargeScreen && <MenuTogglerButton style="button--sidemenu-toggler"/> }
         <HeaderLogo style="header-bar__logo"/>
       </div>
       <div className="group-center">
