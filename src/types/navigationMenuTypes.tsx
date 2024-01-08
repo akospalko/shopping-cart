@@ -12,6 +12,7 @@ export type ModalTypes = {
 
 export type UseNavigationMenuContextType = {
   modal: ModalTypes,
+  isClosing: boolean,
   toggleModal: (modalKey: keyof ModalTypes, switchOffAll?: boolean | undefined) => void
   toggleMenu: (modalKey: keyof ModalTypes) => void
 }

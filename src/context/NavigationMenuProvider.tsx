@@ -10,15 +10,19 @@ import { ModalTypes } from "../types/navigationMenuTypes";
 export const useNavigationMenuContext = () => {
   // STATE
   const [modal, setModal] = useState<ModalTypes>(MODAL_TOGGLE_STATE_INITIALIZER);
-  
+  const [isClosing, setIsClosing] = useState<boolean>(false);
+
   // HANDLER
-  // Toggle menu with fixed position (modal)
+  // Toggle menu and lock scroll for fixed position modals
   const toggleModal = (
       modalKey: keyof ModalTypes, 
       switchOffAll?: boolean | undefined
     ) => {
+      if (isClosing) return; // prevents rerun toggle functionality while modal is not closed completely
+      setIsClosing(true);
       setModal((prevModal) => {
       modalScrollLock(prevModal[modalKey]); // toggle scrolling
+      setTimeout(() => {  setIsClosing(false) }, 200); // finish closing after animation ends
       if(switchOffAll) {
         return { ...MODAL_TOGGLE_STATE_INITIALIZER, [modalKey]: !prevModal[modalKey] }
       }
@@ -32,15 +36,15 @@ export const useNavigationMenuContext = () => {
       return { ...prevModal, [modalKey]: !prevModal[modalKey] };
     })
   };
-
-  return { modal, toggleModal, toggleMenu }
+  return { modal, isClosing, toggleModal, toggleMenu }
 }
 
 // ----------CREATE CONTEXT----------
 const initContextState: UseNavigationMenuContextType = {
   modal: MODAL_TOGGLE_STATE_INITIALIZER,
+  isClosing: false,
   toggleModal: () => {},
-  toggleMenu: () => {},
+  toggleMenu: () => {}
 }
 
 const NavigationMenuContext = createContext<UseNavigationMenuContextType>(initContextState);
