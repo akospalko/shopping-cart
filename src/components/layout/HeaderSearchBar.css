@@ -19,17 +19,6 @@
   top: 0;
 }
 
-.header-search-bar-small-screen--hidden {
-  display: none;
-}
-
-.button--filter-menu {
-  background-color: transparent;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--border-radius);
-}
-
 /* MEDIA QUERIES */
 @media screen and (max-width: 359px) {
   .header-search-bar-small-screen {
