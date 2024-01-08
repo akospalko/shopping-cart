@@ -9,7 +9,6 @@
   width: 100%;
   z-index: var(--z-10);
   background-color: var(--color-1__50);
-  transition: 200ms opacity ease;
 }
 
 .menu-modal__modal {
