@@ -1,29 +1,11 @@
 // Cart page
-import {useState, useEffect} from 'react';
-import CartProduct from './CartProduct';
-import useCart from '../hooks/useCart';
-import {CartItemType} from '../types/cartProviderTypes';
-import './CartPage.css';
-
-// CONSTANTS
-const CONSTANTS = {
-  TOTAL_PRODUCTS: 'Total Products:',
-  TOTAL_PRICE: 'Total Price:',
-  EMPTY_CART: 'Empty Cart',
-  THANKS_FOR_THE_ORDER: 'Thank you for your order.',
-  YOUR_CART: 'Your cart 🛒',
-  PLACE_ORDER: 'Place Order',
-  FILL_YOUR_CART: 'Fill your cart'
-}
-
-// ENUM
-enum HEADER_LABELS {
-  ITEM = 'item',
-  PRICE = 'price',
-  COUNT = 'count',
-  SUBTOTAL_PRICE = 'subtotal', // sum of the same products' price
-  REMOVE_ALL = ''
-}
+import { ReactElement, useState, useEffect } from "react";
+import CartProduct from "./CartProduct";
+import useCart from "../hooks/useCart";
+import { CartItemType } from "../types/cartProviderTypes";
+import textData from "../data/textData.json";
+import { CART_SUMMARY_HEADER_LABELS } from "../utility/constants";
+import "./CartPage.css";
 
 // COMPONENT
 const CartPage = () => {
@@ -33,9 +15,9 @@ const CartPage = () => {
   // CONTEXT
   const { dispatch, REDUCER_ACTIONS_CART, totalItems, totalPrice, cart } = useCart();  
 
-  // EFFECTS
+  // EFFECT
   useEffect(() => {
-    sessionStorage.setItem('lastVisitedPage', 'cart');
+    sessionStorage.setItem("lastVisitedPage", "cart");
   }, []);
 
   // HANDLER
@@ -44,14 +26,14 @@ const CartPage = () => {
     setConfirm(true);
   }
 
-  // ELEMENTS
+  // JSX
   // Products list table 
-  const cartProductListTable = (
+  const cartProductListTable: ReactElement = (
     <>
-      <div className='cart-page__header'> 
-        { Object.keys(HEADER_LABELS).map((key: string, i: number) => <span key={ i }> { HEADER_LABELS[ key as keyof typeof HEADER_LABELS ] } </span>) }
+      <div className="cart-page__header"> 
+        { Object.keys(CART_SUMMARY_HEADER_LABELS).map((key: string, i: number) => <span key={ i }> { CART_SUMMARY_HEADER_LABELS[ key as keyof typeof CART_SUMMARY_HEADER_LABELS ] } </span>) }
       </div>
-      <ul className='cart-page__products'>
+      <ul className="cart-page__products">
         { totalItems > 0 ? 
           <>
             { cart.map((product: CartItemType) => {
@@ -63,14 +45,14 @@ const CartPage = () => {
                   REDUCER_ACTIONS_CART={ REDUCER_ACTIONS_CART }
                 />
               ) }) }
-            <li className='cart-page__products-total'>
-              <h3> { CONSTANTS.TOTAL_PRODUCTS } { totalItems } </h3>
-              <h3> { CONSTANTS.TOTAL_PRICE } { totalPrice } </h3>
+            <li className="cart-page__products-total">
+              <h3> { textData["total-products"] } { totalItems } </h3>
+              <h3> { textData["total-price"] } { totalPrice } </h3>
             </li>
           </>
         :  
-        <li className='cart-page__products-empty'>
-            <h2> { CONSTANTS.EMPTY_CART } </h2>
+        <li className="cart-page__products-empty">
+            <h2> { textData["empty-cart"] } </h2>
           </li>
         }
       </ul>
@@ -78,32 +60,32 @@ const CartPage = () => {
   )
 
   // Order button
-  const orderButton = (
-    <div className='cart-page__order'>
+  const orderButton: ReactElement = (
+    <div className="cart-page__order">
       <button 
-        className='button--order-products' 
+        className="button--order-products" 
         disabled={ !totalItems }
         onClick={ onSubmitOrder }
-      > { totalItems > 0 ? CONSTANTS.PLACE_ORDER : CONSTANTS.FILL_YOUR_CART } </button>
+      > { totalItems > 0 ? textData["place-order"] : textData["fill-your-cart"] } </button>
     </div>
   )
 
   // LAYOUT
-  const orderedProductLayout = <h1 className='cart-page__title'>{ CONSTANTS.THANKS_FOR_THE_ORDER }</h1>
+  const orderedProductLayout = <h1 className="cart-page__title">{ textData["thanks-for-the-order"] }</h1>
   const cartContentLayout = (
     <>
-      <h1 className='cart-page__title'> { CONSTANTS.YOUR_CART } </h1>
-      <div className='cart-page__wrapper'>
-        <div className='cart'>
+      <h1 className="cart-page__title"> { textData["your-cart"] } </h1>
+      <div className="cart-page__wrapper">
+        <div className="cart">
           { cartProductListTable }
         </div>
+        { orderButton }
       </div>
-      { orderButton }
     </>  
   )
 
   return (
-    <main className='main main--cart'>
+    <main className="main main--cart-page">
       { confirm ? orderedProductLayout : cartContentLayout }
     </main>
   )

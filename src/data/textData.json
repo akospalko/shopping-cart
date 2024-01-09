@@ -52,5 +52,13 @@
   "pages": "Pages",
   "product-categories": "Product categories",
   "brand-and-site-name": "Acme co., Shopping Cart ❤️",
-  "developed-by": "My Name"
+  "developed-by": "My Name",
+  
+  "total-products": "Total Products:",
+  "total-price": "Total Price:",
+  "empty-cart": "Empty Cart",
+  "thanks-for-the-order": "Thank you for your order.",
+  "your-cart": "Your cart 🛒",
+  "place-order": "Place Order",
+  "fill-your-cart": "Fill your cart"
 }

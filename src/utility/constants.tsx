@@ -40,6 +40,15 @@ export enum SORT_ORDER {
   DESCENDING = "DESCENDING"
 }
 
+// CartpAGE.tsx
+export enum CART_SUMMARY_HEADER_LABELS {
+  ITEM = 'item',
+  PRICE = 'price',
+  COUNT = 'count',
+  SUBTOTAL_PRICE = 'subtotal', // sum of the same products' price
+  REMOVE_ALL = ''
+}
+
 // ProductView.tsx, ...
 export const enum PRODUCT_VIEW_TAB {
   ABOUT = "ABOUT",
