@@ -1,0 +1,35 @@
+.header-menu {
+  display: grid;
+  position: sticky;
+  top: 0;
+  grid-template-columns: 80px 1fr 80px;
+  grid-template-rows: 1fr;
+  align-items: center;
+  justify-items: center;
+  height: var(--header-height);
+  background-color: var(--color-1);
+  padding: 0.5rem;
+  width: 100%;
+  z-index: var(--z-9);
+  transition: 
+    border-radius 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.header-menu--scrolled {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  visibility: hidden;
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 359px) {
+  .header-menu {
+    width: 360px;
+  } 
+}
+
+@media screen and (min-width: 1024px) {
+  .header-menu {
+    display: none;
+  } 
+}

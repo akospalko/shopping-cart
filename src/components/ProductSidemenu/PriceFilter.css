@@ -9,27 +9,32 @@
 }
 
 .price-filter__values-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   width: 100%;
-  max-width: 350px;
-  height: 30px;
-  align-self: center;
-  align-items: center;
-  background-color: var(--color--light);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--color-2);
+  height: 40px;
   user-select: none;
+  gap: 1rem;
 }
 
 .price-filter__value {
-  width: 50%;
-  text-align: center;
+  display: flex;
+  width: 100%;
+  padding: 0.5rem;
+  justify-content: center;
   color: var(--color-2);
-  font-size: 0.8rem;
+  word-wrap: break-word;
+  border: 2px solid var(--color-2);
+  background-color: var(--color--light);
+  border-radius: var(--border-radius);
+  justify-self: center;
 }
 
 .price-filter__divider {
+  width: 10px;
+  text-align: center;
   color: var(--color-2);
+  margin: auto;
 }
 
 @media screen and (min-width: 768px) {

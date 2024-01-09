@@ -15,6 +15,7 @@ import { PRODUCT_VIEW_TAB } from "../utility/constants";
 import { getProductViewTabLinkAbout } from "../utility/productView";
 import textData from "../data/textData.json";
 import "./ProductCard.css";
+import "./styleSheets/cssTransition.css";
 
 // TYPES
 type ProductCardPropsType = {
@@ -125,7 +126,7 @@ const AnimatedInCartLabel = ({ product }: ProductCardPropsType) => {
     <CSSTransition
       in={ isInCart }
       nodeRef={ inCartLabelRef }
-      timeout={ 300 }
+      timeout={ 200 }
       classNames="slide-right-to-left"
       unmountOnExit
     >

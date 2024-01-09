@@ -5,6 +5,7 @@ import { PriceFilterPropsType } from "../../types/ProductFilterTypes";
 import Slider from "./Slider";
 import { priceFilterStateInitializer } from "../../utility/constants";
 import useFilter from "../../hooks/useFilter";
+import FilterMenuSectionHeader from "../UI/FilterMenuSectionHeader";
 import textData from "../../data/textData.json";
 import "./PriceFilter.css";
 
@@ -37,7 +38,6 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
         setPriceFilterSlider([minPriceRange, maxPriceRange]);
       }
     };
-
     try {
       calculatePriceRanges();
     } catch(error) {
@@ -47,13 +47,13 @@ const PriceFilter = ({ categoryProducts }: PriceFilterPropsType) => {
 
   return (
     <div className={ `price-filter ${ !categoryProducts.length ? "price-filter--disabled" : "" }` }>
-      <h3 className="product-sidemenu__subtitle"> { textData["price"] } </h3>
-        <div className="price-filter__values-container"> 
-          <span className="price-filter__value">{ priceFilterSlider[0] }</span>
-          <span className="price-filter__divider">{ ("-").trim() }</span>
-          <span className="price-filter__value">{ priceFilterSlider[1] }</span>  
-        </div>
-      <Slider disabled={ !categoryProducts.length } />
+      <FilterMenuSectionHeader textContent={ textData["price"] }/>
+      <div className="price-filter__values-container"> 
+        <span className="price-filter__value">{ priceFilterSlider[0] }</span>
+        <span className="price-filter__divider">{ ("-").trim() }</span>
+        <span className="price-filter__value">{ priceFilterSlider[1] }</span>  
+      </div>
+      <Slider disabled={ !categoryProducts.length }/>
     </div>
   );
 };

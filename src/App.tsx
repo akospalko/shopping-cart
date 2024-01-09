@@ -1,39 +1,51 @@
-import { useState } from "react";
+// TODO: Add routes for reviews 
 import { Route, Routes, Navigate } from "react-router-dom";
-import Header from "./components/Header";
-// import Footer from "./components/Footer";
-import CartPage from "./components/CartPage";
-import ErrorPage from "./components/ErrorPage";
-import ProductPage from "./components/ProductPage";
-import ProductView from "./components/ProductView";
 import ProductSearchPage from "./components/ProductSearchPage";
+import Layout from "./components/layout/Layout";
+import ErrorPage from "./components/ErrorPage";
+import CartPage from "./components/CartPage";
+import ProductView from "./components/ProductView";
+import MemoizedProductPage from "./components/ProductPage";
+import { PRODUCT_VIEW_TAB } from "./utility/constants";
 
-// CONSTANT
-const CONSTANT = {
-  CHARACTERISTICS: "CHARACTERISTICS",
-  ABOUT: "ABOUT"
-}
-
-function App() {
-
-  // STATE
-  const [viewCart, setViewCart] = useState<boolean>(false);
-
+const App = () => {
   return (
     <div className="page">
-      <Header viewCart={ viewCart } setViewCart={ setViewCart }/>
       <Routes>
-        <Route path="/cart" element={ <CartPage/> }/>
-        <Route path="/:category/:page?" element={ <ProductPage/> }/>
-        <Route path="/:category/product/:product/about" element={ <ProductView activeTab={ CONSTANT.ABOUT }/> } />  
-        <Route path="/:category/product/:product/characteristics" element={ <ProductView activeTab={ CONSTANT.CHARACTERISTICS }/> }/>  
-        {/* TODO: <Route path="/:category/product/:product/reviews" element={ <ProductView activeTab={ CONSTANT.REVIEWS }/> }/>   */}
-        <Route path="/search/:page?" element={ <ProductSearchPage/> }/>  
+        <Route path="/cart" element={ 
+          <Layout>
+            <CartPage/> 
+          </Layout>
+        }/>
+        <Route path="/:category/:page?" element={
+          <Layout>
+            <MemoizedProductPage/> 
+          </Layout>
+        }/>
+        <Route path="/:category/product/:product/about" element={ 
+          <Layout>
+            <ProductView activeTab={ PRODUCT_VIEW_TAB.ABOUT }/>
+          </Layout>
+        }/>  
+        <Route path="/:category/product/:product/characteristics" element={ 
+            <Layout>
+              <ProductView activeTab={ PRODUCT_VIEW_TAB.CHARACTERISTICS }/> 
+            </Layout>
+        }/>  
+        {/* TODO: <Route path="/:category/product/:product/reviews" element={ <ProductView activeTab={ PRODUCT_VIEW_TAB.REVIEWS }/> }/> */}
+        <Route path="/search/:page?" element={ 
+            <Layout>
+              <ProductSearchPage/> 
+            </Layout>
+        }/>  
         <Route path="/" element={ <Navigate to="/all/1"/> }/>
         {/* <Route path="/*" element={ <Navigate to="/error"/> }/> */}
-        <Route path="/error" element={ <ErrorPage content={ { title: "test", subtitle: "test" } }/> }/>
+        <Route path="/error" element={ 
+          <Layout>
+            <ErrorPage content={ { title: "test", subtitle: "test" } }/> 
+          </Layout>
+        }/>
       </Routes>
-      {/* <Footer/> */}
     </div>
   )
 }

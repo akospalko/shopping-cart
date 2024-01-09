@@ -1,27 +1,27 @@
 [
   {
     "name": "All products",
-    "icon": "RemoveIcon",
+    "icon": "AllIcon",
     "category": "all"
   },
   {
     "name": "Processors",
-    "icon": "CheckmarkIcon",
+    "icon": "ProcessorsIcon",
     "category": "processor"
   },
   {
     "name": "Mobile",
-    "icon": "RemoveIcon",
+    "icon": "MobileIcon",
     "category": "mobile"
   },
   {
     "name": "Video Cards",
-    "icon": "CheckmarkIcon",
+    "icon": "VideoCardIcon",
     "category": "videocard"
   },
   {
     "name": "RAM",
-    "icon": "RemoveIcon",
+    "icon": "RAMIcon",
     "category": "ram"
   }
 ]

@@ -9,8 +9,7 @@ type CheckboxType = {
   onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
-const Checkbox = ({ label="test", isChecked=false, onChange }: CheckboxType) => {
-
+const Checkbox = ({ label="", isChecked=false, onChange }: CheckboxType) => {
   return (
     <>
       <div className="checkbox__wrapper">
@@ -21,7 +20,7 @@ const Checkbox = ({ label="test", isChecked=false, onChange }: CheckboxType) => 
           onChange={ onChange }
         />
       </div>
-      { label }
+      <span className="checkbox__label">{ label }</span>
     </>
   );
 };

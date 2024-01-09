@@ -1,0 +1,17 @@
+[
+  {
+    "name" : "home",
+    "icon": "HomeIcon",
+    "to": "/home"
+  },
+  {
+    "name" : "product",
+    "icon": "ProductIcon",
+    "to": ""
+  },
+  {
+    "name" : "cart",
+    "icon": "CartIcon",
+    "to": "/cart"
+  }
+]

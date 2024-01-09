@@ -1,13 +1,16 @@
 // Enums Constants and magic numbers, initializers
-
-
+import { ModalTypes } from "../types/navigationMenuTypes";
 // 
 export const PRODUCT_CATEGORY = {
-  ALL: "all"
+  ALL: "all",
+  PROCESSOR: "processor",
+  MOBILE: "mobile",
+  VIDEO_CARD: "videocard",
+  RAM: "ram"
 }
 // PriceFilter.tsx
 export const priceFilterStateInitializer = {
-  min: 1 ,
+  min: 1,
   max: 100
 };
 
@@ -17,7 +20,6 @@ export const itemsPerPage: number = 5;
 export const RATING = {
   TOTAL_STARS: 5,
 };
-
 
 // ENUMS
 export enum SEARCH {
@@ -38,9 +40,36 @@ export enum SORT_ORDER {
   DESCENDING = "DESCENDING"
 }
 
-// ???
+// ProductView.tsx, ...
 export const enum PRODUCT_VIEW_TAB {
-  ABOUT = "about",
-  CHARACTERSISTICS = "charactersistics",
-  REVIEW = "review"
+  ABOUT = "ABOUT",
+  CHARACTERISTICS = "CHARACTERSISTICS",
+  REVIEW = "REVIEW"
 } 
+
+// NavigationMenu.tsx
+export const NAVIGATION_MENU_ITEMS_ACTION = {
+  MAIN_MENU_NAVIGATION: "MAIN_MENU_NAVIGATION",
+  MAIN_MENU_PRODUCT_CATEGORIES: "MAIN_MENU_PRODUCT_CATEGORIES",
+  FILTER_MENU_PRODUCT_CATEGORIES: "FILTER_MENU_PRODUCT_CATEGORIES",
+  SIDEMENU_PRODUCT_CATEGORIES: "SIDEMENU_PRODUCT_CATEGORIES",
+  MAIN_BAR_NAVIGATION: "MAIN_BAR_NAVIGATION",
+} as const;
+
+// NavigationMenuProvider.tsx
+export const MODAL_TOGGLE_STATE_INITIALIZER: ModalTypes = {
+  MAIN_MENU: false,
+  FILTER_MENU: false,
+  SIDE_MENU: true
+}
+// NavigationMenuProvider.tsx
+export const enum MODAL_TOGGLE_KEY {
+  MAIN_MENU = "MAIN_MENU",
+  FILTER_MENU = "FILTER_MENU",
+  SIDE_MENU = "SIDE_MENU"
+} 
+
+// Misc
+export const CONSTANT = { 
+  PRODUCT: "product" 
+}

@@ -2,10 +2,13 @@
 import './DividerLine.css';
 
 // TYPE
-type DividerLineType = { style?: string }
-const DividerLine = ({ style = '' }: DividerLineType) => {
+type DividerLinePropsType = {
+  style?: string
+}
+
+const DividerLine = ({ style }: DividerLinePropsType) => {
   return (
-    <div className={ `product-sidemenu-divider ${ style } ` }></div>
+    <div className={`divider-line ${ style }`}> &nbsp; </div>
   )
 }
 

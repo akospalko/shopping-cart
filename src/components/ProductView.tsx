@@ -4,8 +4,10 @@ import { useParams } from 'react-router-dom';
 import useProducts from '../hooks/useProducts';
 import ProductViewHeader from './ProductViewNavigation';
 import { ProductItemType } from '../types/productsProviderTypes';
+import { ProductMergedPropertiesType } from '../types/productsProviderTypes';
 import AboutTab from './AboutTab';
 import CharacteristicsTab from './CharacteristicsTab';
+import { PRODUCT_VIEW_TAB } from '../utility/constants';
 import './ProductView.css';
 
 // TYPES
@@ -25,15 +27,10 @@ const activeProductInitializer: ProductItemType = {
   retailer: '',
   calculatedRatingAvg: 0,
   review: [],
-  properties: undefined
+  properties: {} as ProductMergedPropertiesType
 }
 
-// CONSTANT
-const CONSTANT = {
- CHARACTERISTICS: 'CHARACTERISTICS',
- ABOUT: 'ABOUT'
-}
-
+// product-view
 const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
   // ROUTE
   const { product } = useParams();
@@ -70,10 +67,10 @@ const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
   // conditionally display tabs
   let displayedTab = aboutContent;
   switch(activeTab) {
-    case CONSTANT.CHARACTERISTICS:
+    case PRODUCT_VIEW_TAB.CHARACTERISTICS:
       displayedTab = characteristicsTab;
       break;
-    case CONSTANT.ABOUT:
+    case PRODUCT_VIEW_TAB.ABOUT:
       displayedTab = aboutContent;
       break;
     default: 
