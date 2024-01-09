@@ -42,7 +42,6 @@
 
 .button-pagination-navigation-next-prev:disabled {
   background-color: var(--color-6);
-  opacity: 0.4;
 }
 
 .pagination-ellipsis {

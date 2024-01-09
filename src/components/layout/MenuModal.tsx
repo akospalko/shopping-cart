@@ -33,7 +33,7 @@ const MenuModal = forwardRef(({ children, toggleModalKey }: MenuModalPropsType, 
 
   // STYLE
   const iconSize: string = "20px"; 
-  const iconColor: string = "var(--color-5)";
+  const iconColor: string = "var(--color-1)";
   const buttonStyleVerySmall = {
     wrapper: "menu-modal__close-button-wrapper--very-small",
     button: "button--close-menu-modal-very-small"

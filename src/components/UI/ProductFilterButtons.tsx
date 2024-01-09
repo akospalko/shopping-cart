@@ -20,7 +20,7 @@ const ProductFilterButtons = () => {
   const isClearFilteredButtonDisabled: boolean = categoryProductsFiltered === undefined || !categoryProductsFiltered.length;
   const iconSize: string = "20px"; 
   const iconColor: string = "var(--color-5)";
-  const iconColorDisabled: string = "var(--color-6)";
+  const iconColorDisabled: string = "var(--color-1__70)";
 
   // JSX
   const clearFilterButton: ReactElement = (

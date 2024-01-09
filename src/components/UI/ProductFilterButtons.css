@@ -20,9 +20,9 @@
 }
 
 .button--product-filter-disabled {
-  background-color: var(--color-5);
-  outline: 1px solid var(--color-5);
-  color: var(--color-6);
+  background-color: var(--color-6);
+  outline: 1px solid var(--color-6);
+  color: var(--color-1__70);
   border-radius: var(--border-radius);
   pointer-events: none;
 }
@@ -32,7 +32,7 @@
   display: grid;
   grid-template-columns: repeat(2, 100px);
   grid-template-rows: 40px;
-  gap: 0.5rem;
+  gap: 10px;
   width: 100%;
   left: 0;
   right: 0;

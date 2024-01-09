@@ -27,7 +27,7 @@
   display: flex;
   overflow-y: scroll;
   z-index: var(--z-10);
-  background-color: var(--color-4);
+  background-color: var(--color-5);
   width: 100%;
   flex-direction: column;
   padding: 0.5rem;
@@ -45,7 +45,7 @@
   width: 40px;
   height: 40px;
   margin-bottom: auto;
-  background-color: var(--color-3);
+  background-color: var(--color-5);
 }
 
 .button--close-menu-modal-small-to-large { 
@@ -74,7 +74,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--color-4);
+    background-color: var(--color-5);
     min-height: 100vh;
     min-height: 100svh;
     padding: 1rem;

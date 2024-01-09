@@ -29,7 +29,7 @@ const Pagination = ({ totalPages, pageURLParams }: PaginationPropsType) => {
   const navigationPrevNextButtonStyle = 'button-pagination-navigation-next-prev'; 
   const navigationActiveButtonStyle = 'button--pagination-navigation__active';
   const iconSize = '12px';
-  const iconColor = 'var(--color_1)';
+  const iconColor = 'var(--color-1__70)';
   
   // ELEMENTS
   // Go to a specific page button

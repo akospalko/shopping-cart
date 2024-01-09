@@ -23,7 +23,7 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
   const { category, page }  = useParams();
   
   // CONTEXT
-  const { toggleModal } = useNavigationMenu();
+  const { toggleModal, toggleMenu } = useNavigationMenu();
   
   // HOOK
   const { clearFilteredProductsHandler } = useProductsFilterHandler();
@@ -125,7 +125,7 @@ export const useGetNavigationItems = (navigationMenuAction: NavigationMenuAction
       itemStyles.navLinkStyleActive = "navigation-item__product-category--active";
       itemStyles.navLinkLabel = "navigation-item__product-category-label";
       withIcons = true;
-      toggler = () => toggleModal(MODAL_TOGGLE_KEY.MAIN_MENU, closeOnClick);
+      toggler = () => toggleMenu(MODAL_TOGGLE_KEY.MAIN_MENU);
       break;
     case NAVIGATION_MENU_ITEMS_ACTION.MAIN_MENU_NAVIGATION: 
       dataInitializerArray = navigationMenuInitializerData || [];
