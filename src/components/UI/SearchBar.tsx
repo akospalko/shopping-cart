@@ -100,7 +100,7 @@ const SearchBar = ({ containerStyle }: SearchBarPropsType) => {
     if (filteredProducts?.length) {
       dispatchProducts({ type: REDUCER_ACTIONS_PRODUCT.UPDATE_FILTERED_PRODUCTS, payload: { filteredProducts: [] } });
     }
-    navigate("/", { replace: true }); 
+    navigate("/all/1", { replace: true }); 
   }, 500);
 
   // Focus and blur element handler (reusable): value -> true - focus / value -> false - blur

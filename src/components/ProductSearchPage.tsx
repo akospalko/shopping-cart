@@ -60,7 +60,7 @@ const ProductSearchPage = () => {
       </div>
       <div className="product-page__no-result-return-back-button">
         <button 
-          onClick={ () => navigate("/") }
+          onClick={ () => navigate("/all/1") }
           className="button--search-no-result-return-back"
         > { textData["button-navigate-to-products"] } </button>
       </div>
@@ -81,7 +81,7 @@ const ProductSearchPage = () => {
   }
 
   return (
-    <main className="main main__product-page">
+    <main className="main main__product-search-page">
       { dislayedContent }
     </main>
   )
