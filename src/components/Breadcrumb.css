@@ -10,10 +10,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 3px;
+  margin-right: 1rem;
+}
+
+.breadcrumb__home-link:focus-visible {
+  outline: 2px solid var(--color-2);
+  border-radius: var(--border-radius);
 }
 
 .breadcrumb__item {
   text-decoration: none;
+}
+.breadcrumb__item a:focus-visible {
+  outline: 2px solid var(--color-2);
+  border-radius: var(--border-radius);
 }
 
 .breadcrumb__item a,
@@ -32,6 +43,19 @@
 .breadcrumb__item a:hover {
   color: var(--color-1);
   text-decoration: underline;
+}
+
+/* Scroll bar*/
+.breadcrumb::-webkit-scrollbar-track {
+	background-color: var(--color-1__20);
+}
+
+.breadcrumb::-webkit-scrollbar {
+	height: 2px;
+}
+
+.breadcrumb::-webkit-scrollbar-thumb {
+	background-color: var(--color-2);
 }
 
 /* MEDIA QUERIES */

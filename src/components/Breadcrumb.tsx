@@ -1,100 +1,96 @@
-// Breadcrumb for displaying routes
-import {NavLink} from 'react-router-dom';
-import {HomeIcon} from './SVGComponents'
-import useIsHovered from '../hooks/useIsHovered';
-import './Breadcrumb.css'
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { HomeIcon } from "./SVGComponents";
+import useIsHovered from "../hooks/useIsHovered";
+import "./Breadcrumb.css";
 
 // TYPES
 type BreadcrumbSegmentsType = {
-  breadcrumb?: string | undefined,
-  urlPath: string
-}
+  breadcrumb?: string | undefined;
+  urlPath: string;
+};
 
 type BreadcrumbPropsType = {
-  pathSegmentsArray: string[]
-}
+  pathSegmentsArray: string[];
+};
 
 // COMPONENT
-const Breadcrumb = ({pathSegmentsArray}: BreadcrumbPropsType) => {
-
+const Breadcrumb: React.FC<BreadcrumbPropsType> = ({ pathSegmentsArray }) => {
   // HOOK
-  const {isElementHovered, elementMouseEnter, elementMouseLeave} = useIsHovered();
+  const { isElementHovered, elementMouseEnter, elementMouseLeave } = useIsHovered();
 
-  // url page route params as breadcrumb
-  let urlPath = ''; 
-  // breadcrumb route
-  const breadcrumbSegments:BreadcrumbSegmentsType[] = [];
+  // UTIL
+  // Generate breadcrumb segments
+  const generateBreadcrumbSegments = () => {
+    let urlPath = "";
+    const breadcrumbSegments: BreadcrumbSegmentsType[] = [];
 
-  // create breadcrumbs and url route
-  pathSegmentsArray.forEach((segment, i) => {
-    urlPath += `/${segment}`;
-    // Handle last segment (tab name)
-    if (i === pathSegmentsArray.length - 1) {
-      breadcrumbSegments.push({breadcrumb: '', urlPath: urlPath});
-    }
-    // Handle product name segment 
-    else if (i === pathSegmentsArray.length - 2) {
-      breadcrumbSegments.push({breadcrumb: segment, urlPath: `${urlPath}/about`});
-    }
-    // Handle category segment
-    else if (i === 0) {
-      breadcrumbSegments.push({breadcrumb: segment, urlPath: `/${segment}/1`});
-    }
-    // Handle unclickable 'product' breadcrumb segment
-    else if (segment !== 'product') {
-      breadcrumbSegments.push({breadcrumb: segment, urlPath: urlPath});
-    }
-  });
-  
-  // ELEMENT
-  // navigate to home link
-  const navToHomeLink = (
-    <NavLink 
-      to='/all/1'
-      className='breadcrumb__home-link'
-      onMouseEnter={elementMouseEnter}
-      onMouseLeave={elementMouseLeave}
-    >
-      <HomeIcon 
-        width='25px' 
-        height='25px' 
-        stroke={isElementHovered ? 'var(--color-1)' : 'var(--color-3)'}
-        wrapperCustomStyle={{'width': '45px', 'justifyContent': 'flex-start'}}
-      />
-    </NavLink>
-  )
+    pathSegmentsArray.forEach((segment, i) => {
+      urlPath += `/${ segment }`;
 
-  const displayedSegments = () => {
-    const nonEmptySegments = breadcrumbSegments.filter(
-      (segmentObj) => segmentObj.breadcrumb && segmentObj.breadcrumb !== ''
-    );
-  
-    return nonEmptySegments.map((segmentObj, i) => {
-      if (i === nonEmptySegments.length - 1) {
-        // Render the last non-empty segment as a div
-        return (
-          <div key={i} className="breadcrumb__item breadcrumb__item--non-selectable">
-            {segmentObj.breadcrumb}
-          </div>
-        );
-      } else {
-        // Render other non-empty segments as NavLink
-        return (
-          <div key={i} className="breadcrumb__item">
-            <NavLink to={segmentObj.urlPath}>{segmentObj.breadcrumb}</NavLink>
-            {i < nonEmptySegments.length - 1 && <span>/</span>}
-          </div>
-        );
+      if (i === pathSegmentsArray.length - 1) {
+        breadcrumbSegments.push({ breadcrumb: "", urlPath });
+      } else if (i === pathSegmentsArray.length - 2) {
+        breadcrumbSegments.push({ breadcrumb: segment, urlPath: `${ urlPath }/about` });
+      } else if (i === 0) {
+        breadcrumbSegments.push({ breadcrumb: segment, urlPath: `/${ segment }/1` });
+      } else if (segment !== "product") {
+        breadcrumbSegments.push({ breadcrumb: segment, urlPath });
       }
     });
+
+    return breadcrumbSegments.filter((segmentObj) => segmentObj.breadcrumb && segmentObj.breadcrumb !== "");
   };
 
-  return (
-    <div className='breadcrumb'>
-      {navToHomeLink}
-      {displayedSegments()}
-    </div>
-  )
-}
+  // STYLE
+  const buttonSize = "25px";
+  const buttonColor = "var(--color-3)";
+  const buttonColorHovered = "var(--color-1)";
+  
+  // JSX
+  // Display breadcrumb segments
+  const displayedSegments = () => {
+    const nonEmptySegments: BreadcrumbSegmentsType[] = generateBreadcrumbSegments();
 
-export default Breadcrumb
+    return nonEmptySegments.map((segmentObj: BreadcrumbSegmentsType, i) => (
+      <div 
+        key={ i } 
+        className={ `breadcrumb__item${ i === nonEmptySegments.length - 1 ? " breadcrumb__item--non-selectable" : "" }` }
+        >
+        { i === nonEmptySegments.length - 1 ? (
+          segmentObj.breadcrumb
+        ) : (
+          <>
+            <NavLink to={ segmentObj.urlPath }>{ segmentObj.breadcrumb }</NavLink>
+            <span>{ "/" }</span>
+          </>
+        ) }
+      </div>
+    ));
+  };
+  
+  // Navigation link: Home 
+  const navToHomeLink = (
+    <NavLink
+      to="/all/1"
+      className="breadcrumb__home-link"
+      onMouseEnter={ elementMouseEnter }
+      onMouseLeave={ elementMouseLeave }
+    >
+      <HomeIcon
+        width={ buttonSize }
+        height={ buttonSize }
+        stroke={ isElementHovered ? buttonColorHovered : buttonColor }
+      />
+    </NavLink>
+  );
+
+  return (
+    <div className="breadcrumb">
+      { navToHomeLink }
+      { displayedSegments() }
+    </div>
+  );
+};
+
+export default Breadcrumb;
