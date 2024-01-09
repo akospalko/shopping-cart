@@ -85,7 +85,7 @@ const CartPage = () => {
   )
 
   return (
-    <main className="main main--cart-page">
+    <main className="main main__cart-page">
       { confirm ? orderedProductLayout : cartContentLayout }
     </main>
   )

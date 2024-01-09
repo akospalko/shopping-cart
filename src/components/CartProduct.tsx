@@ -21,11 +21,11 @@ const CartLineItem = ({ product, dispatch, REDUCER_ACTIONS_CART }: PropsType) =>
 
   // HOOKS
   const productURL = useConvertStringToURLFormat(product.name + "-" + product.sku); 
-  const {isElementHovered, elementMouseEnter, elementMouseLeave} = useIsHovered(); 
+  const { isElementHovered, elementMouseEnter, elementMouseLeave } = useIsHovered(); 
 
   // MISC
   // Product image 
-  const img:string =  new URL(`../images/${product.sku}.jpg`, import.meta.url).href
+  const img:string =  new URL(`../images/${ product.sku }.jpg`, import.meta.url).href
   
   // HANDLERS
   // Change product quantity
@@ -64,7 +64,7 @@ const CartLineItem = ({ product, dispatch, REDUCER_ACTIONS_CART }: PropsType) =>
           onClick={ navigateToProductHandler }
           tabIndex={ 0 }
           >
-          <span>{product.name}</span>
+          <span>{ product.name }</span>
         </button>
         </div>
     </div>
@@ -118,8 +118,8 @@ const CartLineItem = ({ product, dispatch, REDUCER_ACTIONS_CART }: PropsType) =>
   // Icon style
   const iconSize = "25px";
   const iconStroke = "none";
-  const iconColorHovered = "";
-  const iconColor = "";
+  const iconColor = "var(--color-2)";
+  const iconColorHovered = "var(--color-3)";
   const removeProductFromCart = (
     <div className="cart-product-remove">
       <button 
