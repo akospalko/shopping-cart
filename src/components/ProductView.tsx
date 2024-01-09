@@ -1,14 +1,15 @@
 // Opened product detailed view
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import useProducts from '../hooks/useProducts';
-import ProductViewHeader from './ProductViewNavigation';
-import { ProductItemType } from '../types/productsProviderTypes';
-import { ProductMergedPropertiesType } from '../types/productsProviderTypes';
-import AboutTab from './AboutTab';
-import CharacteristicsTab from './CharacteristicsTab';
-import { PRODUCT_VIEW_TAB } from '../utility/constants';
-import './ProductView.css';
+import { ReactElement, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import useProducts from "../hooks/useProducts";
+import ProductViewHeader from "./ProductViewNavigation";
+import { ProductItemType } from "../types/productsProviderTypes";
+import { ProductMergedPropertiesType } from "../types/productsProviderTypes";
+import AboutTab from "./AboutTab";
+import ProductRating from "./UI/ProductRating";
+import CharacteristicsTab from "./CharacteristicsTab";
+import { PRODUCT_VIEW_TAB } from "../utility/constants";
+import "./ProductView.css";
 
 // TYPES
 type ProductViewHeaderPropsType = {
@@ -16,22 +17,22 @@ type ProductViewHeaderPropsType = {
 }
 // INITIALIZER
 const activeProductInitializer: ProductItemType = {
-  sku: '',
-  name: '',
+  sku: "",
+  name: "",
   price: 0,
   priceDiscount: 0,
   stock: 0,
-  category: '',
-  description: '',
-  warranty: '',
-  retailer: '',
+  category: "",
+  description: "",
+  warranty: "",
+  retailer: "",
   calculatedRatingAvg: 0,
   review: [],
   properties: {} as ProductMergedPropertiesType
 }
 
 // product-view
-const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
+const ProductView = ({ activeTab }: ProductViewHeaderPropsType) => {
   // ROUTE
   const { product } = useParams();
 
@@ -52,34 +53,43 @@ const ProductView = ({activeTab}:ProductViewHeaderPropsType) => {
     };
 
     // If context's product ID is not available, use URL parameter
-    const filteredProductURL = product?.split('-') || [];
+    const filteredProductURL = product?.split("-") || [];
     const productID = filteredProductURL[filteredProductURL.length - 1];
     updateActiveProduct(productID);
   }, [product, products]);
 
-  // ELEMENTS
-  // about
-  const aboutContent = <AboutTab activeProduct={activeProduct}/>
-  // characteristics
-  const characteristicsTab = <CharacteristicsTab activeProduct={activeProduct}/>
+  // JSX
+  // About
+  const aboutContent: ReactElement = <AboutTab activeProduct={ activeProduct }/>
+  // Characteristics
+  const characteristicsTab: ReactElement = <CharacteristicsTab activeProduct={ activeProduct }/>
+  // TODO: Reviews
+  const reviewsTab: ReactElement = (
+    <div>
+      <h1> { "Reviews" } </h1>
+      <ProductRating />
+    </div>
+  ) 
 
-  // DISPLAYED TAB
-  // conditionally display tabs
+  // Displayed tab
   let displayedTab = aboutContent;
   switch(activeTab) {
+    case PRODUCT_VIEW_TAB.ABOUT:
+      displayedTab = aboutContent;
+      break;
     case PRODUCT_VIEW_TAB.CHARACTERISTICS:
       displayedTab = characteristicsTab;
       break;
-    case PRODUCT_VIEW_TAB.ABOUT:
-      displayedTab = aboutContent;
+    case PRODUCT_VIEW_TAB.REVIEWS:
+      displayedTab = reviewsTab;
       break;
     default: 
       displayedTab = aboutContent;
   }
 
   return (
-    <main className='main main__product-page'>
-      <div className='product-view'>
+    <main className="main main__product-view-page">
+      <div className="product-view">
         <ProductViewHeader/>
         { displayedTab }
       </div>

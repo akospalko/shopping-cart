@@ -8,8 +8,8 @@
 @media screen and (min-width: 1024px) {
   .product-view {
     display: grid;
-    grid-template-rows: 75px min-content;
     width: 1000px;
     gap: 2rem;
+    justify-self: center;
   }
 }
