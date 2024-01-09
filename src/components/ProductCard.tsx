@@ -98,7 +98,7 @@ const ProductRatingAndReview = ({ product }: ProductCardPropsType) => {
   
   // URL
   const productURL = useConvertStringToURLFormat(name + "-" + sku);
-  const reviewTabLink: string = getProductViewTabLinkAbout(category, productURL, PRODUCT_VIEW_TAB.REVIEW)
+  const reviewTabLink: string = getProductViewTabLinkAbout(category, productURL, PRODUCT_VIEW_TAB.REVIEWS)
 
   // ELEMENT
   const productReviewText: ReactElement = <> { `(${ (review?.length || 0) } ${ review?.length > 1 ? textData["reviews"] : textData["review"] })` } </>;

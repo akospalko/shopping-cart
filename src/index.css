@@ -76,6 +76,7 @@ select {
     padding: 0.5rem;
 }
 
+.main__product-view-page,
 .main__product-page {
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
@@ -83,6 +84,11 @@ select {
     gap: 10px;
     padding: 0;
     justify-self: center;
+}
+
+.main__product-view-page {
+    padding: 0.5rem;
+    justify-content: center;
 }
 
 .main--status-page {
@@ -192,6 +198,7 @@ button {
     .main__product-page {
         padding: 0.5rem;
     }   
+
 }
 
 @media screen and (min-width: 1024px) {

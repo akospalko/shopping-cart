@@ -32,7 +32,11 @@ const App = () => {
               <ProductView activeTab={ PRODUCT_VIEW_TAB.CHARACTERISTICS }/> 
             </Layout>
         }/>  
-        {/* TODO: <Route path="/:category/product/:product/reviews" element={ <ProductView activeTab={ PRODUCT_VIEW_TAB.REVIEWS }/> }/> */}
+        <Route path="/:category/product/:product/reviews" element={ 
+          <Layout>
+            <ProductView activeTab={ PRODUCT_VIEW_TAB.REVIEWS }/> 
+          </Layout>
+        }/>
         <Route path="/search/:page?" element={ 
             <Layout>
               <ProductSearchPage/> 

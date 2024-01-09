@@ -44,7 +44,7 @@ export enum SORT_ORDER {
 export const enum PRODUCT_VIEW_TAB {
   ABOUT = "ABOUT",
   CHARACTERISTICS = "CHARACTERSISTICS",
-  REVIEW = "REVIEW"
+  REVIEWS = "REVIEWS"
 } 
 
 // NavigationMenu.tsx
