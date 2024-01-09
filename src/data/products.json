@@ -174,9 +174,9 @@
         "retailer": "Acme shop",
         "review": [{ "userID": "test3@email.com", "username": "test3", "rating": 4, "review": "test review" }],
         "properties": {
-            "brand": "Intel",
+            "brand": "iPhone",
             "model": "test",
-            "operating system": "test",
+            "operating system": "ios",
             "processor": "test",
             "ram": "test",
             "storage": "test",
@@ -198,7 +198,7 @@
         "retailer": "Acme shop",
         "review": [{ "userID": "test1@email.com", "username": "test1", "rating": 1, "review": "test review" }],
         "properties": {
-            "brand": "test",
+            "brand": "Samsung",
             "model": "test",
             "gpu architecture": "test",
             "vram": "test",
