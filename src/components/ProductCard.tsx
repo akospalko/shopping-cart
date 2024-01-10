@@ -27,7 +27,6 @@ type ProductCardPropsType = {
 const ProductImage = ({ product }: ProductCardPropsType) => {
   // PROPS
   const { sku, name, category } = product;
-
   // ROUTE
   const navigate = useNavigate();
  
@@ -36,7 +35,7 @@ const ProductImage = ({ product }: ProductCardPropsType) => {
   const aboutTabLink: string = getProductViewTabLinkAbout(category, productURL, PRODUCT_VIEW_TAB.ABOUT);
  
   // ELEMENT
-  const img: string = new URL(`../images/${ sku }.jpg`, import.meta.url).href;
+  const img: string = new URL(`../images/${ category }.jpg`, import.meta.url).href;
 
   return (
     <img

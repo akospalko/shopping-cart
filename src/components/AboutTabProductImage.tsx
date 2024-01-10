@@ -27,7 +27,7 @@ const AboutTabProductImage = ({ activeProduct }: AboutTabPropsType) => {
 
   // ELEMENTS
   // Product image
-  const img: string =  new URL(`../images/${activeProduct?.sku}.jpg`, import.meta.url).href
+  const img: string =  new URL(`../images/${activeProduct?.category}.jpg`, import.meta.url).href
   
   return (
     <div className="about-tab-product-image">

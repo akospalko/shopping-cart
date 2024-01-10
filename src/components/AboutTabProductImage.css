@@ -12,8 +12,8 @@
 }
 
 .about-tab-product-image__image {
-  width: 75%;
-  height: 75%;
+  width: 400px;
+  height: 450px;
   object-fit: contain;
 }
 

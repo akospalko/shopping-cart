@@ -45,7 +45,11 @@ const ProductSearchPage = () => {
     <div className="product-page__content">
       <h1 className="product-page__header--1"> { textData["title-search-result"] } </h1>
       { !!filteredProducts?.length && <DividerLine style="divider-line--horizontal"/> }
-      { !!filteredProducts?.length && <ProductSortDropdown/> }
+      { !!filteredProducts?.length && (
+        <div className="product-page__toolbar"> 
+          <ProductSortDropdown/>
+        </div>
+      ) }
       <ProductList productsData={ paginatedProducts ?? [] }/>
       { totalPages > 1 && <Pagination totalPages={ totalPages } pageURLParams={ { category: "search", page: pageNumber } } /> }
     </div>
