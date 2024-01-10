@@ -25,7 +25,7 @@ const CartLineItem = ({ product, dispatch, REDUCER_ACTIONS_CART }: PropsType) =>
 
   // MISC
   // Product image 
-  const img:string =  new URL(`../images/${ product.sku }.jpg`, import.meta.url).href
+  const img:string =  new URL(`../images/${ product.category }.jpg`, import.meta.url).href
   
   // HANDLERS
   // Change product quantity
