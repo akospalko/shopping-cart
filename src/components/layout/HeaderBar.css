@@ -59,15 +59,9 @@
   .header-bar__navigation-items {
     display: grid;
     grid-template-columns: auto;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
     grid-auto-flow: column;
-  }
-}
-
-@media screen and (min-width: 1400px) {
-  .header-bar__navigation-items {
-    justify-content: end;
   }
 }
 
